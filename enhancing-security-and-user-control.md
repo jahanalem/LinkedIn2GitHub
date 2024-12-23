@@ -30,3 +30,6 @@ I'm excited to share some new features I've added to enhance security, user cont
 
 ### Tags
 `#webdevelopment` `#security` `#dotnet` `#angular` `#cleancode` `#softwaredevelopment` `#programming`
+
+![LogoutFromAllDevices](https://github.com/user-attachments/assets/83d9eb74-40b4-4e95-a72b-db29158115d5)
+
