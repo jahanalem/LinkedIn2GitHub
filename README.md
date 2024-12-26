@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### **Boosting Performance with HybridCache in .NET 9: New Feature in LiliShop**
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/hybrid-cache.md)
+
 ### **Enhancing Security and User Control: New Features in LiliShop**
 - **Refresh Token**
 - **Logout from All Devices**
