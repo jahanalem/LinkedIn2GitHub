@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### **My Recent Updates: Moving Forward with SmartSupervisorBot**
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/smart-supervisorbot-updates-net9.md)
+
 ### **Boosting Performance with HybridCache in .NET 9: New Feature in LiliShop**
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/hybrid-cache.md)
 
