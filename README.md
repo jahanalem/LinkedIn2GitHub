@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### **Migrating SmartSupervisorBot to a Web API**
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/Migrating-SmartSupervisorBot-to-a-Web-API.md)
+
 ### **My Recent Updates: Moving Forward with SmartSupervisorBot**
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/smart-supervisorbot-updates-net9.md)
 
