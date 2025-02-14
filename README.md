@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### **New Price Drop Subscription Feature in LiliShop**
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/price-drop-subscription.md)
+
 ### **Migrating SmartSupervisorBot to a Web API**
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/Migrating-SmartSupervisorBot-to-a-Web-API.md)
 
