@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### **More Speed and Cleaner Code with async/await and Promise.all (LiliShop)**
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/improving-product-loading-in-admin-page.md)
+
 ### **New Price Drop Subscription Feature in LiliShop**
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/price-drop-subscription.md)
 
