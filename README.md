@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### **Discount Feature with Time Scheduling Implemented!**
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0020_discount-feature-scheduling.md)
+
 ### **More Speed and Cleaner Code with async/await and Promise.all (LiliShop)**
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/improving-product-loading-in-admin-page.md)
 
