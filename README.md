@@ -13,6 +13,10 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+
+### **New Feature: Sale Status Filter and Admin Sale Column**
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0021_sale-feature-update.md)
+
 ### **Discount Feature with Time Scheduling Implemented!**
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0020_discount-feature-scheduling.md)
 
