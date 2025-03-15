@@ -1,6 +1,6 @@
 # New Feature: Sale Status Filter and Admin Sale Column
 
-I’m excited to introduce a new feature that improves how users and admins interact with products in the system! This update includes two main changes:
+I’m excited to introduce a new feature in the LiliShop project that improves how users and admins interact with products in the system! This update includes two main changes:
 
 1. **Users can now filter products based on Sale status.**
 2. **Admins can see a new "Sale" column in the Products table.**
@@ -30,6 +30,9 @@ Admins can now see a new column in the Products table called **"Sale"**. This co
 This update was designed to:
 - **Improve user experience**: Users can quickly find products on sale.
 - **Help admins manage products**: Admins can easily see which products are on sale, not on sale, or scheduled for a sale.
+
+## Live Project
+[https://lilishop-bwdfb5azanh0cfa8.germanywestcentral-01.azurewebsites.net/shop](https://lilishop-bwdfb5azanh0cfa8.germanywestcentral-01.azurewebsites.net/shop)
 
 ---
 
