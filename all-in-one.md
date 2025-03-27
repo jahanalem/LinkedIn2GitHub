@@ -1,3 +1,25 @@
+
+## 🖨️ Printess Editor Integration with .NET 9 & Angular 19
+
+This guide explains how to integrate **Printess Editor**, a powerful online design editor for print products, into a modern **.NET 9 backend** and **Angular 19 frontend** application.
+
+Because the article is quite long, I won’t include all the technical details here.  
+Please check the full documentation at the following link:
+
+🔗 [LiliShop_PrintessEditor_Integration_Guide.md](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0022_LiliShop_PrintessEditor_Integration_Guide.md)
+
+![Printess-Editor-in-LiliShop](https://github.com/user-attachments/assets/e700d569-801a-489a-ae57-b29540e78276)
+
+![Callback Flow Diagram](https://github.com/user-attachments/assets/4ffb2f84-70ac-4589-a0bc-0d50827f68b2)
+
+![Polling-Flow-Diagram](https://github.com/user-attachments/assets/403db09c-5f73-43ee-af22-b363195b6706)
+
+
+
+
+
+---
+
 # 🎉 New Feature: Sale Status Filter and Admin Sale Column
 
 I’m excited to introduce a new feature that improves how users and admins interact with products in the system! This update includes two main changes:
