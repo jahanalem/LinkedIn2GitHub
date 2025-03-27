@@ -6,7 +6,7 @@ This guide explains how to integrate **Printess Editor**, a powerful online desi
 
 ### 📑 Table of Contents
 
-- [❓ Was ist Printess Editor?](#-was-ist-printess-editor)
+- [❓ Was ist Printess Editor?](#-what-is-printess-editor)
   - [🔑 Key Features](#-key-features)
 - [🚀 Integration Overview](#-integration-overview)
   - [1. Get Tokens](#1-get-tokens)
