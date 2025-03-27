@@ -13,6 +13,8 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### **Printess Editor Integration with .NET 9 & Angular 19**
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0022_LiliShop_PrintessEditor_Integration_Guide.md)
 
 ### **New Feature: Sale Status Filter and Admin Sale Column**
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0021_sale-feature-update.md)
