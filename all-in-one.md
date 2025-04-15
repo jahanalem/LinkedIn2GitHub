@@ -1,3 +1,20 @@
+## 🛍️ Smarter Discount System in LiliShop
+
+LiliShop's discount feature was redesigned from a simple model with fields inside the `Product` table to a more flexible and scalable structure using dedicated `Discount` and `ProductDiscount` tables.
+
+This change brings key benefits:
+- Reusable discounts across products  
+- Support for future features like group discounts  
+- Cleaner and more maintainable database structure  
+
+To handle the new complexity, a custom `ProductMapper` was implemented instead of AutoMapper, offering better control, testability, and performance for mapping logic.
+
+Because the article is quite long, I won’t include all the technical details here.  
+👉 **Please check the full documentation at the following link:**  
+[0023_LiliShop_discount-system-algorithm-documentation.md](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0023_LiliShop_discount-system-algorithm-documentation.md)
+
+
+---
 
 ## 🖨️ Printess Editor Integration with .NET 9 & Angular 19
 
