@@ -26,11 +26,11 @@ This document explains the detailed algorithm for processing product updates wit
       - [✅ Key Responsibilities:](#--key-responsibilities-)
     + [🚀 `submit()` Method — EditProductComponent (Frontend)](#-submit-method--editproductcomponent-frontend)
       - [✅ Key Responsibilities:](#-key-responsibilities-1)
-  * [🧩 Discount System Database Schema](#discount-system-database-schema)
-  * [🖼️ UI Preview: Discount Management](#ui-preview--discount-management)
-    + [🎛️ Admin Panel: Discount Form Fields](#-admin-panel--discount-form-fields)
-    + [🧾 Customer View: Product Detail Page](#-customer-view--product-detail-page)
-    + [🛒 Customer View: Product List Grid](#-customer-view--product-list-grid)
+  * [🧩 Discount System Database Schema](#-discount-system-database-schema)
+  * [🖼️ UI Preview: Discount Management](#%EF%B8%8F-ui-preview-discount-management)
+    + [🎛️ Admin Panel: Discount Form Fields](#%EF%B8%8F-admin-panel-discount-form-fields)
+    + [🧾 Customer View: Product Detail Page](#-customer-view-product-detail-page)
+    + [🛒 Customer View: Product List Grid](#-customer-view-product-list-grid)
   * [📌 Tags](#-tags)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
