@@ -8,15 +8,15 @@ This document explains the detailed algorithm for processing product updates wit
   * [Overview](#overview)
   * [System Components](#system-components)
   * [Algorithm Workflow](#algorithm-workflow)
-    + [1. Product Retrieval](#1-product-retrieval)
-    + [2. Validation of the Update Request](#2-validation-of-the-update-request)
-    + [3. Photo Processing](#3-photo-processing)
-    + [4. Mapping Update Data](#4-mapping-update-data)
-    + [5. Discount Handling](#5-discount-handling)
+    + [Product Retrieval](#product-retrieval)
+    + [Validation of the Update Request](#2-validation-of-the-update-request)
+    + [Photo Processing](#photo-processing)
+    + [Mapping Update Data](#mapping-update-data)
+    + [Discount Handling](#discount-handling)
       - [Discount Validation](#discount-validation)
       - [Discount Update or Creation](#discount-update-or-creation)
       - [Price Changes and Scheduled Discounts](#price-changes-and-scheduled-discounts)
-    + [6. Persistence and Final Response](#6-persistence-and-final-response)
+    + [Persistence and Final Response](#persistence-and-final-response)
   * [Discount Scheduling and Lifecycle](#discount-scheduling-and-lifecycle)
   * [Conclusion](#conclusion)
   * [Related Components](#related-components)
@@ -24,10 +24,10 @@ This document explains the detailed algorithm for processing product updates wit
     + [🔧 `UpdateProductAsync` Method — ProductService (Backend)](#-updateproductasync-method--productservice-backend)
     + [🧩 `MapUpdateDtoToProduct` Method — ProductMapper (Backend)](#-mapupdatedtotoproduct--method---productmapper--backend)
       - [✅ Key Responsibilities:](#--key-responsibilities-)
-    + [🚀 `submit()` Method — EditProductComponent (Frontend)](#-submit----method---editproductcomponent--frontend)
-      - [✅ Key Responsibilities:](#-key-responsibilities--1)
-  * [🧩 9. Discount System Database Schema](#-9-discount-system-database-schema)
-  * [🖼️ 10. UI Preview: Discount Management](#-10-ui-preview--discount-management)
+    + [🚀 `submit()` Method — EditProductComponent (Frontend)](#-submit-method--editproductcomponent-frontend)
+      - [✅ Key Responsibilities:](#-key-responsibilities-1)
+  * [🧩 Discount System Database Schema](#discount-system-database-schema)
+  * [🖼️ UI Preview: Discount Management](#ui-preview--discount-management)
     + [🎛️ Admin Panel: Discount Form Fields](#-admin-panel--discount-form-fields)
     + [🧾 Customer View: Product Detail Page](#-customer-view--product-detail-page)
     + [🛒 Customer View: Product List Grid](#-customer-view--product-list-grid)
@@ -66,7 +66,7 @@ Only one discount per product is active at a time. The system handles:
 
 ## Algorithm Workflow
 
-### 1. Product Retrieval
+### Product Retrieval
 
 - The product is fetched from the database in a single query along with all its related entities (photos, characteristics, and discount history).
 
@@ -75,7 +75,7 @@ Only one discount per product is active at a time. The system handles:
 var productFromDb = await FetchProductFromDatabaseAsync(productId);
 ```
 
-### 2. Validation of the Update Request
+### Validation of the Update Request
 
 - **Validate Existence**  
   The system checks if the product exists.
@@ -96,7 +96,7 @@ if (!isValid)
 }
 ```
 
-### 3. Photo Processing
+### Photo Processing
 
 - Any new product photo (if provided) is processed asynchronously. This ensures that updated images are uploaded and associated with the product entity.
 
@@ -104,7 +104,7 @@ if (!isValid)
 await ProcessPhotosAsync(productFromDb, file);
 ```
 
-### 4. Mapping Update Data
+### Mapping Update Data
 
 The `ProductMapper.MapUpdateDtoToProduct` method maps the update DTO to the existing product entity. This includes:
 
@@ -156,7 +156,7 @@ The `ProductMapper.MapUpdateDtoToProduct` method maps the update DTO to the exis
 _productMapper.MapUpdateDtoToProduct(productToUpdateDto, productFromDb);
 ```
 
-### 5. Discount Handling
+### Discount Handling
 
 #### Discount Validation
 
@@ -207,7 +207,7 @@ if (dto.Discount is not null)
 - For immediate discounts:
   - The product's price is updated directly, and the old price is stored as `PreviousPrice`.
 
-### 6. Persistence and Final Response
+### Persistence and Final Response
 
 - The updated product entity is saved to the database via the Unit of Work pattern.
 - Finally, the product entity is mapped to a return DTO and sent back as a successful operation result.
@@ -1142,7 +1142,7 @@ onSubmit() {
 
 ---
 
-## 🧩 9. Discount System Database Schema
+## 🧩 Discount System Database Schema
 
 The following diagram illustrates the key database tables and their relationships involved in the discount management process:
 
@@ -1159,7 +1159,7 @@ This schema plays a central role in applying, scheduling, and managing product d
 
 ---
 
-## 🖼️ 10. UI Preview: Discount Management
+## 🖼️ UI Preview: Discount Management
 
 Below are screenshots from the LiliShop UI showcasing how the discount system appears for both admin users and customers.
 
