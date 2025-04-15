@@ -2,6 +2,40 @@
 
 This document explains the detailed algorithm for processing product updates with discount logic in the LiliShop project. The goal is to ensure that product updates (including photo processing, characteristic synchronization, discount validation, and price adjustments) are handled in a robust, maintainable manner.
 
+## Table of Contents
+
+- [Discount System Algorithm Documentation](#discount-system-algorithm-documentation)
+  * [Overview](#overview)
+  * [System Components](#system-components)
+  * [Algorithm Workflow](#algorithm-workflow)
+    + [1. Product Retrieval](#1-product-retrieval)
+    + [2. Validation of the Update Request](#2-validation-of-the-update-request)
+    + [3. Photo Processing](#3-photo-processing)
+    + [4. Mapping Update Data](#4-mapping-update-data)
+    + [5. Discount Handling](#5-discount-handling)
+      - [Discount Validation](#discount-validation)
+      - [Discount Update or Creation](#discount-update-or-creation)
+      - [Price Changes and Scheduled Discounts](#price-changes-and-scheduled-discounts)
+    + [6. Persistence and Final Response](#6-persistence-and-final-response)
+  * [Discount Scheduling and Lifecycle](#discount-scheduling-and-lifecycle)
+  * [Conclusion](#conclusion)
+  * [Related Components](#related-components)
+  * [🧠 Full Source Code (Backend & Frontend)](#---full-source-code--backend---frontend-)
+    + [🔧 `UpdateProductAsync` Method — ProductService (Backend)](#----updateproductasync--method---productservice--backend-)
+    + [🧩 `MapUpdateDtoToProduct` Method — ProductMapper (Backend)](#----mapupdatedtotoproduct--method---productmapper--backend-)
+      - [✅ Key Responsibilities:](#--key-responsibilities-)
+    + [🚀 `submit()` Method — EditProductComponent (Frontend)](#----submit----method---editproductcomponent--frontend-)
+      - [✅ Key Responsibilities:](#--key-responsibilities--1)
+  * [🧩 9. Discount System Database Schema](#---9-discount-system-database-schema)
+  * [🖼️ 10. UI Preview: Discount Management](#----10-ui-preview--discount-management)
+    + [🎛️ Admin Panel: Discount Form Fields](#----admin-panel--discount-form-fields)
+    + [🧾 Customer View: Product Detail Page](#---customer-view--product-detail-page)
+    + [🛒 Customer View: Product List Grid](#---customer-view--product-list-grid)
+  * [📌 Tags](#---tags)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
+
 ## Overview
 
 The discount system in LiliShop is a complex set of business rules that manage how discounts are applied to products. A discount can be active immediately or scheduled for a future activation. 
