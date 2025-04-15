@@ -20,7 +20,7 @@ This document explains the detailed algorithm for processing product updates wit
   * [Discount Scheduling and Lifecycle](#discount-scheduling-and-lifecycle)
   * [Conclusion](#conclusion)
   * [Related Components](#related-components)
-  * [🧠 Full Source Code (Backend & Frontend)](#---full-source-code--backend---frontend-)
+  * [🧠 Full Source Code (Backend & Frontend)](#-full-source-code-backend--frontend)
     + [🔧 `UpdateProductAsync` Method — ProductService (Backend)](#----updateproductasync--method---productservice--backend-)
     + [🧩 `MapUpdateDtoToProduct` Method — ProductMapper (Backend)](#----mapupdatedtotoproduct--method---productmapper--backend-)
       - [✅ Key Responsibilities:](#--key-responsibilities-)
