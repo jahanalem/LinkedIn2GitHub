@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### **Discount System Algorithm Documentation**
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0023_LiliShop_discount-system-algorithm-documentation.md)
+
 ### **Printess Editor Integration with .NET 9 & Angular 19**
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0022_LiliShop_PrintessEditor_Integration_Guide.md)
 
