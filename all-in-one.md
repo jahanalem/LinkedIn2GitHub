@@ -1,3 +1,17 @@
+## ✨ **Group Discount System for LiliShop** ✨
+
+This article dives into the flexible group discount feature I developed for my e-commerce platform, LiliShop 🛍️. The system allows for creating discounts for **groups of products** based on their **brand** 🏷️ and/or **type** 👕. Admins can select a specific brand or type, or even apply the discount to **ALL** brands or types! 🌐
+
+Each discount rule can be set with a specific **start** 🗓️ and **end date** 🔚, giving you full control over promotional periods. For example, you can easily set a discount for all products of a certain brand for a week! 🗓️➡️🔚
+
+It's also important to note the **priority**: if a product has both a specific, single-product discount and a group discount, the **single-product discount will always be applied** 🥇. This ensures clarity for customers.
+
+LiliShop is built with modern technologies like **Angular 19** 💻 for the frontend and **.NET 9** ⚙️ for the backend, running smoothly on **Microsoft Azure** ☁️. This group discount system is designed to be both powerful and easy for administrators to manage 💪.
+
+Check out the full article here: [0024_group-discount-system.md](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0024_group-discount-system.md) 🚀
+
+---
+
 ## 🛍️ Smarter Discount System in LiliShop
 
 LiliShop's discount feature was redesigned from a simple model with fields inside the `Product` table to a more flexible and scalable structure using dedicated `Discount` and `ProductDiscount` tables.
