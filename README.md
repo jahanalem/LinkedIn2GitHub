@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### **LiliShop's Group Discount System**
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0024_group-discount-system.md#lilishops-group-discount-system-)
+
 ### **Discount System Algorithm Documentation**
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0023_LiliShop_discount-system-algorithm-documentation.md)
 
