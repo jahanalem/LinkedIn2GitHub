@@ -1,3 +1,10 @@
+## How to Upgrade Angular v19 to v20 and Deploy to Azure Using GitHub Actions ##
+I recently upgraded my project LiliShop from Angular 19 to Angular 20. In this article, I have explained the key steps I took, focusing on important changes like the new browser folder in the build output. I also cover how I updated my ASP.NET Core backend and the GitHub Actions workflow to ensure a smooth deployment to Azure.
+
+Check out the full article here: https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0025_upgrade-angular19-to-20-azure-gh-actions.md
+
+---
+
 ## ✨ **Group Discount System for LiliShop** ✨
 
 This article dives into the flexible group discount feature I developed for my e-commerce platform, LiliShop 🛍️. The system allows for creating discounts for **groups of products** based on their **brand** 🏷️ and/or **type** 👕. Admins can select a specific brand or type, or even apply the discount to **ALL** brands or types! 🌐
