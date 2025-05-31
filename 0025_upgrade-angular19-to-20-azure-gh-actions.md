@@ -239,5 +239,5 @@ Always remember to test locally after making backend changes and use the logs in
 
 Happy coding, and enjoy Angular 20\! 🚀
 
-```
-```
+
+
