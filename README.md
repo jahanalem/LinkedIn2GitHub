@@ -14,7 +14,7 @@ You can find all articles combined in one file here:
 ## 📚 Articles:
 
 ### **How to Upgrade Angular v19 to v20 and Deploy to Azure Using GitHub Actions**
-[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0025_upgrade-angular19-to-20-azure-gh-actions.md))
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0025_upgrade-angular19-to-20-azure-gh-actions.md)
 
 ### **LiliShop's Group Discount System**
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0024_group-discount-system.md#lilishops-group-discount-system-)
