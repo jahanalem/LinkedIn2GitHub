@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### **Homeoffice Zeiterfassung – Ein Full-Stack-Projekt**
+[Read More](https://github.com/jahanalem/HomeofficeApp/tree/client?tab=readme-ov-file#homeoffice-zeiterfassung--ein-full-stack-projekt)
+
 ### **How to Upgrade Angular v19 to v20 and Deploy to Azure Using GitHub Actions**
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0025_upgrade-angular19-to-20-azure-gh-actions.md)
 
