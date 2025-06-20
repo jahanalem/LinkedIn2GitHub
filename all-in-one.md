@@ -1,3 +1,10 @@
+## **Homeoffice Zeiterfassung – Ein Full-Stack-Projekt (.NET 9 und Angular 20)**
+Eine moderne Webanwendung zur Zeiterfassung im Homeoffice, realisiert als Full-Stack-Projekt mit .NET 9 und Angular 20. Mitarbeiter können sich einloggen, um ihre Arbeitszeit zu starten und zu stoppen. Nach Abschluss eines Eintrags versendet das System automatisch eine Benachrichtigung per E-Mail an die Personalabteilung.
+
+https://github.com/jahanalem/HomeofficeApp/tree/client?tab=readme-ov-file#homeoffice-zeiterfassung--ein-full-stack-projekt
+
+---
+
 ## How to Upgrade Angular v19 to v20 and Deploy to Azure Using GitHub Actions ##
 I recently upgraded my project LiliShop from Angular 19 to Angular 20. In this article, I have explained the key steps I took, focusing on important changes like the new browser folder in the build output. I also cover how I updated my ASP.NET Core backend and the GitHub Actions workflow to ensure a smooth deployment to Azure.
 
