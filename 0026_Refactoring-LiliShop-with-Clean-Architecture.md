@@ -4,6 +4,23 @@ Welcome to the technical overview of LiliShop, a modern e-commerce platform buil
 
 This document will guide you through the "what," the "why," and the "how" of this transition, providing a clear blueprint of the new project structure.
 
+<!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
+
+- [From Monolith to Masterpiece: Refactoring LiliShop with Clean Architecture](#from-monolith-to-masterpiece-refactoring-lilishop-with-clean-architecture)
+   * [1\. What is Clean Architecture?](#1-what-is-clean-architecture)
+   * [2\. Why Migrate LiliShop to Clean Architecture?](#2-why-migrate-lilishop-to-clean-architecture)
+   * [3\. The Structure of LiliShop in Clean Architecture](#3-the-structure-of-lilishop-in-clean-architecture)
+      + [3.1. The Core: `LiliShop.Domain`](#31-the-core-lilishopdomain)
+      + [3.2. The Use Cases: `LiliShop.Application`](#32-the-use-cases-lilishopapplication)
+      + [3.3. The Details: `LiliShop.Infrastructure`](#33-the-details-lilishopinfrastructure)
+      + [3.4. The Entry Point: `LiliShop.API`](#34-the-entry-point-lilishopapi)
+   * [4\. The Dependency Rule in Action](#4-the-dependency-rule-in-action)
+   * [5\. Overcoming a Migration Challenge: Decoupling Identity](#5-overcoming-a-migration-challenge-decoupling-identity)
+   * [6. Code Metrics: The Proof in Numbers](#6-code-metrics-the-proof-in-numbers)
+   * [Conclusion](#conclusion)
+
+<!-- TOC end -->
+
 ## 1\. What is Clean Architecture?
 
 Clean Architecture, a concept popularized by Robert C. Martin ("Uncle Bob"), is a software design philosophy that emphasizes the separation of concerns. Its primary goal is to create systems that are:
