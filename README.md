@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### **From Monolith to Masterpiece: Refactoring LiliShop with Clean Architecture**
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0026_Refactoring-LiliShop-with-Clean-Architecture.md)
+
 ### **Homeoffice Zeiterfassung – Ein Full-Stack-Projekt (.NET 9 und Angular 20)**
 [Read More](https://github.com/jahanalem/HomeofficeApp/tree/client?tab=readme-ov-file#homeoffice-zeiterfassung--ein-full-stack-projekt)
 
