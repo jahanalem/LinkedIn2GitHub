@@ -57,7 +57,9 @@ LiliShop is now organized into four primary projects, each representing a layer 
 |-- LiliShop.Infrastructure/
 `-- LiliShop.API/
 ```
-![Clean-Architecture](https://github.com/user-attachments/assets/5b8aff8f-4c0c-480f-ba83-423082db4b52)
+![Clean-Architecture-LiliShop](https://github.com/user-attachments/assets/0ae71b76-efab-41c4-a780-3feb42b9f080)
+
+
 
 
 ### 3.1. The Core: `LiliShop.Domain`
