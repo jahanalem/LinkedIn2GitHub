@@ -1,3 +1,8 @@
+## **From Monolith to Masterpiece: Refactoring LiliShop with Clean Architecture**
+This article documents the refactoring of the LiliShop e-commerce platform's backend from a traditional N-Layer system to Clean Architecture. The change was made to improve maintainability, testability, and technology independence by separating the software into four distinct layers: Domain (core business logic), Application (use cases), Infrastructure (external details like databases and services), and API (the presentation layer). By enforcing the Dependency Rule, where all dependencies point inward toward the Domain, the project achieves a more robust, scalable, and flexible foundation, as illustrated by the successful decoupling of framework-specific components like ASP.NET Identity from the core business rules.
+
+https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0026_Refactoring-LiliShop-with-Clean-Architecture.md
+
 ## **Homeoffice Zeiterfassung – Ein Full-Stack-Projekt (.NET 9 und Angular 20)**
 Eine moderne Webanwendung zur Zeiterfassung im Homeoffice, realisiert als Full-Stack-Projekt mit .NET 9 und Angular 20. Mitarbeiter können sich einloggen, um ihre Arbeitszeit zu starten und zu stoppen. Nach Abschluss eines Eintrags versendet das System automatisch eine Benachrichtigung per E-Mail an die Personalabteilung.
 
