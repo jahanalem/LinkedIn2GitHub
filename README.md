@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### **Dokumentation: Wie man Rechtecke aus Punkten findet**
+[Read More](https://github.com/jahanalem/RectanglesCalculator?tab=readme-ov-file#dokumentation-wie-man-rechtecke-aus-punkten-findet)
+
 ### **From Monolith to Masterpiece: Refactoring LiliShop with Clean Architecture**
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0026_Refactoring-LiliShop-with-Clean-Architecture.md)
 
