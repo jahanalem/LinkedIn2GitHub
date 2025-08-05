@@ -13,7 +13,7 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
-### **Dokumentation: Wie man Rechtecke aus Punkten findet**
+### **RectanglesCalculator: Rechtecke aus Punkten finden**
 [Read More](https://github.com/jahanalem/RectanglesCalculator?tab=readme-ov-file#dokumentation-wie-man-rechtecke-aus-punkten-findet)
 
 ### **From Monolith to Masterpiece: Refactoring LiliShop with Clean Architecture**
