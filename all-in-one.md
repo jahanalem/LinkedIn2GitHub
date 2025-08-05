@@ -1,3 +1,25 @@
+## RectanglesCalculator: Rechtecke aus Punkten finden
+
+Dieses Projekt ist eine C#-Anwendung. Es löst eine interessante Aufgabe: Finde alle möglichen Rechtecke aus einer gegebenen Liste von Punkten.
+
+**Was macht das Projekt besonders?**
+
+* **Intelligenter Algorithmus:** Es benutzt einen klaren und cleveren Algorithmus, um die Rechtecke zu finden.
+* **Schnelle Verarbeitung:** Das Programm ist sehr schnell. Es nutzt **Parallel-Processing**, um die Arbeit auf mehrere CPU-Kerne zu verteilen.
+* **Sauberer Code:** Der Code ist gut strukturiert und leicht verständlich. Er benutzt moderne C#-Techniken.
+* **Effizient:** Durch smarte Tricks wie Caching und optimierte Datenstrukturen ist das Programm sehr effizient.
+
+Dieses Projekt ist ein super Beispiel dafür, wie man ein komplexes Problem mit gutem Softwaredesign und modernen Programmiertechniken lösen kann.
+
+Eine vollständige und detaillierte Erklärung des Codes und des Algorithmus findest du hier:
+[https://github.com/jahanalem/RectanglesCalculator?tab=readme-ov-file#dokumentation-wie-man-rechtecke-aus-punkten-findet](https://github.com/jahanalem/RectanglesCalculator?tab=readme-ov-file#dokumentation-wie-man-rechtecke-aus-punkten-findet)
+
+
+<img width="674" height="616" alt="Punkte" src="https://github.com/user-attachments/assets/d67b9de7-f459-4a83-a3fe-12948b5f4eea" />
+
+
+---
+
 ## **From Monolith to Masterpiece: Refactoring LiliShop with Clean Architecture**
 This article documents the refactoring of the LiliShop e-commerce platform's backend from a traditional N-Layer system to Clean Architecture. The change was made to improve maintainability, testability, and technology independence by separating the software into four distinct layers: Domain (core business logic), Application (use cases), Infrastructure (external details like databases and services), and API (the presentation layer). By enforcing the Dependency Rule, where all dependencies point inward toward the Domain, the project achieves a more robust, scalable, and flexible foundation, as illustrated by the successful decoupling of framework-specific components like ASP.NET Identity from the core business rules.
 
