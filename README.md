@@ -71,13 +71,13 @@ You can find all articles combined in one file here:
 ### **11. Revamping My Blog Application: From .NET 5 to .NET 8**  
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/blog-app-net8-upgrade.md)
 
-### **10. Certification Achievement: Postman REST API Testing**  
+### **10. Certification Achievement: Postman REST API Testing 🔬🧪🔎🕵️**  
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/postman-certification-completion.md)
 
-### **9. Improving API Error Handling: My Approach**  
+### **9. Improving API Error Handling: My Approach 🔬🧪🔎🕵️**  
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/api-error-handling-improvements.md)
 
-### **8. Developing Unit Tests for LiliShop**  
+### **8. Developing Unit Tests for LiliShop 🔬🧪🔎🕵️**  
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/lilishop-unit-tests-xunit.md)
 
 ### **7. Automating Deployments with GitHub Actions: LiliShop Update**  
