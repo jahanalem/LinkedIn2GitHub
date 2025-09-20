@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### **29. Wachstum über den Code hinaus: Ein Blick auf meine Projekte außerhalb der Entwicklung 🌱 💪**
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0027_growth-beyond-code.md)
+
 ### **28. RectanglesCalculator: Rechtecke aus Punkten finden**
 [Read More](https://github.com/jahanalem/RectanglesCalculator?tab=readme-ov-file#dokumentation-wie-man-rechtecke-aus-punkten-findet)
 
