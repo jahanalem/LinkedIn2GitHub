@@ -1,3 +1,10 @@
+## Wachstum über den Code hinaus: Ein Blick auf meine Projekte außerhalb der Entwicklung 🌱 💪
+This article is about personal growth outside of work. It covers two of my projects: a fitness journey with systematic progress tracking, and my volunteer work with Malteser. My roles there include helping seniors with tech at a "Café Digital" and serving as an IT-Referent.
+
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0027_growth-beyond-code.md)
+
+---
+
 ## RectanglesCalculator: Rechtecke aus Punkten finden
 
 Dieses Projekt ist eine C#-Anwendung. Es löst eine interessante Aufgabe: Finde alle möglichen Rechtecke aus einer gegebenen Liste von Punkten.
