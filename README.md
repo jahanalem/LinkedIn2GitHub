@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### 30. New Skill Acquired: Foundations of Go (Golang)
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0030_golang-foundations-and-microservices-plan.md)
+
 ### **29. Wachstum über den Code hinaus: Ein Blick auf meine Projekte außerhalb der Entwicklung 🌱 💪**
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0027_growth-beyond-code.md)
 
