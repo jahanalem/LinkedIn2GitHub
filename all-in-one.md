@@ -1,3 +1,11 @@
+## New Skill Acquired: Foundations of Go (Golang)
+I’ve completed a foundational Go (Golang) course as a first step toward learning microservices architecture for my e-commerce project LiliShop.
+While the core stays in .NET, I plan to use Go for high-concurrency services like notifications, thanks to its efficiency and lightweight performance.
+
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0030_golang-foundations-and-microservices-plan.md)
+
+---
+
 ## Wachstum über den Code hinaus: Ein Blick auf meine Projekte außerhalb der Entwicklung 🌱 💪
 This article is about personal growth outside of work. It covers two of my projects: a fitness journey with systematic progress tracking, and my volunteer work with Malteser. My roles there include helping seniors with tech at a "Café Digital" and serving as an IT-Referent.
 
