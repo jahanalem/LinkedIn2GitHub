@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### 31. Go (Golang) Rectangles: A Performance Comparison with C#
+[Read More](https://github.com/jahanalem/go-rectangles?tab=readme-ov-file#go-rectangles-a-performance-comparison-with-c)
+
 ### 30. New Skill Acquired: Foundations of Go (Golang)
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0030_golang-foundations-and-microservices-plan.md)
 
