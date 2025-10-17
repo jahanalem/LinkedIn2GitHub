@@ -1,3 +1,10 @@
+## Go Rectangles: A Performance Comparison with C#
+A case study comparing Go and C# performance on a concurrent, computational task. This Go program finds all possible rectangles from 2D points, running up to 20x faster than the original C# implementation.
+
+[Read More](https://github.com/jahanalem/go-rectangles?tab=readme-ov-file#go-rectangles-a-performance-comparison-with-c)
+
+---
+
 ## New Skill Acquired: Foundations of Go (Golang)
 I’ve completed a foundational Go (Golang) course as a first step toward learning microservices architecture for my e-commerce project LiliShop.
 While the core stays in .NET, I plan to use Go for high-concurrency services like notifications, thanks to its efficiency and lightweight performance.
