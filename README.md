@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### 32. Catch Eleven: A C# Game Engine with Clean Architecture
+[Read More](https://github.com/jahanalem/CatchEleven)
+
 ### 31. Go (Golang) Rectangles: A Performance Comparison with C#
 [Read More](https://github.com/jahanalem/go-rectangles?tab=readme-ov-file#go-rectangles-a-performance-comparison-with-c)
 
