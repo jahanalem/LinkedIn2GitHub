@@ -1,3 +1,10 @@
+## Catch Eleven: A C# Game Engine with Clean Architecture
+A C#/.NET 9 project for the classic Persian card game "Pasoor" (Catch Eleven). The project was refactored to use Clean Architecture, separating the core game logic (Domain/Application) from the UI (Infrastructure/ConsoleUI). This creates a testable (with XUnit) and maintainable "game engine" ready for any future UI, like WPF or Angular.
+
+[Read More](https://github.com/jahanalem/CatchEleven)
+
+---
+
 ## Go Rectangles: A Performance Comparison with C#
 A case study comparing Go and C# performance on a concurrent, computational task. This Go program finds all possible rectangles from 2D points, running up to 20x faster than the original C# implementation.
 
