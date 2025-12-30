@@ -210,7 +210,80 @@ Dies ermöglicht es den Mitarbeitern der Malteser, hunderte von Datensätzen in 
 
 ---
 
+Das ist eine sehr gute Entscheidung. Nachdem wir den Prozess (Flow) erklärt haben, ist es logisch, nun den **Speicherort (Datenbank)** zu beschreiben. Ohne die Listen funktioniert weder die App noch der Flow.
 
+Hier ist die Dokumentation für den **SharePoint-Teil**. Sie erklärt die Struktur der beiden Listen und warum wir sie genau so eingerichtet haben.
+
+---
+
+# Dokumentation: SharePoint – Die Datenstruktur (Backend)
+
+Für dieses Projekt nutzen wir **Microsoft SharePoint Online** als Datenbank. SharePoint-Listen eignen sich hervorragend für Power Apps, da sie sicher, einfach zu verwalten und direkt in die Microsoft-Umgebung integriert sind.
+
+Wir verwenden zwei separate Listen für dieses Projekt:
+
+1. **Suchende:** Die Haupt-Datenbank für alle Personen.
+2. **TempImport:** Eine Hilfs-Liste für den Datei-Upload.
+
+---
+
+## 1. Die Hauptliste: "Suchende"
+
+Dies ist das Herzstück unserer Anwendung. Hier werden alle Datensätze der arbeitssuchenden Personen dauerhaft gespeichert.
+
+### Zweck
+
+Die Liste dient als zentrale Datenbank. Die Power App liest Daten von hier (um sie anzuzeigen) und schreibt Daten hierhin (beim Erstellen oder Bearbeiten). Auch der Power Automate Flow speichert die importierten Daten am Ende in dieser Liste.
+
+### Wichtige Spalten (Datenstruktur)
+
+Neben den Standard-Spalten von SharePoint haben wir folgende benutzerdefinierte Spalten eingerichtet:
+
+| Spaltenname | Typ | Beschreibung |
+| --- | --- | --- |
+| **Vorname** | Text | Der Vorname der Person. |
+| **Nachname** | Text | Der Nachname der Person. |
+| **Email** | Text | Kontakt-Email-Adresse. |
+| **Geburtsdatum** | Datum | Wichtig für Altersberechnungen. |
+| **Telefon** | Text | Telefonnummer für Rückfragen. |
+| **Gelöscht** | Ja/Nein (Boolean) | **Wichtig:** Steuert den "Papierkorb". |
+
+### Besonderheit: Das "Soft Delete" Konzept (Papierkorb)
+
+Ein besonderes Merkmal dieser Liste ist die Spalte `Gelöscht`.
+
+* Wenn ein Benutzer in der App auf "Löschen" klickt, wird der Datensatz **nicht** sofort physisch entfernt.
+* Stattdessen setzen wir den Wert in der Spalte `Gelöscht` auf `Ja` (True).
+* **Vorteil:** Die Daten verschwinden aus der normalen Ansicht, landen aber in unserem app-internen "Papierkorb". So können versehentlich gelöschte Daten leicht wiederhergestellt werden (`Gelöscht` wird wieder auf `Nein` gesetzt).
+* Erst im Papierkorb gibt es einen Button für das endgültige Löschen (`Remove`-Befehl).
+
+---
+
+## 2. Die Hilfsliste: "TempImport"
+
+Diese Liste ist für den Benutzer der App eigentlich unsichtbar. Sie arbeitet im Hintergrund als technischer Helfer.
+
+### Zweck (Der "Briefkasten")
+
+Da Power Apps eine Excel-Datei nicht direkt Zeile für Zeile lesen kann, brauchen wir einen Ort, an dem wir die Datei kurzzeitig "abladen" können.
+
+* Die App lädt die Excel-Datei als **Anhang** in diese Liste hoch.
+* Das Erstellen eines Eintrags in dieser Liste ist das **Startsignal (Trigger)** für unseren Power Automate Flow.
+
+### Funktionsweise im Prozess
+
+1. **App:** Erstellt ein neues Element in `TempImport` und hängt die Excel-Datei an.
+2. **Flow:** Bemerkt das neue Element, holt sich die Datei und verarbeitet sie.
+3. **Flow:** Löscht das Element aus `TempImport` wieder, sobald er fertig ist.
+
+### Warum eine extra Liste?
+
+Wir trennen den "Upload-Bereich" (`TempImport`) strikt vom "Daten-Bereich" (`Suchende`).
+
+* **Sicherheit:** Fehler beim Upload beschädigen nicht die Hauptdatenbank.
+* **Logik:** Die App weiß genau: "Solange die Datei in `TempImport` liegt, arbeitet der Server noch." (Lade-Animation wird angezeigt).
+
+---
 
 
 `#PowerApps` `#SharePoint` `#Ehrenamt` `#Malteser` `#LearningByDoing` `#LowCode`
