@@ -42,7 +42,14 @@ Anstatt zu versuchen, die Datei direkt zu verarbeiten, nutzt die App eine **Zwis
 3. **Die Verarbeitung:** Der Flow holt sich die Datei, liest die Daten und schreibt sie in die eigentliche Datenbank (`Suchende`).
 4. **Der Abschluss:** Der Flow löscht die Datei aus `TempImport`, um der App zu signalisieren, dass er fertig ist.
 
----
+
+<img width="1262" height="496" alt="01_Flow_Import-Excel" src="https://github.com/user-attachments/assets/0ea5ec97-2069-4168-b627-ecb2249a28ea" />
+
+---<img width="1254" height="986" alt="02_Flow_Import-Excel_Trigger-and-Action" src="https://github.com/user-attachments/assets/0be542db-4951-4610-82dc-042b40f04173" />
+
+
+<img width="1336" height="1378" alt="03_Flow_Import-Excel_Main-Loop" src="https://github.com/user-attachments/assets/77f49532-1cfd-4ef2-b160-a872536767ac" />
+
 
 ## Detaillierte Beschreibung der Flow-Schritte
 
