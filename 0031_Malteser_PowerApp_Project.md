@@ -283,6 +283,40 @@ Wir trennen den "Upload-Bereich" (`TempImport`) strikt vom "Daten-Bereich" (`Suc
 * **Sicherheit:** Fehler beim Upload beschädigen nicht die Hauptdatenbank.
 * **Logik:** Die App weiß genau: "Solange die Datei in `TempImport` liegt, arbeitet der Server noch." (Lade-Animation wird angezeigt).
 
+
+# Dokumentation: Die Excel-Vorlage (Datenvorbereitung)
+
+Damit der Import-Prozess technisch funktioniert, darf die Excel-Datei nicht beliebig aufgebaut sein. Der Power Automate Flow erwartet eine ganz bestimmte Struktur, um die Daten lesen zu können.
+
+## 1. Die "Intelligente Tabelle" (ListObject)
+Das wichtigste technische Detail ist, dass die Daten in Excel als **"Intelligente Tabelle"** (ListObject) formatiert sein müssen.
+
+* **Der Grund:** Der Power Automate Connector "List rows present in a table" kann nicht einfach "Blatt 1" lesen. Er benötigt ein definiertes Tabellen-Objekt, um Start und Ende der Daten zu erkennen.
+* **Die Fehlerquelle:** Ein häufiger Anwenderfehler ist, dass Daten *unterhalb* der Tabelle eingefügt werden.
+    * Excel zeigt den Bereich der Tabelle durch einen **blauen Rahmen** (oder einen blauen Winkel unten rechts) an.
+    * Daten außerhalb dieses Rahmens werden vom Flow **ignoriert** ("Ghost Data").
+* **Die Lösung:** Der Benutzer muss sicherstellen, dass sich der blaue Rahmen automatisch erweitert, wenn neue Daten hineinkopiert werden.
+
+## 2. Spaltenstruktur und Mapping
+Die Spaltenüberschriften in der Excel-Datei fungieren als **Schlüssel (Keys)** für den Flow.
+
+* **Namenskonvention:** Die Überschriften (`Vorname`, `Nachname`, `Email`, `Geburtsdatum`, ...) sind fest im Flow programmiert.
+* **Regel:** Diese Überschriften dürfen **nicht umbenannt oder gelöscht** werden. Wenn eine Spalte fehlt, bricht der Flow mit einem Fehler ab, da er den Schlüssel nicht findet.
+
+## 3. Datentypen
+Damit der Import in die SharePoint-Liste (die strenge Datentypen hat) gelingt, muss die Formatierung in Excel stimmen:
+
+* **Datum:** Felder wie `Geburtsdatum` müssen in Excel als echtes Datum formatiert sein (z. B. `TT.MM.JJJJ`). Wenn sie als "Text" gespeichert sind, kann der Flow sie oft nicht in das SharePoint-Datumsformat konvertieren, was zu Fehlern oder falschen Werten führt.
+* **Pflichtfelder:** Spalten wie `Nachname` sollten nicht leer sein, da SharePoint diese Einträge sonst eventuell ablehnt.
+
+---
+*Hinweis: Um Fehler zu vermeiden, stellen wir den Anwendern eine geschützte Vorlage (`Suchende_Import_Template.xlsx`) zur Verfügung, in der die Tabelle und die Datentypen bereits korrekt eingestellt sind.*
+
+<img width="3068" height="442" alt="image" src="https://github.com/user-attachments/assets/212ec87f-25ee-4b8b-b3f5-dfe9177e2adf" />
+<img width="1638" height="448" alt="Exel-Tabelle" src="https://github.com/user-attachments/assets/d901eb8e-6766-4654-9483-64f97c450bd5" />
+
+
+
 ---
 
 
