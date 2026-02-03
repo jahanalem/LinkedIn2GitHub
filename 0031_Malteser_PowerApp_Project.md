@@ -1,4 +1,4 @@
-# 🚀 Neues Projekt: Malteser Tandem App (WIP)
+# 🚀 Neues Projekt: Malteser Tandem App
 
 Ich freue mich, mein aktuelles Projekt vorzustellen. Es ist eine ehrenamtliche Arbeit für den **[Malteser Hilfsdienst](https://www.malteser.de/standorte/frankfurt.html)**.
 
@@ -15,11 +15,11 @@ Die Hauptfunktionen sind:
 * **Verwaltung von Unterstützungssuchenden:** Wer braucht Hilfe? (Mit detailliertem Stammdatenblatt).
 * **Tandem-Management:** Die wichtigste Funktion. Die App verknüpft einen Ehrenamtlichen mit einem Suchenden zu einem "Tandem" (Patenschaft).
 
-## 🚧 Status des Projekts
-Ich arbeite zurzeit noch aktiv an diesem Projekt. Die Entwicklung ist noch nicht abgeschlossen.
-Auch dieses Dokument ist noch **in Arbeit (Work in Progress)**. Ich werde in Zukunft mehr Details, Screenshots und technische Einblicke hinzufügen, sobald das Projekt weiter fortgeschritten ist.
+##  Zertifikat
+Offizielle Bescheinigung des Malteser Hilfsdienstes über meine ehrenamtliche Mitarbeit und die Entwicklung einer internen Power-Platform-Anwendung.
+<img width="1374" height="1914" alt="Malteser_BescheinigungEAM - Ohne-Geburtzdatum" src="https://github.com/user-attachments/assets/226886ed-f6dd-4570-a915-160c365f4d0f" />
 
-Bleibt dran!
+
 
 ---
 
