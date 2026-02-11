@@ -1,3 +1,18 @@
+
+# Project: Malteser Tandem App
+
+This project documents the development of the **Malteser Tandem App**, a low-code solution built with **Microsoft Power Apps** and **SharePoint** for the Malteser Hilfsdienst.The application digitizes the management of volunteer-based "Tandem" sponsorships, connecting volunteers with individuals seeking support.
+
+### Key Features
+
+* **Volunteer & Case Management:** Centralized tracking of volunteers and support-seekers including skills, contact details, and matchmaking status.
+* **Automated Data Import:** A backend **Power Automate** flow that extracts data from Excel uploads and populates the SharePoint database automatically.
+* **Robust Backend:** Utilizes SharePoint Online for data storage with a "Soft Delete" mechanism to prevent accidental data loss.
+  
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0032_Lilishop_Migration_NET10_and_Angular21.md)
+
+---
+
 ## Catch Eleven: A C# Game Engine with Clean Architecture
 A C#/.NET 9 project for the classic Persian card game "Pasoor" (Catch Eleven). The project was refactored to use Clean Architecture, separating the core game logic (Domain/Application) from the UI (Infrastructure/ConsoleUI). This creates a testable (with XUnit) and maintainable "game engine" ready for any future UI, like WPF or Angular.
 
