@@ -1,4 +1,19 @@
 
+# Project Update: Lilishop Migration (.NET 10 & Angular 21)
+
+This release documents the comprehensive migration of the **Lilishop** platform from .NET 9/Angular 20 to **.NET 10** and **Angular 21**. The update prioritizes high-performance backend architecture, significant memory reduction, and code modernization.
+
+### Key Technical Improvements
+
+* **High-Performance Serialization:** Complete replacement of `Newtonsoft.Json` with native **System.Text.Json**. This leverages "Zero-Allocation" deserialization (reading directly from memory bytes) to achieve up to 4x faster performance and reduced GC pressure.
+* **EF Core 10 Batch Operations:** Implementation of `ExecuteUpdateAsync` and `ExecuteDeleteAsync` to perform bulk database modifications in a single round-trip, bypassing the need to load entities into memory.
+* **Tag-Based Hybrid Caching:** A robust caching system using **HybridCache** and `SerializeToUtf8Bytes`. It stores raw bytes to save memory and utilizes tag-based invalidation for instant, O(1) cache clearing, replacing slow Redis pattern scans.
+* **Codebase Cleanup:** Removal of legacy formatters and wrapper classes, resulting in a cleaner, dependency-light architecture.
+
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0032_Lilishop_Migration_NET10_and_Angular21.md)
+
+---
+
 # Project: Malteser Tandem App
 
 This project documents the development of the **Malteser Tandem App**, a low-code solution built with **Microsoft Power Apps** and **SharePoint** for the Malteser Hilfsdienst.The application digitizes the management of volunteer-based "Tandem" sponsorships, connecting volunteers with individuals seeking support.
