@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### 34. Lilishop Update: Migration to .NET 10 and Angular 21
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0032_Lilishop_Migration_NET10_and_Angular21.md)
+
 ### 33. Neues Projekt: Malteser Tandem App (Microsoft Power Apps und SharePoint)
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0031_Malteser_PowerApp_Project.md)
 
