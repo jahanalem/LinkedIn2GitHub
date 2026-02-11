@@ -1,4 +1,17 @@
+# Lilishop Update: Migration to .NET 10 and Angular 21
 
+I recently updated my project, **Lilishop**.
+I migrated the backend from **.NET 9** to **.NET 10**, and updated the frontend from **Angular 20** to **Angular 21**.
+
+In this update, I didn't just upgrade the libraries; I also improved the code performance. I would like to highlight the following points:
+
+- Using **System.Text.Json** instead of Newtonsoft.
+- Using **Batch Operations** (`ExecuteUpdateAsync` and `ExecuteDeleteAsync`).
+- Implementing a **Tag-Based Hybrid Caching System**.
+
+Although I updated the frontend to Angular 21, I have not yet implemented new features like **Signal Forms**. I plan to do this at the next available opportunity.
+
+---
 
 # Goodbye Newtonsoft, Hello Speed: Migrating to .NET 10 & System.Text.Json
 
