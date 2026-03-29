@@ -1,7 +1,7 @@
 # [Trends in Testing 2026](https://www.imbus.de/events/trends-in-testing/): Meine Insights von der [imbus](https://www.imbus.de/) Roadshow
 
 ## Inhaltsverzeichnis
-
+* [Teil 0: Mein Hintergrund und die Motivation](#teil-0-mein-hintergrund-und-die-motivation)
 * [Teil 1: Eröffnung und die Grundlagen der Agentic AI](#teil-1-eröffnung-und-die-grundlagen-der-agentic-ai)
 * [Teil 2: Von Sprachmodellen zu intelligenten Agenten](#teil-2-von-sprachmodellen-zu-intelligenten-agenten)
 * [Teil 3: Die Balance zwischen Mensch und Maschine (Human in the Loop)](#teil-3-die-balance-zwischen-mensch-und-maschine-human-in-the-loop)
@@ -15,6 +15,33 @@
 * [Teil 11: Fazit und Ausblick – Bereit für die Zukunft (Conclusion & Outlook)](#teil-11-fazit-und-ausblick--bereit-für-die-zukunft-conclusion--outlook)
 
 ---
+
+## Teil 0: Mein Hintergrund und die Motivation
+
+Als Full-Stack-Entwickler mit Schwerpunkt auf **C#/.NET** und **Angular** ist eine hohe Code-Qualität für mich das Fundament jeder stabilen Anwendung. In meinen bisherigen Projekten habe ich bereits mit automatisierten Tests gearbeitet, um die Zuverlässigkeit meiner Software sicherzustellen.
+
+Einen Einblick in meine Arbeit mit **Unit-Tests (xUnit)** und API-Testing bieten folgende Projekte:
+* **[CatchEleven](https://github.com/jahanalem/CatchEleven/tree/master/tests/CatchEleven.Tests):** Umfangreiche Test-Suiten für Core-Logik.
+* **[SmartSupervisorBot](https://github.com/jahanalem/SmartSupervisorBot/blob/main/SmartSupervisorBot.Test.Core/BotServiceTests.cs):** Tests für Bot-Services und Datenzugriff.
+* **[RectanglesCalculator](https://github.com/jahanalem/RectanglesCalculator/tree/main/Nineteen.Rectangle.Test):** Mathematische Validierung und parallele Verarbeitung.
+* **[LiliShop](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/lilishop-unit-tests-xunit.md):** Umfassende Unit-Tests in einer E-Commerce-Architektur.
+* **[Postman REST API Testing](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/postman-certification-completion.md):** Zertifizierte Erfahrung im Bereich API-Automatisierung.
+
+Ich bin fest davon überzeugt, dass Unit-Tests unverzichtbar sind. Gleichzeitig spielt **Künstliche Intelligenz** heute eine entscheidende Rolle dabei, Anwendungen noch sicherer, hochwertiger und leistungsfähiger zu machen. Um zu verstehen, wie KI das Testen von morgen verändert, habe ich die imbus-Konferenz besucht.
+
+---
+
+## Die Highlights von "Trends in Testing 2026"
+
+Die Konferenz hat gezeigt, dass wir vor einem fundamentalen **Paradigmenwechsel** in der Softwarequalitätssicherung stehen. Hier sind die wichtigsten Erkenntnisse zusammengefasst:
+
+* **Das Konzept der "Licence to Execute":** KI erhält die Erlaubnis, Aufgaben autonom auszuführen. Dabei bleibt sie jedoch stets durch technische und ethische Leitplanken (**Guardrails**) unter menschlicher Kontrolle.
+* **Der Sprung vom Chat zum Agenten:** Die Entwicklung geht weg von einfachen Chatbots hin zu **Agenten**. Diese nutzen Werkzeuge (Tools), können Code ausführen und verfügen über eine Denkschleife (**Reasoning Loop**), um Ziele eigenständig zu erreichen.
+* **Multi-Agenten-Systeme (Digitale Teams):** Statt eines einzelnen großen Modells werden spezialisierte Agenten-Teams (z. B. Analyst, Designer, Coder) orchestriert. Dies steigert die Präzision und minimiert die Fehlerquote (**Hallucination Rate**).
+* **Self-Healing Tests (Selbstheilung):** KI-Agenten können Testskripte in Echtzeit reparieren. Ändert sich beispielsweise die Benutzeroberfläche in einer **Angular**-App, erkennt die KI den Button semantisch oder visuell wieder – der Test läuft ohne manuellen Eingriff weiter.
+* **LLM-as-a-Judge:** Da KI-Ergebnisse oft nicht-deterministisch sind, bewerten hochperformante Modelle (wie GPT-4o) die Qualität anderer Modelle anhand von Metriken wie Treue (**Faithfulness**) und sachlicher Richtigkeit.
+* **Wandel der Rollen:** Das Berufsbild des Testers wird deutlich technischer. Die Rolle entwickelt sich zum **Evaluation Engineer**, der automatisierte Bewertungssysteme entwirft, oder zum **Quality Architect**, der Qualität bereits in der Anforderungsphase sicherstellt.
+* **iSecTest für Security:** Mit **iSecTest** wurde eine konkrete KI-Lösung präsentiert, die automatisch Sicherheits-Testfälle für Webanwendungen generiert und so Penetrationstests massiv beschleunigt.
 
 ## Teil 1: Eröffnung und die Grundlagen der Agentic AI
 
