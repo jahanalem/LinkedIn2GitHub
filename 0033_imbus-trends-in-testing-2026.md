@@ -222,7 +222,7 @@ Der massive Unterschied zu klassischen Tools? **Self-Healing (Selbstheilung)**. 
 Der Agent führt den Test nicht nur aus, er übernimmt auch das Reporting. Tritt ein Fehler auf, macht die KI automatisch einen Screenshot, analysiert die Server-Logs und erstellt einen kompletten, detaillierten Bug-Report direkt in Systemen wie Jira.
 
 ### 4. Automatisierte Security-Tests mit iSecTest
-Ein weiteres, extrem spannendes Praxisbeispiel aus dem imbus-Portfolio ist **iSecTest**. Als Web-Entwickler weiß ich, wie komplex und zeitaufwendig Vulnerability Assessments (Schwachstellenanalysen) und Penetrationstests sein können. 
+Ein weiteres, extrem spannendes Praxisbeispiel aus dem imbus-Portfolio ist [**iSecTest**](https://www.imbus.de/security-test/isec-test). Als Web-Entwickler weiß ich, wie komplex und zeitaufwendig Vulnerability Assessments (Schwachstellenanalysen) und Penetrationstests sein können. 
 Dieses Tool nutzt KI, um mit nur wenigen Klicks gezielte Security-Testfälle für Webanwendungen zu generieren. Die Künstliche Intelligenz deckt dabei selbstständig potenzielle Sicherheitslücken auf und hilft dabei, Systeme gegen komplexe Cyberangriffe abzusichern. Das beschleunigt den Prozess des Security-Testings enorm und zeigt eindrucksvoll, wie Agenten uns dabei helfen, unsere Web-Apps sicher zu machen.
 
 ### 5. Wichtiges Vokabular für die Praxis
