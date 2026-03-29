@@ -1,3 +1,16 @@
+# Trends in Testing 2026 – The Era of Agentic AI
+This article explores the future of software quality assurance, highlighting the shift from traditional test automation to autonomous **Agentic AI**. Based on insights from the imbus roadshow, the core theme is the **"Licence to Execute"**—giving AI the autonomy to perform complex testing tasks while humans keep control using strict safety boundaries (Guardrails). 
+
+**Key Takeaways:**
+* **Multi-Agent Systems:** Instead of one large AI, a team of specialized AI agents (Analyst, Designer, Coder) works together to test software.
+* **Self-Healing Tests:** AI agents can understand web interfaces semantically. If a UI element (like an Angular button) changes, the AI fixes the test script in real-time without breaking.
+* **LLM-as-a-Judge:** AI is used to test other AI models to ensure correctness and reduce hallucinations.
+* **The New Role of Developers/Testers:** The job is changing. Developers and testers will write fewer manual scripts and instead become **Quality Architects** or **Evaluation Engineers** who design, orchestrate, and supervise AI systems. 
+* **The Value of Coding Skills:** Deep technical knowledge (like C#/.NET and Angular) is a huge advantage for writing powerful prompts and controlling AI agents effectively.
+
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0033_imbus-trends-in-testing-2026.md#teil-11-fazit-und-ausblick--bereit-f%C3%BCr-die-zukunft-conclusion--outlook)
+***
+
 
 # Project Update: Lilishop Migration (.NET 10 & Angular 21)
 
