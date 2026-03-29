@@ -1,5 +1,21 @@
 # [Trends in Testing 2026](https://www.imbus.de/events/trends-in-testing/): Meine Insights von der [imbus](https://www.imbus.de/) Roadshow
 
+## Inhaltsverzeichnis
+
+* [Teil 1: Eröffnung und die Grundlagen der Agentic AI](#teil-1-eröffnung-und-die-grundlagen-der-agentic-ai)
+* [Teil 2: Von Sprachmodellen zu intelligenten Agenten](#teil-2-von-sprachmodellen-zu-intelligenten-agenten)
+* [Teil 3: Die Balance zwischen Mensch und Maschine (Human in the Loop)](#teil-3-die-balance-zwischen-mensch-und-maschine-human-in-the-loop)
+* [Teil 4: Systemarchitektur und die Orchestrierung autonomer Agenten](#teil-4-systemarchitektur-und-die-orchestrierung-autonomer-agenten)
+* [Teil 5: Multi-Agenten-Systeme und die Orchestrierung eines digitalen Teams](#teil-5-multi-agenten-systeme-und-die-orchestrierung-eines-digitalen-teams)
+* [Teil 6: Showcases – Die Agenten in der Praxis und mein Entwickler-Blickwinkel](#teil-6-showcases--die-agenten-in-der-praxis-und-mein-entwickler-blickwinkel)
+* [Teil 7: Testing AI – Wie wir die Künstliche Intelligenz selbst testen](#teil-7-testing-ai--wie-wir-die-künstliche-intelligenz-selbst-testen)
+* [Teil 8: "Agentic Thinking" und die Neudefinition von Produktivität](#teil-8-agentic-thinking-und-die-neudefinition-von-produktivität)
+* [Teil 9: Prompt Engineering und die Bedeutung von Fachkompetenz](#teil-9-prompt-engineering-und-die-bedeutung-von-fachkompetenz)
+* [Teil 10: Der komplette Lebenszyklus – Agenten-Teams in der Praxis](#teil-10-der-komplette-lebenszyklus--agenten-teams-in-der-praxis)
+* [Teil 11: Fazit und Ausblick – Bereit für die Zukunft (Conclusion & Outlook)](#teil-11-fazit-und-ausblick--bereit-für-die-zukunft-conclusion--outlook)
+
+---
+
 ## Teil 1: Eröffnung und die Grundlagen der Agentic AI
 
 Alles begann in einer ganz besonderen Atmosphäre: Im Filmpalast Hofheim. Zur Begrüßung durch die imbus-Manager [Frank Schmeißner](https://www.imbus.de/karriere/vorstellung-unserer-standorte/rhein-main#c19315) und [Rolf Glunz](https://www.imbus.de/events/trends-in-testing-2015/referenten#c3510) gab es eine riesige Kinoleinwand und perfekten Sound – die ideale Kulisse, um die beeindruckende Kraft der Künstlichen Intelligenz zu demonstrieren. Ein kurzer Rückblick auf die rasante Entwicklung der KI seit dem Start von ChatGPT im Jahr 2022 bildete den perfekten Einstieg in den Tag.
