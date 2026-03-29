@@ -13,6 +13,7 @@
 * [Teil 9: Prompt Engineering und die Bedeutung von Fachkompetenz](#teil-9-prompt-engineering-und-die-bedeutung-von-fachkompetenz)
 * [Teil 10: Der komplette Lebenszyklus – Agenten-Teams in der Praxis](#teil-10-der-komplette-lebenszyklus--agenten-teams-in-der-praxis)
 * [Teil 11: Fazit und Ausblick – Bereit für die Zukunft (Conclusion & Outlook)](#teil-11-fazit-und-ausblick--bereit-für-die-zukunft-conclusion--outlook)
+* [Teil 12: Meine Eindrücke in Bildern](#teil-12-meine-eindrücke-in-bildern)
 
 ---
 
@@ -24,7 +25,7 @@ Einen Einblick in meine Arbeit mit **Unit-Tests (xUnit)** und API-Testing bieten
 * **[CatchEleven](https://github.com/jahanalem/CatchEleven/tree/master/tests/CatchEleven.Tests):** Umfangreiche Test-Suiten für Core-Logik.
 * **[SmartSupervisorBot](https://github.com/jahanalem/SmartSupervisorBot/blob/main/SmartSupervisorBot.Test.Core/BotServiceTests.cs):** Tests für Bot-Services und Datenzugriff.
 * **[RectanglesCalculator](https://github.com/jahanalem/RectanglesCalculator/tree/main/Nineteen.Rectangle.Test):** Mathematische Validierung und parallele Verarbeitung.
-* **[LiliShop](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/lilishop-unit-tests-xunit.md):** Umfassende Unit-Tests in einer E-Commerce-Architektur.
+* **[LiliShop](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/lilishop-unit-tests-xunit.md):** Unit-Tests in einer E-Commerce-Architektur.
 * **[Postman REST API Testing](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/postman-certification-completion.md):** Zertifizierte Erfahrung im Bereich API-Automatisierung.
 
 Ich bin fest davon überzeugt, dass Unit-Tests unverzichtbar sind. Gleichzeitig spielt **Künstliche Intelligenz** heute eine entscheidende Rolle dabei, Anwendungen noch sicherer, hochwertiger und leistungsfähiger zu machen. Um zu verstehen, wie KI das Testen von morgen verändert, habe ich die imbus-Konferenz besucht.
@@ -422,5 +423,21 @@ Wer in den nächsten Jahren im Testing ganz vorne mitspielen will, muss diese Be
 Das Motto der Konferenz ist für mich zum Leitgedanken geworden. Wir geben der Künstlichen Intelligenz die "Lizenz zum Ausführen". Wir lassen sie Code analysieren, Testdaten generieren und Bugs finden. Aber wir – die Entwickler und Qualitätsarchitekten – behalten die Aufsicht. Diese Balance ist der Schlüssel zum Erfolg. 
 
 Die Werkzeuge sind da. Die Agenten sind bereit. Es wird Zeit, loszulegen!
+
+## Teil 12: Meine Eindrücke in Bildern
+
+Zum Abschluss noch ein paar persönliche Foto-Impressionen von einem spannenden Tag bei der imbus Roadshow in Hofheim.
+
+![Trends-in-Testing](https://github.com/user-attachments/assets/ccfb05fb-a5bd-4400-8238-d4112b260c45)
+
+
+<img src="https://github.com/user-attachments/assets/fda16372-b46a-4453-936d-b1f828c816ad" alt="Selfie bei der Ankunft" width="400"/>
+*Selfie bei der Ankunft vor dem Kino.*
+
+
+
+<img src="https://github.com/user-attachments/assets/117317f7-8450-4d95-bac9-a5d0e370fc75" alt="Selfie im Kinosaal" width="400"/>
+*Selfie im Kinosaal kurz vor dem Start.*
+
 
 
