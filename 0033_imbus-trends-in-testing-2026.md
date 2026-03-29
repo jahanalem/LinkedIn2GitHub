@@ -221,7 +221,11 @@ Der massive Unterschied zu klassischen Tools? **Self-Healing (Selbstheilung)**. 
 ### 3. Live-Testing und direktes Feedback
 Der Agent führt den Test nicht nur aus, er übernimmt auch das Reporting. Tritt ein Fehler auf, macht die KI automatisch einen Screenshot, analysiert die Server-Logs und erstellt einen kompletten, detaillierten Bug-Report direkt in Systemen wie Jira.
 
-### 4. Wichtiges Vokabular für die Praxis
+### 4. Automatisierte Security-Tests mit iSecTest
+Ein weiteres, extrem spannendes Praxisbeispiel aus dem imbus-Portfolio ist **iSecTest**. Als Web-Entwickler weiß ich, wie komplex und zeitaufwendig Vulnerability Assessments (Schwachstellenanalysen) und Penetrationstests sein können. 
+Dieses Tool nutzt KI, um mit nur wenigen Klicks gezielte Security-Testfälle für Webanwendungen zu generieren. Die Künstliche Intelligenz deckt dabei selbstständig potenzielle Sicherheitslücken auf und hilft dabei, Systeme gegen komplexe Cyberangriffe abzusichern. Das beschleunigt den Prozess des Security-Testings enorm und zeigt eindrucksvoll, wie Agenten uns dabei helfen, unsere Web-Apps sicher zu machen.
+
+### 5. Wichtiges Vokabular für die Praxis
 Um diese Showcases zu verstehen, wurden folgende Begriffe geprägt:
 * **Test Oracle (Test-Orakel):** Das Konzept, bei dem die KI als "Schiedsrichter" entscheidet, ob ein Testergebnis "Pass" (bestanden) oder "Fail" (fehlgeschlagen) ist.
 * **Semantic Understanding:** Die KI versteht die *Bedeutung* eines Feldes (z. B. "Das ist ein Passwort-Feld") und sucht nicht nur nach technischen Bezeichnern in HTML.
@@ -230,7 +234,7 @@ Um diese Showcases zu verstehen, wurden folgende Begriffe geprägt:
 ### Meine Perspektive: Die perfekte Symbiose mit .NET und Angular
 Genau bei diesen Praxisbeispielen sehe ich den enormen Wert meiner technischen Erfahrung. Agentic AI ist keine isolierte Insel. Die wahre Stärke entsteht durch **Integration**. 
 
-Moderne KI-Agenten können den **Angular**-Code direkt analysieren, um Komponenten besser zu verstehen, und gleichzeitig intelligente Integrationstests für Backend-Services in **.NET** schreiben. Diese Tools ersetzen uns nicht. Sie nehmen uns die stundenlange, repetitive Fleißarbeit ab, damit wir den Test-Prozess einer gesamten Web-Applikation um das Zehnfache beschleunigen können.
+Moderne KI-Agenten (und KI-Lösungen wie iSecTest) können den **Angular**-Code direkt analysieren, um Komponenten besser zu verstehen, und gleichzeitig intelligente Integrationstests für Backend-Services in **.NET** schreiben. Diese Tools ersetzen uns nicht. Sie nehmen uns die stundenlange, repetitive Fleißarbeit ab, damit wir den Test-Prozess einer gesamten Web-Applikation um das Zehnfache beschleunigen können.
 
 ## Teil 7: Testing AI – Wie wir die Künstliche Intelligenz selbst testen
 
