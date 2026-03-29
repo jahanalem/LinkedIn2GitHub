@@ -8,7 +8,7 @@ This article explores the future of software quality assurance, highlighting the
 * **The New Role of Developers/Testers:** The job is changing. Developers and testers will write fewer manual scripts and instead become **Quality Architects** or **Evaluation Engineers** who design, orchestrate, and supervise AI systems. 
 * **The Value of Coding Skills:** Deep technical knowledge (like C#/.NET and Angular) is a huge advantage for writing powerful prompts and controlling AI agents effectively.
 
-[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0033_imbus-trends-in-testing-2026.md#teil-11-fazit-und-ausblick--bereit-f%C3%BCr-die-zukunft-conclusion--outlook)
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0033_imbus-trends-in-testing-2026.md)
 ***
 
 
