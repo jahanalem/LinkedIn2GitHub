@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### 35. Trends in Testing 2026: Meine Insights von der imbus Roadshow 🔬🧪🔎🕵️
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0033_imbus-trends-in-testing-2026.md#teil-11-fazit-und-ausblick--bereit-f%C3%BCr-die-zukunft-conclusion--outlook)
+
 ### 34. Lilishop Update: Migration to .NET 10 and Angular 21
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0032_Lilishop_Migration_NET10_and_Angular21.md)
 
