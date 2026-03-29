@@ -1,8 +1,8 @@
-# [Trends in Testing 2026](https://www.imbus.de/events/trends-in-testing/): Meine Insights von der imbus Roadshow
+# [Trends in Testing 2026](https://www.imbus.de/events/trends-in-testing/): Meine Insights von der [imbus](https://www.imbus.de/) Roadshow
 
 ## Teil 1: Eröffnung und die Grundlagen der Agentic AI
 
-Alles begann in einer ganz besonderen Atmosphäre: Im Filmpalast Hofheim. Zur Begrüßung durch die imbus-Manager Frank Schmeißner und Rolf Glunz gab es eine riesige Kinoleinwand und perfekten Sound – die ideale Kulisse, um die beeindruckende Kraft der Künstlichen Intelligenz zu demonstrieren. Ein kurzer Rückblick auf die rasante Entwicklung der KI seit dem Start von ChatGPT im Jahr 2022 bildete den perfekten Einstieg in den Tag.
+Alles begann in einer ganz besonderen Atmosphäre: Im Filmpalast Hofheim. Zur Begrüßung durch die imbus-Manager [Frank Schmeißner](https://www.imbus.de/karriere/vorstellung-unserer-standorte/rhein-main#c19315) und [Rolf Glunz](https://www.imbus.de/events/trends-in-testing-2015/referenten#c3510) gab es eine riesige Kinoleinwand und perfekten Sound – die ideale Kulisse, um die beeindruckende Kraft der Künstlichen Intelligenz zu demonstrieren. Ein kurzer Rückblick auf die rasante Entwicklung der KI seit dem Start von ChatGPT im Jahr 2022 bildete den perfekten Einstieg in den Tag.
 
 ### Das Motto: "Licence to execute"
 
