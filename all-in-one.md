@@ -1,3 +1,15 @@
+# Refresh Token and Login Process in Lilishop
+This document explains the secure authentication system built for the Lilishop application. It details how the system uses short-lived access tokens alongside long-lived refresh tokens to keep users securely logged in without interrupting their experience. 
+
+**Key Takeaways:**
+* **Secure Storage:** Refresh tokens are safely stored inside `HttpOnly` cookies. This prevents hackers from stealing the tokens using malicious JavaScript (XSS attacks).
+* **Silent Refresh:** When a user's access token expires, the Angular frontend automatically catches the error, gets a new token in the background, and retries the original request silently. 
+* **Token Rotation:** Every time the system refreshes a token, it generates a brand new refresh token and deletes the old one. This is a highly recommended security practice.
+* **Smooth User Experience:** Users never see an error message or get asked to log in again, as long as their refresh token remains valid.
+
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0034_refresh-token-system.md)
+***
+
 # Trends in Testing 2026 – The Era of Agentic AI
 This article explores the future of software quality assurance, highlighting the shift from traditional test automation to autonomous **Agentic AI**. Based on insights from the imbus roadshow, the core theme is the **"Licence to Execute"**—giving AI the autonomy to perform complex testing tasks while humans keep control using strict safety boundaries (Guardrails). 
 
