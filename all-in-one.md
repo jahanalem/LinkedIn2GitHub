@@ -1,3 +1,14 @@
+# Secure Password Recovery Flow in Lilishop in Lilishop
+This document details the highly secure, multi-step process for account recovery. It highlights the protective measures taken to prevent database scraping, token forging, and replay attacks during the password reset cycle.
+
+**Key Takeaways:**
+* **Anti-Enumeration Security:** The system never reveals whether an email exists during the recovery request, neutralizing brute-force enumeration attacks.
+* **Cryptographic Expiration:** The system utilizes one-time-use, time-sensitive tokens that are instantly destroyed the moment a password is changed, neutralizing replay attacks.
+* **Branded Communication:** The backend dynamically loads and injects the secure recovery URL into a custom HTML template (`PasswordResetTemplate.html`), ensuring all communication maintains high-quality brand standards.
+
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0039_secure-password-recovery.md)
+***
+
 # Registration and Email Confirmation Flow in Lilishop
 This document outlines the complete lifecycle of a new user joining the Lilishop platform. It details the robust security and fault-tolerance measures taken to ensure every account belongs to a real, verified person.
 
