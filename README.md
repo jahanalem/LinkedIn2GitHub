@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### 42. System Security & Authentication Architecture in Lilishop 🛡️
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0040_system-security-and-authentication-architecture.md)
+
 ### 41. Secure Password Recovery (Forgot / Reset Password) Flow in Lilishop
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0039_secure-password-recovery.md?)
 
