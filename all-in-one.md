@@ -1,4 +1,10 @@
-# Secure Password Recovery Flow in Lilishop in Lilishop
+# 🛡️ System Security & Authentication Architecture
+I have custom-built an enterprise-grade security and authentication system for Lilishop. This includes token rotation, Google SSO, fault-tolerant email verification, secure password recovery, and Role-Based Access Control (RBAC). 
+
+[Read the complete Security Architecture Guide here](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0040_system-security-and-authentication-architecture.md)
+***
+
+# Secure Password Recovery Flow in Lilishop
 This document details the highly secure, multi-step process for account recovery. It highlights the protective measures taken to prevent database scraping, token forging, and replay attacks during the password reset cycle.
 
 **Key Takeaways:**
