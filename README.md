@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### 39. Google External Login (Single Sign-On / SSO) in Lilishop
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0037_google-external-login-sso.md)
+
 ### 38. Role-Based and Policy-Based Authorization (RBAC) in Lilishop
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0036_role-and-policy-based-authorization.md)
 
