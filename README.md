@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### 37. Global Logout: Logging Out From All Devices in Lilishop
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0035_global-logout.md)
+
 ### 36. Refresh Token and Login Process Documentation in Lilishop
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0034_refresh-token-system.md)
 
