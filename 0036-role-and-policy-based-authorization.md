@@ -1,4 +1,4 @@
-# Role-Based and Policy-Based Authorization (RBAC)
+# Role-Based and Policy-Based Authorization (RBAC) in Lilishop
 
 > **Note:** This document describes the security and authorization system in Lilishop. This project is designed and maintained by a single developer. However, the word "we" is used throughout the document for consistency with standard technical writing.
 
