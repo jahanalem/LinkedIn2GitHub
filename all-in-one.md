@@ -1,3 +1,14 @@
+# Google External Login (Single Sign-On / SSO) in Lilishop
+This document details the implementation of Google Single Sign-On (SSO). It explains the "Translation" strategy, where a third-party Google token is processed and seamlessly exchanged for a local, role-aware access token and a secure refresh token.
+
+**Key Takeaways:**
+* **Token Extraction:** The backend uses `JwtSecurityTokenHandler` to parse the Google ID Token and securely extract vital user claims like Email and Name.
+* **Frictionless Registration:** If a user logs in with Google for the first time, the system silently creates an account and assigns them the `Standard` role, bypassing traditional registration forms entirely.
+* **Local Authority & Refresh Continuity:** By discarding the Google token and issuing custom Lilishop Access and Refresh tokens, the system ensures SSO users benefit from the same silent background refresh process and strict Role-Based Access Control (RBAC) as standard users.
+
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0037_google-external-login-sso.md)
+***
+
 # Role-Based and Policy-Based Authorization (RBAC) in Lilishop
 This document explains how Lilishop protects its API using a highly scalable Role-Based Access Control (RBAC) system combined with Policy-Based Authorization. It details the separation of user roles from endpoint policies to create a clean, hierarchical security structure.
 
