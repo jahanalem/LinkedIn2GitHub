@@ -1,3 +1,13 @@
+# Global Logout: Logging Out From All Devices in Lilishop
+This document explains the "Log Out from All Devices" feature. It allows users to instantly terminate every active session across all their devices. This is a vital security tool for protecting accounts if a device is lost or stolen.
+
+**Key Takeaways:**
+* **Security Stamp:** The system uses a "Security Stamp" as a master kill-switch to invalidate all current tokens.
+* **Database Wipe:** Every refresh token associated with the user is deleted from the database, preventing any device from staying logged in.
+* **Automatic Kick:** Other devices are automatically logged out as soon as their short-lived access tokens expire and they fail to refresh.
+
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0035_global-logout.md)
+***
 # Refresh Token and Login Process in Lilishop
 This document explains the secure authentication system built for the Lilishop application. It details how the system uses short-lived access tokens alongside long-lived refresh tokens to keep users securely logged in without interrupting their experience. 
 
