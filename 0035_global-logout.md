@@ -171,6 +171,26 @@ If you are developing or testing the Lilishop application, you can easily verify
 4. **Test the Second Device:** * Go back to Firefox (your second simulated device). 
    * Try to browse the shop or wait for the access token to expire. As soon as the frontend attempts a silent refresh, the backend will reject it, and Firefox will automatically redirect you to the login screen!
 
+Here is the exact Markdown section you can add directly to the very end of your `0035_global-logout.md` document. It uses clear, simple English to explain the database mechanism based on your screenshot\!
+
+-----
+
+## 7\. Database View: Multiple Active Sessions
+
+To see how this works in reality, look at the database screenshot below. This shows the `AspNetUserTokens` table when a single user is logged into the application from three different browsers (for example: Chrome, Firefox, and Edge) at the same exact time.
+
+As you can see, there are three separate rows for the same user. Here is exactly what each column means in our system:
+
+  * **`UserId`**: The unique identifier for the account. Notice that all three rows share the exact same ID because they belong to one person.
+  * **`LoginProvider`**: This tells us how the user authenticated. In our application, "LiliShop" means they used our standard email and password login.
+  * **`Name`**: This is where the device tracking happens\! It combines the prefix `RefreshToken_` with the unique `DeviceId` (a random GUID) that we generated during login. This structure is what allows us to have multiple active sessions.
+  * **`Value`**: This is the actual Refresh Token itself. It is a long, highly secure, base64-encoded string. This exact same string is what gets saved securely inside the browser's `HttpOnly` cookie.
+
+When the user clicks the **"Log out from all devices"** button, the system simply searches for this specific `UserId`, finds all rows where the Name starts with `RefreshToken_`, and deletes all three of them instantly\!
+
+<img width="2386" height="408" alt="AspNetUserTokens" src="https://github.com/user-attachments/assets/8dfdcc78-d290-47a8-82fe-1790be4d18e0" />
+
+
 ***
 
 ### Final Note
