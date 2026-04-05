@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### 41. Secure Password Recovery (Forgot / Reset Password) Flow in Lilishop
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0039_secure-password-recovery.md?)
+
 ### 40. Registration and Email Confirmation Flow in Lilishop
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0038_registration-and-email-confirmation.md)
 
