@@ -13,7 +13,7 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
-### 36. Refresh Token and Login Process Documentation (Lilishop)
+### 36. Refresh Token and Login Process Documentation in Lilishop
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0034_refresh-token-system.md)
 
 ### 35. Trends in Testing 2026: Meine Insights von der imbus Roadshow 🔬🧪🔎🕵️
