@@ -1,3 +1,14 @@
+# Registration and Email Confirmation Flow in Lilishop
+This document outlines the complete lifecycle of a new user joining the Lilishop platform. It details the robust security and fault-tolerance measures taken to ensure every account belongs to a real, verified person.
+
+**Key Takeaways:**
+* **Fault-Tolerant Delivery:** The system utilizes a custom "exponential backoff" retry mechanism to guarantee the delivery of branded HTML emails even if the external email server experiences temporary hiccups.
+* **Backend Redirection:** Instead of linking the email directly to the frontend, Lilishop safely routes the user back through the ASP.NET Core API for verification, before issuing a smooth `302 Redirect` to the Angular interface.
+* **Strict Expirations:** The backend encodes the precise token issue time into the link, allowing the service to enforce a strict custom 24-hour expiration policy before querying the database.
+
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0038_registration-and-email-confirmation.md)
+***
+
 # Google External Login (Single Sign-On / SSO) in Lilishop
 This document details the implementation of Google Single Sign-On (SSO). It explains the "Translation" strategy, where a third-party Google token is processed and seamlessly exchanged for a local, role-aware access token and a secure refresh token.
 
