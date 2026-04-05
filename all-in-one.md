@@ -1,3 +1,15 @@
+# Role-Based and Policy-Based Authorization (RBAC) in Lilishop
+This document explains how Lilishop protects its API using a highly scalable Role-Based Access Control (RBAC) system combined with Policy-Based Authorization. It details the separation of user roles from endpoint policies to create a clean, hierarchical security structure.
+
+**Key Takeaways:**
+* **Roles vs. Policies:** Roles act as static labels for users (e.g., `SuperAdmin`, `Standard`), while Policies act as flexible rules for endpoints (e.g., `RequireAtLeastAdministratorRole`).
+* **Hierarchical Security:** A single policy can accept multiple roles. This automatically creates a permission hierarchy without cluttering the controller logic.
+* **Single Source of Truth:** Defining roles and policies as strict constants in the Domain layer prevents typos and makes global updates effortless.
+* **Built-in Protection:** The ASP.NET Core framework automatically intercepts invalid requests, returning accurate `401 Unauthorized` or `403 Forbidden` statuses before they ever reach the business logic.
+
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0036_role-and-policy-based-authorization.md)
+***
+
 # Global Logout: Logging Out From All Devices in Lilishop
 This document explains the "Log Out from All Devices" feature. It allows users to instantly terminate every active session across all their devices. This is a vital security tool for protecting accounts if a device is lost or stolen.
 
