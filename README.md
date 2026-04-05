@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### 40. Registration and Email Confirmation Flow in Lilishop
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0038_registration-and-email-confirmation.md)
+
 ### 39. Google External Login (Single Sign-On / SSO) in Lilishop
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0037_google-external-login-sso.md)
 
