@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### 38. Role-Based and Policy-Based Authorization (RBAC) in Lilishop
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0036-role-and-policy-based-authorization.md)
+
 ### 37. Global Logout: Logging Out From All Devices in Lilishop
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0035_global-logout.md)
 
