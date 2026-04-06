@@ -100,12 +100,12 @@ Here is a clear visual representation of the entire global logout process.
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {
-  'background': '#ffffff',
-  'primaryColor': '#e74c3c',
-  'primaryBorderColor': '#c0392b',
-  'primaryTextColor': '#ffffff',
-  'secondaryColor': '#34495e',
-  'tertiaryColor': '#ecf0f1',
+'background': '#ffffff',
+  'primaryColor': '#4a90e2',
+  'primaryBorderColor': '#2c3e50',
+  'primaryTextColor': '#1a1a1a',
+  'secondaryColor': '#f39c12',
+  'tertiaryColor': '#e74c3c',
   'lineColor': '#2c3e50',
   'actorBkg': '#3498db',
   'actorBorder': '#2c3e50',
