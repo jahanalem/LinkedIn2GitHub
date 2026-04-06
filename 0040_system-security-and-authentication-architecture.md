@@ -90,3 +90,13 @@ This document provides a comprehensive list of technical questions and detailed 
 
 ---
 
+### 8. Sicherheitsarchitektur: Fragen & Antworten (Deutsch)
+Dieses Dokument bietet eine umfassende Liste technischer Fragen und detaillierter Antworten zum Sicherheitssystem von Lilishop. Es dient als hervorragender Leitfaden, um das „Wie“ und „Warum“ hinter den architektonischen Entscheidungen des Projekts zu verstehen. 
+
+**Wichtige Erkenntnisse:**
+* **Konzeptübersicht:** Bietet klare, leicht verständliche Erklärungen komplexer Sicherheitsabläufe (wie lautlose Token-Rotation, SSO-Übersetzung und globaler Logout).
+* **Architektonische Einblicke:** Erläutert die Gründe für spezifische Sicherheitsentscheidungen, wie die Verwendung von `HttpOnly`-Cookies und die Verhinderung von E-Mail-Enumeration-Angriffen.
+* **Schnellreferenz:** Dient als schnelle, leicht zugängliche Zusammenfassung aller wichtigen Authentifizierungs- und Autorisierungskonzepte, die in der API implementiert wurden.
+
+[Weiterlesen](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0042_sicherheitsarchitektur-fragen-und-antworten.md)
+
