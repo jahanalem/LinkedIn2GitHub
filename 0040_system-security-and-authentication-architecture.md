@@ -76,3 +76,17 @@ This document explains the "Log Out from All Devices" feature. It allows users t
 
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0035_global-logout.md)
 
+---
+
+### 7. Security Architecture: Questions & Answers (English)
+This document provides a comprehensive list of technical questions and detailed answers regarding the Lilishop security system. It serves as an excellent review guide for understanding the "how" and "why" behind the project's architectural decisions. 
+
+**Key Takeaways:**
+* **Concept Breakdown:** Features clear, easy-to-understand explanations of complex security workflows (such as silent token rotation, SSO translation, and Global Logout).
+* **Architectural Insights:** Explores the reasoning behind specific security choices, such as using `HttpOnly` cookies and preventing email enumeration attacks.
+* **Quick Reference:** Acts as a fast, accessible summary of all the major authentication and authorization concepts implemented across the API.
+
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0041_security-architecture-questions-and-answers.md)
+
+---
+
