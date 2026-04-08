@@ -160,21 +160,29 @@ The user sees no error and continues working without interruption.
 ## Complete Sequence Diagram (Both Phases)
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {
-  'background': '#ffffff',
-  'primaryColor': '#4a90e2',
-  'primaryBorderColor': '#2c3e50',
-  'primaryTextColor': '#1a1a1a',
-  'secondaryColor': '#f39c12',
-  'tertiaryColor': '#e74c3c',
-  'lineColor': '#2c3e50',
-  'actorBkg': '#3498db',
-  'actorBorder': '#2c3e50',
-  'actorTextColor': '#ffffff',
-  'noteBkg': '#fef9e4',
-  'noteBorderColor': '#f1c40f',
-  'noteTextColor': '#1a1a1a'
-}}}%%
+%%{init: {
+  'theme': 'base',
+  'darkMode': false,
+  'themeVariables': {
+    'background': '#ffffff',
+    'primaryColor': '#4a90e2',
+    'primaryBorderColor': '#2c3e50',
+    'primaryTextColor': '#1a1a1a',
+    'secondaryColor': '#f39c12',
+    'tertiaryColor': '#e74c3c',
+    'lineColor': '#2c3e50',
+    'actorBkg': '#3498db',
+    'actorBorder': '#2c3e50',
+    'actorTextColor': '#ffffff',
+    'noteBkg': '#fef9e4',
+    'noteBorderColor': '#f1c40f',
+    'noteTextColor': '#1a1a1a'
+  },
+  'themeCSS': '
+    svg { background-color: #ffffff !important; }
+    .background { fill: #ffffff !important; }
+  '
+}}%%
 sequenceDiagram
     participant User as 👤 User
     participant Frontend as 🅰️ Angular (account.service & interceptors)
