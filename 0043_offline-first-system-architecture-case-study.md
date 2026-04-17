@@ -1,4 +1,5 @@
-# 📄 Comprehensive Architecture & System Design Document: Offline-First Smart Caregiver Platform
+# Orchestrating the Offline‑First Healthcare Data Lifeline
+## A Comprehensive Architecture & System Design Case Study for Rural Caregiver Workflows
 
 ## Table of Contents
 
