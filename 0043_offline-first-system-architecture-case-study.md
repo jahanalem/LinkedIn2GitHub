@@ -17,6 +17,17 @@ To guarantee stability and scalability, this architecture is built upon two stan
 * **Outbox Pattern:** To prevent data loss during network outages, all events and files are first written to the client's local database (acting as an Outbox) and are later synchronized with the server via a background service.
 * **Claim-Check Pattern:** To prevent overloading the Message Brokers, the heavy audio payload is uploaded directly to Object Storage, and only a lightweight message containing the "File ID and URI" (the Claim-Check) is pushed into the processing queue.
 
+| Layer / Component | Selected Technology | Design Pattern Implemented | Solves This Specific Constraint |
+| :--- | :--- | :--- | :--- |
+| **📱 Mobile Client DB** | WatermelonDB / RxDB | **Outbox Pattern** | Ensures zero data loss when caregiver has 0% signal in rural home. |
+| **📤 File Transfer** | TUS Protocol (Resumable) | **Retry with Backoff** | Prevents wasted bandwidth when 4G drops mid-upload of a 30‑min audio file. |
+| **🔒 Local Security** | AES‑256 File Encryption | **Encryption at Rest** | Compliance with GDPR Art. 32; data unreadable if device is stolen. |
+| **☁️ Storage Routing** | AWS S3 / Azure Blob | **Claim‑Check Pattern** | Keeps the Message Broker (RabbitMQ) lightweight and fast. |
+| **⚙️ Processing Trigger** | AWS Lambda / K8s HPA | **Event‑Driven Scaling** | Cost Optimization: Pay for compute only when audio is waiting in queue. |
+| **🧠 AI Speech** | OpenAI Whisper (Cloud) | **Specialized Adapter** | Handles medical terminology and heavy accents better than native OS dictation. |
+| **📋 Data Structuring** | GPT‑4o (JSON Mode) | **Prompt Engineering** | Transforms free‑form caregiver notes into strict database schema fields. |
+| **🔄 Conflict Strategy** | Manual Fork Resolution | **Domain‑Specific Merge** | Prevents auto‑overwrite of critical medical notes (Patient Safety). |
+  
 ## 4. Client Architecture & Tech Stack
 To accommodate technical team requirements and modern mobile development standards, two parallel approaches are proposed for the client implementation:
 
@@ -45,6 +56,16 @@ Given the unstable nature of rural internet, traditional upload methods (HTTP PO
 ### C) Conflict Resolution
 In scenarios where a file is modified simultaneously offline and on the server (e.g., manual report edits), common strategies like *Last Write Wins* are discarded. For highly sensitive medical data, the system avoids Auto-Merge. Instead, it forks both versions and enforces **Manual Resolution**, delegating the final decision to the end-user or administrator.
 
+### D) Data State Transition Table
+| Stage | Local Status (Outbox) | File Location | Encryption State | Action Available |
+| :--- | :--- | :--- | :--- | :--- |
+| **1. Recording** | `RECORDING` | RAM Temp Buffer | None (Stream) | Stop / Cancel |
+| **2. Local Storage** | `PENDING_SYNC` | App Sandbox | **AES‑256 (Encrypted)** | Retry / Delete |
+| **3. Uploading** | `UPLOADING` | Chunks in Network Buffer | **TLS 1.3 (In‑Transit)** | Pause / Resume (TUS) |
+| **4. Cloud Queue** | `SYNCED` | S3 (Cloud) | SSE‑S3 / KMS | Wait for AI Worker |
+| **5. Processing** | `PROCESSING` | S3 + Worker Memory | Decrypted (In‑Memory) | View Status |
+| **6. Completed** | `COMPLETED` | S3 + PostgreSQL | At‑Rest (Cloud) | View Report / **Auto‑Evict Local** |
+
 ## 7. Backend Infrastructure, Cost Optimization & IaC
 * **Core Services:** Microservices built with **.NET Minimal APIs** for maximum speed and minimal overhead.
 * **Storage Layer:** Audio files are stored in **AWS S3** or **Azure Blob Storage**, while structured data and metadata reside in a robust relational database like **PostgreSQL**.
@@ -65,6 +86,15 @@ To guarantee system health while serving hundreds of thousands of users, the inf
     * Network Response Latency.
     * CPU and Memory consumption across Worker nodes.
     * Message Queue Length (to proactively predict bottlenecks).
+
+### A) Critical Thresholds & Actions
+| Metric (Source) | Tool | Warning Threshold | Critical Action |
+| :--- | :--- | :--- | :--- |
+| **📱 Mobile Storage Pressure** | Client Analytics | < 200 MB Free | Trigger Auto‑Eviction of `SYNCED` files |
+| **📤 Upload Success Rate** | Datadog / Prometheus | < 95% | Scale TUS Proxy / Check Rural CDN health |
+| **📬 RabbitMQ Queue Length** | Grafana | > 500 Messages | Trigger **HPA Scale Out** (Add 2 Workers) |
+| **🧠 Whisper API Latency** | Custom Middleware | > 45s per file | Switch to batch processing or fallback model |
+| **🗄️ DB Connection Pool** | PostgreSQL Stats | > 80% Utilization | Increase `max_connections` or add Read Replica |
 
 ## 10. Step-by-Step Data Flow
 1.  **Pre-check:** Mobile app verifies available local storage.
