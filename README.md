@@ -13,6 +13,11 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### 43. Orchestrating the Offline‑First Healthcare Data Lifeline 
+(A Comprehensive Architecture & System Design Case Study for Rural Caregiver Workflows)
+
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0043_offline-first-system-architecture-case-study.md)
+
 ### 42. System Security & Authentication Architecture in Lilishop 🛡️
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0040_system-security-and-authentication-architecture.md)
 
