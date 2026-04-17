@@ -1,5 +1,22 @@
 # 📄 Comprehensive Architecture & System Design Document: Offline-First Smart Caregiver Platform
 
+## Table of Contents
+
+1. [Introduction & Problem Statement](#1-introduction--problem-statement)
+2. [Key Technical Challenges](#2-key-technical-challenges)
+3. [High-Level Architectural Design Patterns](#3-high-level-architectural-design-patterns)
+4. [Client Architecture & Tech Stack](#4-client-architecture--tech-stack)
+5. [Data Security & Privacy](#5-data-security--privacy)
+6. [Synchronization, Upload Strategy & Conflict Resolution](#6-synchronization-upload-strategy--conflict-resolution)
+7. [Backend Infrastructure, Cost Optimization & IaC](#7-backend-infrastructure-cost-optimization--iac)
+8. [Asynchronous AI Pipeline](#8-asynchronous-ai-pipeline)
+9. [Observability & APM (Application Performance Monitoring)](#9-observability--apm-application-performance-monitoring)
+10. [Step-by-Step Data Flow](#10-step-by-step-data-flow)
+11. [Future Phase: Edge AI Fallback](#11-future-phase-edge-ai-fallback)
+12. [Glossary of Key Terms & Concepts](#12-glossary-of-key-terms--concepts)
+
+---
+
 ## 1. Introduction & Problem Statement
 The objective of this system is to digitally transform the patient admission process (Admission Talk) conducted by healthcare caregivers. During these 30-minute sessions, critical patient information is gathered. The current paper-based, manual data entry system leads to wasted time and human error.
 The primary goal is to develop a mobile application that records these conversations, processes the audio using Artificial Intelligence, and automatically generates structured reports.
