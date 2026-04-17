@@ -126,6 +126,8 @@ To guarantee system health while serving hundreds of thousands of users, the inf
 ## 11. Future Phase: Edge AI Fallback
 In subsequent product phases, to further reduce absolute reliance on cloud processing in areas with multi-day outages, lightweight on-device AI models (such as `Whisper.cpp`) can be integrated. This allows the mobile hardware to generate a preliminary draft report instantly, even entirely offline.
 
+---
+### **Figure 1: End‑to‑End Data Flow – Offline Recording to AI‑Generated Structured Report**
 
 ```mermaid
 %%{init: {'theme':'base', 'themeVariables': {
