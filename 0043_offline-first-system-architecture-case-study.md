@@ -223,6 +223,9 @@ flowchart TB
 | **Final Review Interface** | Teal | `#1ABC9C` |
 
 
+<img alt="Comprehensive Architecture   System Design Document Offline-First Smart Caregiver Platform" src="https://github.com/user-attachments/assets/2f4d3c33-e47b-41bf-b8d6-c23f7d6124ca" />
+
+
 ---
 
 ## 12. Glossary of Key Terms & Concepts
