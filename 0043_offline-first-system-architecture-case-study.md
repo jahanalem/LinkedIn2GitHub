@@ -222,3 +222,32 @@ flowchart TB
 | **Database & Object Storage** | Crimson Red | `#D0021B` |
 | **Final Review Interface** | Teal | `#1ABC9C` |
 
+
+---
+
+## 12. Glossary of Key Terms & Concepts
+
+This section provides simple, non‑technical explanations for the specialized vocabulary used throughout this architecture document.
+
+| Term | Simple Explanation | Why It Matters for This System |
+| :--- | :--- | :--- |
+| **Offline‑First** | An application designed to work perfectly without internet, syncing data later when a connection becomes available. | Caregivers in rural areas with zero signal can still complete admission talks; data uploads automatically once they return to coverage. |
+| **Outbox Pattern** | Instead of trying to send data immediately (and risking loss), the app saves everything locally first. A background process handles sending when the network is ready. | Prevents lost patient recordings when the 4G connection drops mid‑upload. |
+| **Claim‑Check Pattern** | Large files (audio) are stored separately in cloud storage. Only a small "receipt" with the file's location travels through the processing system. | Keeps the message queue fast and cheap; the heavy 30‑minute audio file never clogs the pipeline. |
+| **AES‑256** | A military‑grade encryption standard that scrambles data so it cannot be read without the correct key. | If a caregiver's phone is lost or stolen, patient audio files remain completely unreadable—mandatory for GDPR compliance. |
+| **TLS 1.3** | The modern security protocol that protects data while it travels across the internet. | Ensures no one can eavesdrop on patient information during upload to the cloud. |
+| **TUS Protocol (Resumable Upload)** | A method for uploading files that remembers progress. If the internet cuts out after 80% of the file is sent, it resumes from 80% instead of starting over. | Critical for rural uploads over unstable connections; avoids wasting time and mobile data. |
+| **Pre‑signed URL** | A temporary, secure web address that grants permission to upload a file to cloud storage without needing a full account login. | The mobile app can upload directly to AWS S3 safely, without embedding secret cloud credentials in the app. |
+| **GDPR** | General Data Protection Regulation—strict European privacy law governing how personal and medical data must be handled. | Every security and encryption decision in this design is driven by GDPR compliance requirements. |
+| **Serverless / AWS Lambda** | A cloud computing model where code runs only when triggered, and you pay only for the milliseconds it executes. No permanent servers to maintain. | AI processing of audio files happens on‑demand; costs scale to zero when no one is recording. |
+| **Horizontal Pod Autoscaler (HPA)** | A tool that automatically adds more processing workers when the queue gets long, and removes them when it's quiet. | Handles unpredictable spikes in caregiver activity without manual intervention or wasted cloud spending. |
+| **Infrastructure as Code (IaC)** | Writing the cloud setup (servers, databases, storage) as configuration files, rather than clicking in a web console. | Ensures the testing environment is an exact copy of production—eliminating "works on my machine" surprises. |
+| **Message Broker (RabbitMQ / Service Bus)** | A post‑office system for software components. One service drops off a message; another picks it up when ready. | Decouples the upload process from the AI processing. The mobile app can finish its job while the AI works in the background. |
+| **Whisper (OpenAI)** | A specialized AI model designed specifically for converting spoken audio into written text. | Handles medical terminology and diverse accents far more accurately than generic phone dictation software. |
+| **GPT‑4o** | A powerful large language model that can read unstructured text and extract specific information into a structured format. | Reads the transcript of a 30‑minute conversation and automatically populates the correct fields in the patient record (medications, vital signs, etc.). |
+| **JSON Mode** | A setting that forces an AI model to output data in a strict, machine‑readable format with zero conversational filler. | Guarantees the AI response can be saved directly to a database without manual reformatting. |
+| **Conflict Resolution (Manual Fork)** | When two versions of the same data exist (e.g., an offline edit and a simultaneous online edit), the system saves both and asks a human to decide which is correct. | Prevents automatic overwriting of critical medical information—a safety requirement for healthcare data. |
+| **Observability / APM** | Tools and practices that provide a real‑time dashboard of system health: speed, errors, and resource usage. | Allows the operations team to detect a growing queue of audio files *before* it causes a delay for caregivers. |
+| **Edge AI** | Running artificial intelligence directly on the mobile device, without needing to contact the cloud. | Future capability: a caregiver could receive a draft report instantly, even with zero connectivity for days. |
+
+---
