@@ -14,7 +14,7 @@
 10. [Step-by-Step Data Flow](#10-step-by-step-data-flow)
 11. [Future Phase: Edge AI Fallback](#11-future-phase-edge-ai-fallback)
 12. [Glossary of Key Terms & Concepts](#12-glossary-of-key-terms--concepts)
-
+13. [Visual architecture presentation slide deck](#13-visual-architecture-presentation-slide-deck)
 ---
 
 ## 1. Introduction & Problem Statement
