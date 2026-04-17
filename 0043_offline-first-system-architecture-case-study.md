@@ -272,6 +272,31 @@ This section provides simple, non‑technical explanations for the specialized v
 
 ---
 
+## 13. Visual Architecture Presentation (Slide Deck)
+
+To supplement the technical documentation and provide a high-level narrative for stakeholders, the following slide deck visually breaks down the architecture. It maps the journey from the initial rural connectivity challenge to the final automated AI pipeline and future cloud roadmap.
+
+### Presentation Overview
+
+| Slide | Title / Focus | Key Insight |
+| :--- | :--- | :--- |
+| **Slide 1** | **Project Title** | Overview of the Smart Caregiver Platform. |
+| **Slide 2** | **The Challenge** | Visual representation of the rural connectivity gap. |
+| **Slide 3** | **Architecture Overview** | The high-level flow from Mobile to Cloud. |
+| **Slide 4** | **Offline-First Design** | How the Outbox pattern and local DB work. |
+| **Slide 5** | **Security & Privacy** | AES-256 and TLS 1.3 implementation for GDPR compliance. |
+| **Slide 6** | **Resilient Upload** | The TUS protocol and chunked transfer logic. |
+| **Slide 7** | **Async Processing** | Message Queues and the Claim-Check pattern. |
+| **Slide 8** | **AI Pipeline** | Integration of OpenAI Whisper and GPT-4o. |
+| **Slide 9** | **Observability** | Monitoring thresholds with Grafana & Datadog. |
+| **Slide 10**| **Conclusion** | Summary of technical wins and business value. |
+| **Slide 11**| **Database Schema** | Relational mapping of patients, recordings, and reports. |
+| **Slide 12**| **Cloud Infrastructure** | The AWS/Azure resource map (Lambda, S3, K8s). |
+| **Slide 13**| **CI/CD & IaC** | Automated deployment pipeline via Terraform. |
+| **Slide 14**| **Future Roadmap** | Edge AI and advanced diagnostic integrations. |
+
+### Presentation Slides
+
 <img width="1707" height="926" alt="Slide1" src="https://github.com/user-attachments/assets/b50f5212-5eb0-461e-b67e-7412f6e44367" />
 <img width="1707" height="929" alt="Slide2" src="https://github.com/user-attachments/assets/12206bc2-51d8-4aa8-afd5-2fb053684bb0" />
 <img width="1707" height="930" alt="Slide3" src="https://github.com/user-attachments/assets/e0061ce2-d452-4d6b-b50e-49e4416cff01" />
