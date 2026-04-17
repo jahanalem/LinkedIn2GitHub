@@ -251,3 +251,40 @@ This section provides simple, non‑technical explanations for the specialized v
 | **Edge AI** | Running artificial intelligence directly on the mobile device, without needing to contact the cloud. | Future capability: a caregiver could receive a draft report instantly, even with zero connectivity for days. |
 
 ---
+
+<img width="1707" height="926" alt="Slide1" src="https://github.com/user-attachments/assets/b50f5212-5eb0-461e-b67e-7412f6e44367" />
+<img width="1707" height="929" alt="Slide2" src="https://github.com/user-attachments/assets/12206bc2-51d8-4aa8-afd5-2fb053684bb0" />
+<img width="1707" height="930" alt="Slide3" src="https://github.com/user-attachments/assets/e0061ce2-d452-4d6b-b50e-49e4416cff01" />
+<img width="1707" height="925" alt="Slide4" src="https://github.com/user-attachments/assets/d1a6bacc-3c36-4291-8d24-d6f8d0067297" />
+<img width="1707" height="930" alt="Slide5" src="https://github.com/user-attachments/assets/1858bac6-d06f-4ab5-9535-2909c4d122c7" />
+<img width="1707" height="929" alt="Slide6" src="https://github.com/user-attachments/assets/e57aa5dc-5af7-479c-be20-5194a649757c" />
+<img width="1707" height="925" alt="Slide7" src="https://github.com/user-attachments/assets/097b9f60-c9ae-4590-ada1-7dc3bb06d489" />
+<img width="1707" height="926" alt="Slide8" src="https://github.com/user-attachments/assets/d565c3d2-9654-4347-a229-245371c09e28" />
+<img width="1707" height="923" alt="Slide9" src="https://github.com/user-attachments/assets/d6e385b0-f720-4b18-b12e-0fa59c3bcab0" />
+<img width="1707" height="928" alt="Slide10" src="https://github.com/user-attachments/assets/cfe24ea8-8a72-4297-8d2e-b646c1d9afd3" />
+<img width="1707" height="924" alt="Slide11" src="https://github.com/user-attachments/assets/4c6da3b5-b986-406c-bf2a-5b4f46cc0677" />
+<img width="1707" height="927" alt="Slide12" src="https://github.com/user-attachments/assets/34881db9-ebfc-464f-aded-562e4e54e16b" />
+<img width="1707" height="932" alt="Slide13" src="https://github.com/user-attachments/assets/c8e2b82b-22af-4171-ad84-ac58d70a6aa4" />
+<img width="1707" height="928" alt="Slide14" src="https://github.com/user-attachments/assets/2118ce6b-3df2-40bc-a48c-af95e0a8c985" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
