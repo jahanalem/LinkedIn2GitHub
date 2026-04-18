@@ -21,7 +21,70 @@
 ## 1. Introduction & Problem Statement
 The objective of this system is to digitally transform the patient admission process (Admission Talk) conducted by healthcare caregivers. During these 30-minute sessions, critical patient information is gathered. The current paper-based, manual data entry system leads to wasted time and human error.
 The primary goal is to develop a mobile application that records these conversations, processes the audio using Artificial Intelligence, and automatically generates structured reports.
+
 **Key Constraint:** The system must be deployed in rural areas with poor coverage or complete lack of internet connectivity while the caregiver is at the patient's home.
+
+### High-Level System Overview: Offline-First Caregiver Workflow
+*(A conceptual view of the data lifecycle and system domains)*
+```mermaid
+%%{init: {'theme':'base', 'themeVariables': {
+'background':'#FFFFFF',
+'primaryColor':'#FFFFFF',
+'primaryBorderColor':'#5c6bc0',
+'primaryTextColor':'#1E2C3A',
+'lineColor':'#5c6bc0',
+'clusterBkg':'#F8F9FA',
+'clusterBorder':'#B0BEC5',
+'titleColor':'#1E2C3A'
+}}}%%
+flowchart TD
+%% Simplified conceptual block diagram
+
+%% Concept Styles
+classDef conceptualBlock fill:#eee,stroke:#999,stroke-width:1px,color:#333;
+style CaregiverApp fill:#FDF5E6,stroke:#D3C2AE,color:#5C4033
+style Transfer fill:#FFF0F5,stroke:#E6C7C2,color:#5C4033
+style Storage fill:#F0F8FF,stroke:#B9D9EB,color:#5C4033
+style Processing fill:#F5FFFA,stroke:#C2E0C6,color:#5C4033
+style Review fill:#FFFFF0,stroke:#E6E6C7,color:#5C4033
+
+%% Blocks
+subgraph CaregiverApp [📱 Mobile Caregiver App]
+    A[User Records Talk] --> B[Process Data Locally]:::conceptualBlock
+    B -->|Send Encrypted Data/Metadata| C[Initiate Sync]:::conceptualBlock
+    C --> D[Detect Network]:::conceptualBlock
+    D -->|Online| E[Resilient Upload]:::conceptualBlock
+end
+
+subgraph Transfer [☁️ Transfer Layer]
+    F[Upload Service]:::conceptualBlock
+end
+
+subgraph Storage [🗃️ Cloud Storage & Database]
+    G[(Audio Files)]:::conceptualBlock
+    H[(Structured Reports)]:::conceptualBlock
+end
+
+subgraph Processing [⚙️ AI Processing Workers]
+    I[Process Event & Fetch Audio]:::conceptualBlock
+    I -->|Transcription -> LLM| J[Generate Medical Report]:::conceptualBlock
+end
+
+subgraph Review [📊 Review & Audit]
+    L[Dashboards / Views]:::conceptualBlock
+end
+
+%% Conceptual Interactions (High Level)
+E -->|Upload Request| F
+F -->|Store Audio| G
+F -->|Publish Upload Event| I
+G -->|Access Audio| I
+J -->|Save to Database| H
+H -->|Read Report| L
+A -.->|Confirm Sync| C
+```
+<img width="718" height="1574" alt="High-Level System Overview" src="https://github.com/user-attachments/assets/65320e78-ca68-4c86-a060-b10fa2d67fe4" />
+
 
 ## 2. Key Technical Challenges
 Designing this system requires overcoming the following complex challenges:
@@ -128,7 +191,7 @@ To guarantee system health while serving hundreds of thousands of users, the inf
 In subsequent product phases, to further reduce absolute reliance on cloud processing in areas with multi-day outages, lightweight on-device AI models (such as `Whisper.cpp`) can be integrated. This allows the mobile hardware to generate a preliminary draft report instantly, even entirely offline.
 
 ---
-### **Figure 1: End‑to‑End Data Flow – Offline Recording to AI‑Generated Structured Report**
+### **Figure 2: End‑to‑End Data Flow – Offline Recording to AI‑Generated Structured Report**
 
 ```mermaid
 %%{init: {'theme':'base', 'themeVariables': {
