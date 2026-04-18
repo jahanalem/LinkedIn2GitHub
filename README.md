@@ -13,8 +13,7 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
-### 43. Orchestrating the Offline‑First Healthcare Data Lifeline 
-(A Comprehensive Architecture & System Design Case Study for Rural Caregiver Workflows)
+### 43. Orchestrating the Offline-First Healthcare Data Lifeline (System Architecture Case Study) 
 
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0043_offline-first-system-architecture-case-study.md)
 
