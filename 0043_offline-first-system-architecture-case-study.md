@@ -24,7 +24,7 @@ The primary goal is to develop a mobile application that records these conversat
 
 **Key Constraint:** The system must be deployed in rural areas with poor coverage or complete lack of internet connectivity while the caregiver is at the patient's home.
 
-### High-Level System Overview: Offline-First Caregiver Workflow
+### Figure 1: High-Level System Overview: Offline-First Caregiver Workflow
 *(A conceptual view of the data lifecycle and system domains)*
 ```mermaid
 %%{init: {'theme':'base', 'themeVariables': {
