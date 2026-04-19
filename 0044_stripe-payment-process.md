@@ -208,3 +208,114 @@ The backend uses the Stripe .NET SDK to validate totals, create payment intents,
    ```
 3. **Webhook Verification:** The Webhook Secret is utilized inside the `PaymentsController` to cryptographically verify that the incoming HTTP webhook events actually originated from Stripe and not from an unauthorized source.
 
+-----
+## 6\. Local Development with Stripe CLI
+
+When developing locally, Stripe cannot send webhook events directly to your `localhost` because your local server is not exposed to the public internet. The **Stripe CLI (Command Line Interface)** solves this by securely tunneling webhook events from your Stripe account directly to your local .NET API.
+
+### What are Scoop and Chocolatey?
+
+To install the Stripe CLI on Windows, it is best to use a package manager.
+
+  * **Chocolatey (Choco):** A traditional, machine-level package manager for Windows that often requires Administrator privileges to install and manage software.
+  * **Scoop:** A lightweight, user-level package manager for Windows that installs programs in your home directory, avoiding path pollution and rarely requiring Administrator privileges for standard use.
+
+### Installing Scoop
+
+If you choose to use Scoop, you can install it via PowerShell with the following command:
+
+```powershell
+iwr -useb get.scoop.sh | iex
+```
+
+**Understanding the parameters:**
+
+  * `iwr`: An alias for `Invoke-WebRequest`, which downloads content from the internet.
+  * `-useb`: An alias for `-UseBasicParsing`. This tells PowerShell to use a basic parser instead of relying on the Internet Explorer engine, making the request faster and more reliable.
+  * `get.scoop.sh`: The URL of the installation script.
+  * `|` (Pipe): Takes the downloaded script from the first command and passes it directly to the second command.
+  * `iex`: An alias for `Invoke-Expression`, which executes the script downloaded by `iwr`.
+
+### Installing the Stripe CLI
+
+Once your preferred package manager is ready, you can install the Stripe CLI.
+
+**Using Scoop:**
+
+```powershell
+scoop install stripe
+```
+
+**Using Chocolatey:**
+
+```powershell
+choco install stripe-cli
+```
+
+### Authentication and Webhook Forwarding
+
+After installation, you must link the CLI to your Stripe account.
+
+**1. Logging In**
+Run the login command in your terminal. This will output a pairing code and open your web browser to authenticate your account.
+
+```powershell
+stripe login
+```
+
+*(To remove your credentials from the local machine at any time, run `stripe logout`)*
+
+**2. Forwarding Webhooks**
+Once authenticated, instruct the CLI to listen for events and forward them to your local .NET API webhook endpoint:
+
+```powershell
+stripe listen -f http://localhost:6001/api/payments/webhook
+```
+
+When you run this command, the CLI will output a webhook signing secret (e.g., `whsec_...`). You must copy this secret and place it in your backend configuration (e.g., `appsettings.Development.json`) to verify the events securely. This secret corresponds to the webhook configuration seen in your Stripe Dashboard.
+
+### Version Management and Updating
+
+To ensure you have the latest features and security updates, it is important to keep the CLI updated. You can check your current version at any time:
+
+```powershell
+stripe version
+```
+
+Occasionally, when running commands, Stripe will notify you if a newer version is available.
+
+**Updating the CLI**
+When an update is required, **you must open PowerShell in Administrator mode** to apply the upgrade successfully.
+
+**To update via Chocolatey:**
+
+```powershell
+choco upgrade stripe-cli
+```
+
+**To update via Scoop:**
+
+```powershell
+scoop update stripe
+```
+<img width="3072" height="252" alt="1-Stripe_message-cli-to-update-me" src="https://github.com/user-attachments/assets/ea2f8b47-5771-40ad-a74a-6e8c1050cfcc" />
+-
+<img width="1668" height="798" alt="2-Stripe_powershell_the-upgrade-of-stripe-cli-was-successful" src="https://github.com/user-attachments/assets/13c8e7c8-63fe-469b-b005-3a183319b396" />
+-
+<img width="3072" height="750" alt="3-Stripe_was-installed-successfully" src="https://github.com/user-attachments/assets/f8ef242f-36bd-4cbf-bb18-2b53d7041a9d" />
+-
+<img width="3072" height="232" alt="4-StripeCLI-running-in-latest-version" src="https://github.com/user-attachments/assets/bd20d061-59b7-4992-8329-cb9157aa808c" />
+-
+<img width="2510" height="152" alt="5-dashboard stripe com-CLI-key" src="https://github.com/user-attachments/assets/d0530114-45cf-452d-b9d4-4e38abd42c68" />
+
+
+
+
+
+
+
+
+
+
+
+
