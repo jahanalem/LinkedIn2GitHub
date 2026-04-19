@@ -333,7 +333,29 @@ scoop update stripe
 
 **A:** You use the **Stripe CLI**. By running `stripe listen -f http://localhost:6001/api/payments/webhook`, the CLI creates a secure tunnel. It intercepts events from your Stripe dashboard and forwards them directly to your local .NET API endpoint, allowing you to test the entire webhook confirmation cycle without deploying to a public server.
 
+---
+## 7. Häufig gestellte Fragen (Q&A)
 
+**F1: Warum vertraut das Backend in dieser Architektur nicht darauf, dass das Frontend eine erfolgreiche Zahlung bestätigt?**
+
+**A:** Dies ist ein grundlegendes Sicherheitsprinzip namens "Zero-Trust" (Null-Vertrauen). Das Frontend läuft im Browser des Benutzers, was bedeutet, dass ein böswilliger Benutzer den Code manipulieren oder Netzwerkanfragen abfangen könnte, um eine gefälschte "Erfolgs"-Nachricht an das Backend zu senden. Um dies zu verhindern, betrachtet das Backend eine Zahlung nur dann als erfolgreich, wenn es einen sicheren, kryptografisch signierten Webhook direkt von den Stripe-Servern erhält.
+
+**F2: Warum berechnet die API beim Checkout die Warenkorbsumme neu, anstatt einfach die vom Client gesendete Summe zu verwenden?**
+
+**A:** Ähnlich wie beim oben genannten Zero-Trust-Prinzip könnte ein Benutzer die HTTP-Anfrage manipulieren, bevor sie an die API gesendet wird, und so den Preis eines teuren Artikels auf 1 Cent ändern. Das Backend muss immer die wahren Preise der Artikel aus der Datenbank abfragen und die Summe serverseitig neu berechnen, bevor der `payment_intent` bei Stripe erstellt wird.
+
+**F3: Was ist der Unterschied zwischen dem `client_secret` und dem Webhook-Secret?**
+
+**A:** Das **`client_secret`** wird von Stripe für einen bestimmten `payment_intent` generiert. Es wird an das Frontend gesendet, damit der Browser die Kartendaten des Benutzers sicher und direkt an Stripe senden kann, um die Abbuchung durchzuführen. 
+* Das **Webhook-Secret** ist ein statischer Schlüssel, der im Backend (.NET API) konfiguriert ist. Er ist streng vertraulich und wird verwendet, um kryptografisch zu überprüfen, ob eingehende asynchrone Ereignisse (wie `payment_intent.succeeded`) wirklich von Stripe gesendet und nicht von einem Angreifer gefälscht wurden.
+
+**F4: Was ist SCA (Strong Customer Authentication) und wie geht Ihr System damit um?**
+
+**A:** SCA ist eine europäische Vorschrift zur Betrugsbekämpfung, die eine Multi-Faktor-Authentifizierung für Online-Zahlungen vorschreibt (wie 3D Secure). Durch die Verwendung des Stripe SDKs und des `PaymentIntent`-Systems wird diese Komplexität abstrahiert. Wenn die Bank des Kunden SCA verlangt, fängt das Stripe SDK den Ablauf automatisch ab und zeigt dem Benutzer ein sicheres Fenster (z. B. zur Eingabe eines SMS-Codes), bevor die Zahlung abgeschlossen wird.
+
+**F5: Wie testen Sie Stripe-Webhooks in einer lokalen Entwicklungsumgebung, da Stripe `localhost` nicht erreichen kann?**
+
+**A:** Man verwendet die **Stripe CLI**. Durch das Ausführen von `stripe listen -f http://localhost:6001/api/payments/webhook` erstellt die CLI einen sicheren Tunnel. Sie fängt Ereignisse von Ihrem Stripe-Dashboard ab und leitet sie direkt an Ihren lokalen .NET-API-Endpunkt weiter. So können Sie den gesamten Webhook-Bestätigungszyklus testen, ohne Ihre Anwendung auf einem öffentlichen Server bereitstellen zu müssen.
 
 
 
