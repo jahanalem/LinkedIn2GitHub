@@ -153,3 +153,58 @@ sequenceDiagram
 | | 13 | API → API | Verify webhook signature |
 | | 14 | API → API | Update order payment status |
 
+---
+## 5. Core Technologies and Configuration
+
+### What is a Webhook?
+A webhook is an HTTP-based callback function that allows two systems to communicate automatically. Instead of the API constantly querying the payment gateway for status updates, Stripe automatically sends an HTTP request (a webhook event) to the API immediately after an event occurs, such as a successful or failed payment. This mechanism is critical for system security because it relies on server-to-server communication, preventing malicious users from manipulating payment statuses on the frontend.
+
+### What is Stripe and Stripe with SCA?
+**Stripe** is a global payment processing platform that provides the infrastructure to securely accept and manage online transactions.
+
+**Stripe with SCA (Strong Customer Authentication)** refers to compliance with European regulatory rules designed to reduce fraud. SCA requires online payments to be verified using at least two independent authentication elements (e.g., a password and a fingerprint). When using Stripe's `PaymentIntent` system, Stripe automatically handles SCA requirements. If a customer's bank requires additional authentication, Stripe will trigger a modal (like 3D Secure) in the frontend, requiring the customer to verify the transaction via their banking app or an SMS code before the payment is confirmed.
+
+### What is the Stripe SDK?
+An SDK (Software Development Kit) is a collection of pre-built code libraries provided directly by Stripe. 
+
+* **Why we need it:** Interacting with Stripe's raw REST APIs manually requires complex logic for handling HTTP requests, data serialization, authentication, and cryptographic webhook signature verification. The SDK abstracts this complexity, reducing development time and minimizing the risk of security errors.
+* **How we use it:** We implement the SDK into our specific development environments (Angular and .NET). It provides dedicated classes and methods that allow developers to execute Stripe operations cleanly.
+
+### How to Configure Stripe in the Project
+
+The configuration is divided into two distinct environments to separate public capabilities from secret backend operations.
+
+**Frontend Configuration (Angular)**
+The frontend requires the **Publishable Key** to connect to the Stripe account safely. This key is safe to expose in the browser. Instead of relying on a Node package manager (NPM) installation, the frontend injects the Stripe library directly into the browser and initializes it using a custom helper function.
+
+1. **Loading the Stripe Script:** The Stripe JavaScript library (`v3`) is injected dynamically into the Document Object Model (DOM) via the `index.html` file. This ensures the required Stripe objects are available globally in the browser when the user reaches the checkout page.
+   ```html
+   loadStripe: function() {
+       const script = document.createElement('script');
+       script.src = 'https://js.stripe.com/v3/';
+       script.async = true;
+       script.crossOrigin = 'anonymous';
+       document.body.appendChild(script);
+   }
+   ```
+2. **Initialization:** In the `CheckoutPaymentComponent`, the application uses a custom utility function (`getStripeInstance`) to initialize the Stripe object with the public key. 
+   ```typescript
+   // In checkout-payment.component.ts
+   this.stripe = getStripeInstance('pk_test_your_publishable_key');
+   ```
+   *Note: This initialized `this.stripe` object is then used later to mount the card input elements and call `confirmCardPayment`.*
+
+**Backend Configuration (.NET API)**
+The backend uses the Stripe .NET SDK to validate totals, create payment intents, and verify incoming webhook events.
+
+1. **Installation:** Run the following command in the terminal or use the NuGet Package Manager:
+   ```bash
+   dotnet add package Stripe.net
+   ```
+2. **Configuration:** The backend requires the **Secret Key** and the **Webhook Secret**. These keys grant full access to your Stripe account and must remain strictly confidential on the server.
+   ```csharp
+   // Configured in Program.cs
+   StripeConfiguration.ApiKey = builder.Configuration["StripeSettings:SecretKey"];
+   ```
+3. **Webhook Verification:** The Webhook Secret is utilized inside the `PaymentsController` to cryptographically verify that the incoming HTTP webhook events actually originated from Stripe and not from an unauthorized source.
+
