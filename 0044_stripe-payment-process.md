@@ -1,29 +1,5 @@
 # LiliShop: Stripe Payment Process Documentation
 
-## Table of Contents
-
-  * **[1. Overview](https://www.google.com/search?q=%231-overview)**
-  * **[2. Core Interfaces and Component Architecture](https://www.google.com/search?q=%232-core-interfaces-and-component-architecture)**
-      * [Data Models](https://www.google.com/search?q=%23data-models)
-      * [Client (Angular)](https://www.google.com/search?q=%23client-angular)
-      * [API (.NET)](https://www.google.com/search?q=%23api-net)
-  * **[3. Step-by-Step Process Flow](https://www.google.com/search?q=%233-step-by-step-process-flow)**
-  * **[4. Flow Diagram](https://www.google.com/search?q=%234-flow-diagram)**
-      * [Textual Sequence Summary](https://www.google.com/search?q=%23textual-sequence-summary)
-  * **[5. Core Technologies and Configuration](https://www.google.com/search?q=%235-core-technologies-and-configuration)**
-      * [What is a Webhook?](https://www.google.com/search?q=%23what-is-a-webhook)
-      * [What is Stripe and Stripe with SCA?](https://www.google.com/search?q=%23what-is-stripe-and-stripe-with-sca)
-      * [What is the Stripe SDK?](https://www.google.com/search?q=%23what-is-the-stripe-sdk)
-      * [How to Configure Stripe in the Project](https://www.google.com/search?q=%23how-to-configure-stripe-in-the-project)
-  * **[6. Local Development with Stripe CLI](https://www.google.com/search?q=%236-local-development-with-stripe-cli)**
-      * [What are Scoop and Chocolatey?](https://www.google.com/search?q=%23what-are-scoop-and-chocolatey)
-      * [Installing Scoop](https://www.google.com/search?q=%23installing-scoop)
-      * [Installing the Stripe CLI](https://www.google.com/search?q=%23installing-the-stripe-cli)
-      * [Authentication and Webhook Forwarding](https://www.google.com/search?q=%23authentication-and-webhook-forwarding)
-      * [Version Management and Updating](https://www.google.com/search?q=%23version-management-and-updating)
-  * **[7. Frequently Asked Questions (Q\&A)](https://www.google.com/search?q=%237-frequently-asked-questions-qa)**
-  * **[7. Häufig gestellte Fragen (Q\&A)](https://www.google.com/search?q=%237-h%C3%A4ufig-gestellte-fragen-qa)**
-
 ## 1. Overview
 This document outlines the secure payment workflow for the LiliShop project. The system architecture involves three primary entities:
 * **Client (Frontend):** An Angular application responsible for capturing user input and securely submitting payment parameters to Stripe.
