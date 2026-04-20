@@ -1,3 +1,9 @@
+# Stripe Payment Process in Lilishop
+This article outlines the secure payment workflow implemented in the LiliShop project. It details the architecture connecting the Angular frontend, the .NET backend API, and the Stripe payment gateway. The core focus is on a "zero-trust" security model, where final payment confirmation is handled exclusively via secure asynchronous webhooks from Stripe to prevent client-side manipulation. The document includes a step-by-step process flow, a visual sequence diagram, and configuration instructions for local development using the Stripe CLI.
+
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0044_stripe-payment-process.md)
+
+***
 # Orchestrating the Offline‑First Healthcare Data Lifeline (System Architecture Case Study)
 
 In this case study, You will read about a resilient, offline-first system architecture designed for a mobile caregiver application. The system tackles the challenge of recording and processing patient admission talks in rural areas with zero or unstable internet connectivity.
