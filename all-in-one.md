@@ -1,3 +1,16 @@
+# Orchestrating the Offline‑First Healthcare Data Lifeline (System Architecture Case Study)
+
+In this case study, You will read about a resilient, offline-first system architecture designed for a mobile caregiver application. The system tackles the challenge of recording and processing patient admission talks in rural areas with zero or unstable internet connectivity.
+
+The article details the implementation of advanced architectural patterns to ensure zero data loss and GDPR compliance, including:
+* The **Outbox Pattern** (WatermelonDB/RxDB) for local data storage under storage pressure.
+* The **TUS Protocol** for resumable, chunked file uploads over 4G/3G drops.
+* The **Claim-Check Pattern** to handle heavy audio files without overloading message brokers (RabbitMQ).
+* An asynchronous AI pipeline utilizing **OpenAI Whisper** for transcription and **GPT-4o** (JSON Mode) for generating structured medical reports.
+
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0043_offline-first-system-architecture-case-study.md)
+***
+
 # 🛡️ System Security & Authentication Architecture
 I have custom-built an enterprise-grade security and authentication system for Lilishop. This includes token rotation, Google SSO, fault-tolerant email verification, secure password recovery, and Role-Based Access Control (RBAC). 
 
