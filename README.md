@@ -13,8 +13,10 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
-### 43. Orchestrating the Offline-First Healthcare Data Lifeline (System Architecture Case Study) 
+### 44. Stripe Payment Process in Lilishop
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0044_stripe-payment-process.md)
 
+### 43. Orchestrating the Offline-First Healthcare Data Lifeline (System Architecture Case Study) 
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0043_offline-first-system-architecture-case-study.md)
 
 ### 42. System Security & Authentication Architecture in Lilishop 🛡️
