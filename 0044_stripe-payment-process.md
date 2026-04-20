@@ -382,6 +382,45 @@ scoop update stripe
 **A:** Man verwendet die **Stripe CLI**. Durch das Ausführen von `stripe listen -f http://localhost:6001/api/payments/webhook` erstellt die CLI einen sicheren Tunnel. Sie fängt Ereignisse von Ihrem Stripe-Dashboard ab und leitet sie direkt an Ihren lokalen .NET-API-Endpunkt weiter. So können Sie den gesamten Webhook-Bestätigungszyklus testen, ohne Ihre Anwendung auf einem öffentlichen Server bereitstellen zu müssen.
 
 
+<img width="1707" height="960" alt="Slide1" src="https://github.com/user-attachments/assets/71cd6022-f763-49a8-ad72-40189751b5f7" />
+-
+<img width="1707" height="960" alt="Slide2" src="https://github.com/user-attachments/assets/5c467908-bff4-4b72-9fbb-13c2dd01e736" />
+-
+<img width="1707" height="960" alt="Slide3" src="https://github.com/user-attachments/assets/4a9bc7ee-61e1-4679-911f-06ba085f256f" />
+-
+<img width="1707" height="960" alt="Slide4" src="https://github.com/user-attachments/assets/9e12f01b-1de5-4a9a-885f-8774a9dcc6da" />
+-
+<img width="1707" height="960" alt="Slide5" src="https://github.com/user-attachments/assets/374f16cc-0eff-48da-98e2-8b15cfaf9738" />
+-
+<img width="1707" height="960" alt="Slide6" src="https://github.com/user-attachments/assets/3a23d0ef-344f-49fe-9be1-9317d007bdfc" />
+-
+<img width="1707" height="960" alt="Slide7" src="https://github.com/user-attachments/assets/735c108c-cf16-4386-bb6e-21253810a6ed" />
+-
+<img width="1707" height="960" alt="Slide8" src="https://github.com/user-attachments/assets/01c8bcd3-0051-4d54-967d-2e56b939fd89" />
+-
+<img width="1707" height="960" alt="Slide9" src="https://github.com/user-attachments/assets/c4b51a30-5ba4-4750-bbf2-06a03d4e8a6b" />
+-
+<img width="1707" height="960" alt="Slide10" src="https://github.com/user-attachments/assets/9d78f91e-baa7-4530-a738-1ad041861763" />
+-
+<img width="1707" height="960" alt="Slide11" src="https://github.com/user-attachments/assets/70c00db8-41b1-4abe-b88d-aef72978b3e0" />
+-
+<img width="1707" height="960" alt="Slide12" src="https://github.com/user-attachments/assets/3949de03-37bc-4ac0-97f5-8c9bfb5c790a" />
+-
+<img width="1707" height="960" alt="Slide13" src="https://github.com/user-attachments/assets/88a347ff-e133-4ca6-8ce6-5b771fc7a588" />
+-
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
