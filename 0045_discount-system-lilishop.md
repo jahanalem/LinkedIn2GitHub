@@ -207,6 +207,9 @@ Below is the breakdown of each major table and its responsibilities.
 * **Why it exists:** The product table has two crucial columns: `Price` and `PreviousPrice`. `Price` is always the live, customer-facing price. When a sale starts, the original price is moved to `PreviousPrice` for safekeeping. 
 * **Role in the system:** This guarantees that the storefront NEVER has to calculate discounts while a customer is browsing. It simply reads the `Price` column, resulting in blazing-fast load times ($O(1)$ complexity).
 
+  <img width="3998" height="2647" alt="discount-tables" src="https://github.com/user-attachments/assets/73838a01-3959-4d2e-9854-d94e64d36044" />
+
+
 ***
 
 ## E. Step-by-Step Admin Flow (Real Example Scenario)
@@ -226,6 +229,8 @@ The administrator starts by opening the "Create Discount" page in the frontend d
 
 **Database Impact:** The backend prepares a new record for the **`Discount`** table. At this stage, the system knows *when* the sale happens and what it is called, but it doesn't know the financial value or which products are affected.
 
+<img width="2468" height="950" alt="group-discount-step-1" src="https://github.com/user-attachments/assets/dd310f30-bd6d-40e9-921c-cd17321f26f4" />
+
 ---
 
 ### Step 2: Creating Discount Tiers
@@ -235,6 +240,8 @@ Next, the administrator needs to define the financial value of the sale. They cl
 * **FreeShipping:** Unchecked (False)
 
 **Database Impact:** The backend prepares a new record for the **`DiscountTier`** table. This tier is linked directly to the Discount created in Step 1. The system now knows that a "20% reduction" is available during the Summer Clearance.
+
+<img width="2466" height="796" alt="group-discount-step-2" src="https://github.com/user-attachments/assets/0ea58bfc-5e32-4525-beb7-9778d68e1f98" />
 
 ---
 
@@ -248,6 +255,8 @@ Now, the administrator must tell the system exactly *who* gets this 20% discount
 
 **Database Impact:** Because this uses multiple filters, the backend prepares a new **`ConditionGroup`** (the logical box). Inside that box, it creates two **`DiscountGroupCondition`** records: one pointing to the Nike Brand ID, and one pointing to the Shoes Type ID. 
 *(If they had selected a single product instead, it would simply prepare a record for the **`ProductDiscount`** mapping table).*
+
+<img width="2440" height="1246" alt="group-discount-step-3" src="https://github.com/user-attachments/assets/9c85debe-9b4a-4a30-b370-e120749c1574" />
 
 ---
 
