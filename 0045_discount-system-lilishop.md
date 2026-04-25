@@ -270,6 +270,10 @@ The administrator reviews the summary and clicks the final **"Save Discount"** b
 
 When June 1st arrives, the background worker will read this exact setup, find all Nike Shoes, and drop their prices by 20%.
 
+<img width="3070" height="1468" alt="discount-list" src="https://github.com/user-attachments/assets/69fdb75c-d31f-41b9-bdff-5020d25f15ad" />
+-
+<img width="3072" height="1580" alt="product-list-user-view" src="https://github.com/user-attachments/assets/ea72fc33-64ff-4e39-8279-9f43ac6f45ba" />
+
 ***
 
 ## F. How Discount Data Is Persisted in the System
