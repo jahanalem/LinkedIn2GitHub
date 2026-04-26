@@ -51,7 +51,7 @@ To guarantee $O(1)$ read performance on the storefront frontend, the system pre-
 3. **Failsafe Clamping:** A mathematical failsafe guarantees the final evaluated price never drops below `0`.
 4. **Persistence:** The calculated live price is written to the `Price` column. 
 
-When a user requests the product via the Storefront API, the `ProductToReturnDto` strictly reads these two primitive columns, completely entirely avoiding relational database joins to the `Discount` tables.
+When a user requests the product via the Storefront API, the `ProductToReturnDto` strictly reads these two primitive columns, completely avoiding relational database joins to the `Discount` tables.
 
 ### Handling Active State Updates
 A critical edge case involves administrators modifying the base price of a product *while* a single discount is actively running. 
@@ -259,7 +259,7 @@ erDiagram
 
 ## E. Step-by-Step Execution Flow (Campaign Creation)
 
-To understand how the relational entities interact during Creation, consider a standard operational scenario: an administrator schedules a **"Summer Clearance Sale"** offering a **20% reduction on all Nike Shoes**.
+To understand how the relational entities interact during the creation process, consider a standard operational scenario: an administrator schedules a **"Summer Clearance Sale"** offering a **20% reduction on all Nike Shoes**.
 
 Instead of simple CRUD operations, this requires constructing a complex nested graph of entities. Here is the exact execution pipeline when the client submits the campaign to the backend:
 
@@ -464,7 +464,7 @@ A dynamic pricing engine is highly susceptible to race conditions, conflicting r
 ### 1. Conflict Resolution (Overlapping Promotions)
 In a relational rules engine, a single product (e.g., a "Nike Shirt") could inadvertently qualify for multiple active campaigns simultaneously (e.g., a 10% off "Nike" campaign and a 20% off "Shirts" campaign). 
 
-Lilishop enforces a **strict Priority Rules**:
+Lilishop follows **strict Priority Rules**:
 * **Single Discount Override:** `ProductDiscount` entities carry absolute priority. If a product has a direct single discount, the background worker explicitly excludes it from any dynamic `DiscountGroup` LINQ queries.
 * **Failsafe Clamping:** Regardless of mathematical combinations or overlapping executions, the `ApplyTierToProducts` method enforces a strict `Math.Max(0, calculatedPrice)` boundary, guaranteeing the database never persists a negative integer for a customer-facing price.
 
