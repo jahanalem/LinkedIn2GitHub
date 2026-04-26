@@ -3,7 +3,7 @@
 ## A. Introduction to the Discount System in Lilishop
 
 ### Business Goals and Requirements
-The Lilishop discount system allows administrators to manage product pricing dynamically across the e-commerce platform without mutating historical base prices. The system is designed to meet the following business requirements:
+The Lilishop discount system allows administrators to manage product pricing dynamically across the e-commerce platform without overwriting historical base prices. The system is designed to meet the following business requirements:
 * **Flexibility:** Support percentage-based reductions, fixed-amount deductions, and free shipping triggers.
 * **Granular Targeting:** Apply targeted discounts to single products (`ProductDiscount`) or execute store-wide campaigns based on entity relationships (Brands, Product Types, Sizes).
 * **Automated Scheduling:** Execute campaign state transitions (activation/deactivation) asynchronously based on UTC timestamps.
@@ -241,9 +241,9 @@ erDiagram
 
 ***
 
-## E. Step-by-Step Execution Flow (Campaign Provisioning)
+## E. Step-by-Step Execution Flow (Campaign Creation)
 
-To understand how the relational entities interact during provisioning, consider a standard operational scenario: an administrator schedules a **"Summer Clearance Sale"** offering a **20% reduction on all Nike Shoes**.
+To understand how the relational entities interact during Creation, consider a standard operational scenario: an administrator schedules a **"Summer Clearance Sale"** offering a **20% reduction on all Nike Shoes**.
 
 Instead of simple CRUD operations, this requires constructing a complex nested graph of entities. Here is the exact execution pipeline when the client submits the campaign to the backend:
 
@@ -693,7 +693,7 @@ The Lilishop discount engine was designed by prioritizing read-performance and d
 
 ### 1. Pre-Calculation vs. Runtime Evaluation ($O(1)$ Reads)
 * **The Problem:** Dynamically calculating prices on every `GET /api/products` request requires joining the `Product` table with the entire `Discount` rule graph, destroying database performance at scale.
-* **The Solution:** The system uses a **Pre-calculated Read Strategy**. Complex relational rules (`ConditionGroup`, `DiscountTier`) are only evaluated during background worker *writes*. The storefront API simply reads the primitive `Price` and `PreviousPrice` columns, yielding blazing-fast $O(1)$ latency for end users.
+* **The Solution:** The system uses a **Pre-calculated Read Strategy**. Complex relational rules (`ConditionGroup`, `DiscountTier`) are only evaluated during background worker *writes*. The storefront API simply reads the primitive `Price` and `PreviousPrice` columns, yielding fast $O(1)$ latency for end users.
 
 ### 2. Eventual Consistency via Background Workers
 * **The Trade-Off:** Moving activation logic to Hangfire means there is a slight delay between an administrator clicking "Activate Now" and the catalog fully updating.
