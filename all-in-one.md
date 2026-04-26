@@ -1,3 +1,13 @@
+# Discount System Documentation (Lilishop)
+A detailed look at the discount and pricing system behind Lilishop.  
+To avoid runtime price calculations, the system uses a **Pre-calculated Read Strategy**, which keeps product reads fast with $O(1)$ performance on the storefront and moves large discount updates to asynchronous **Hangfire** background jobs.
+
+The documentation explains how multi-level discount rules work for store-wide campaigns, how database consistency is protected using the **Unit of Work** pattern, and how important edge cases are handled, such as overlapping discounts, product price updates during active sales, and safely changing discount rules while a campaign is already running.
+
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0045_discount-system-lilishop.md)
+
+***
+
 # Stripe Payment Process in Lilishop
 This article outlines the secure payment workflow implemented in the LiliShop project. It details the architecture connecting the Angular frontend, the .NET backend API, and the Stripe payment gateway. The core focus is on a "zero-trust" security model, where final payment confirmation is handled exclusively via secure asynchronous webhooks from Stripe to prevent client-side manipulation. The document includes a step-by-step process flow, a visual sequence diagram, and configuration instructions for local development using the Stripe CLI.
 
