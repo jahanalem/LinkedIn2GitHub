@@ -231,7 +231,7 @@ erDiagram
   * **For Single Discounts:** When `DiscountGroupId` is `NULL`, this table directly stores the exact financial variables (`Amount` and `IsPercentage`) needed to calculate the price drop.
   * **For Group Campaigns:** When linked to a `DiscountGroup`, it acts as a scheduling wrapper (`StartDate`, `EndDate`, `IsActive`), delegating the financial rules to the `DiscountTier` table.
 * **`ProductDiscount`**: A highly efficient many-to-many junction table strictly used for **Single Discounts**. It directly maps a `DiscountId` to a `ProductId`, bypassing the rules engine entirely for simple use cases.
-* **`DiscountTier`**: Handles the financial polymorphism of a group campaign. Because a single "Summer Sale" (`DiscountGroup`) might offer 10% off shirts but 30% off shoes, the financial variables are abstracted into Tiers.
+* **`DiscountTier`**: Stores the specific discount values for a group campaign. Because a single "Summer Sale" (`DiscountGroup`) might offer 10% off shirts but 30% off shoes, the financial variables are abstracted into Tiers.
 * **`ConditionGroup` & `DiscountGroupCondition`**: The logical rules engine. `ConditionGroup` acts as the `AND` wrapper connecting targeting predicates (the Conditions) to a specific `DiscountTier`.
 * **`DiscountAuditLog`**: Essential for state tracking in financial applications. It records the exact UTC timestamp, the admin's identity, and the specific mutation (`Created`, `Updated`, `Deleted`) applied to any discount.
 * **`Product` (Pricing Columns)**: The `Product` table deliberately avoids calculating prices via SQL `JOIN`s to the discount tables on read requests. Instead, active discounts mathematically mutate the `Price` column while the original value is safely cached in `PreviousPrice`. This denormalized read-strategy guarantees $O(1)$ performance for customer page loads.
@@ -448,7 +448,7 @@ A dynamic pricing engine is highly susceptible to race conditions, conflicting r
 ### 1. Conflict Resolution (Overlapping Promotions)
 In a relational rules engine, a single product (e.g., a "Nike Shirt") could inadvertently qualify for multiple active campaigns simultaneously (e.g., a 10% off "Nike" campaign and a 20% off "Shirts" campaign). 
 
-Lilishop enforces a strict **Deterministic Priority Model**:
+Lilishop enforces a **strict Priority Rules**:
 * **Single Discount Override:** `ProductDiscount` entities carry absolute priority. If a product has a direct single discount, the background worker explicitly excludes it from any dynamic `DiscountGroup` LINQ queries.
 * **Failsafe Clamping:** Regardless of mathematical combinations or overlapping executions, the `ApplyTierToProducts` method enforces a strict `Math.Max(0, calculatedPrice)` boundary, guaranteeing the database never persists a negative integer for a customer-facing price.
 
@@ -693,7 +693,7 @@ The Lilishop discount engine was designed by prioritizing read-performance and d
 
 ### 1. Pre-Calculation vs. Runtime Evaluation ($O(1)$ Reads)
 * **The Problem:** Dynamically calculating prices on every `GET /api/products` request requires joining the `Product` table with the entire `Discount` rule graph, destroying database performance at scale.
-* **The Solution:** The system uses a **Denormalized Read Model**. Complex relational rules (`ConditionGroup`, `DiscountTier`) are only evaluated during background worker *writes*. The storefront API simply reads the primitive `Price` and `PreviousPrice` columns, yielding blazing-fast $O(1)$ latency for end users.
+* **The Solution:** The system uses a **Pre-calculated Read Strategy**. Complex relational rules (`ConditionGroup`, `DiscountTier`) are only evaluated during background worker *writes*. The storefront API simply reads the primitive `Price` and `PreviousPrice` columns, yielding blazing-fast $O(1)$ latency for end users.
 
 ### 2. Eventual Consistency via Background Workers
 * **The Trade-Off:** Moving activation logic to Hangfire means there is a slight delay between an administrator clicking "Activate Now" and the catalog fully updating.
