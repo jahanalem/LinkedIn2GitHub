@@ -18,6 +18,22 @@ Lilishop solves this using a **Pre-Calculation Architecture** managed by asynchr
 
 Instead of calculating prices on the fly, the system schedules Hangfire background jobs to physically mutate the active `Price` column at the exact start time, utilizing a `PreviousPrice` column as a safe historical backup.
 
+
+### System Interface Preview
+
+The following screenshots illustrate the Lilishop discount management lifecycle, covering the multi-step administrative workflow for configuring complex group rules, the central discount oversight list, and the resulting live price display on the customer-facing storefront.
+
+| **Admin Workflow: Group Discount Setup** 
+|:---:|
+| [Step 1 - Basic Info]<img width="2468" height="950" alt="group-discount-step-1" src="https://github.com/user-attachments/assets/ea4747b8-ad17-46b5-bb0e-faaff8f1b8a3" /> 
+| [Step 2 - Tiers]<img width="2466" height="796" alt="group-discount-step-2" src="https://github.com/user-attachments/assets/7e2554bb-7b6d-496d-a746-c6b9c1b9b534" />
+| [Step 3 - Targeting]<img width="2440" height="1246" alt="group-discount-step-3" src="https://github.com/user-attachments/assets/a9e09880-558c-4b0a-8160-1efe69c939c5" /> 
+| [Discount Oversight List]<img width="3070" height="1468" alt="discount-list" src="https://github.com/user-attachments/assets/a0551ea4-3671-43c3-a2e5-031480690ffc" />
+
+| **Management & Storefront View** |
+|:---:|
+| [Customer Storefront View]<img width="3072" height="1580" alt="product-list-user-view" src="https://github.com/user-attachments/assets/efff370e-1cf8-4b49-80ac-916931b61f5e" />
+
 ***
 
 ## B. How a Single Discount Works (Algorithm and Execution)
