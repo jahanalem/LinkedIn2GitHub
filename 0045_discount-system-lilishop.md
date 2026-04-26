@@ -385,8 +385,8 @@ The API immediately returns a `200 OK`, ensuring the admin dashboard remains hig
 
 ### Worker Thread Execution
 Hangfire runs on a separate worker thread pool, backed by a persistent SQL storage queue.
-* **Activation Job:** The system schedules `DiscountService.ActivateDiscountByIdAsync(discountId)`. When the `StartDate` UTC timestamp is reached, the worker thread picks up the job, dynamically evaluates the Entity Framework queries, and mutates the live catalog.
-* **Deactivation Job:** Expiration is treated as a strict system event. The system schedules `DiscountService.DeactivateDiscountByIdAsync(discountId)` at the exact `EndDate` timestamp. The worker thread reverses the mutation, safely moving `PreviousPrice` back to the live `Price` column.
+* **Activation Job:** The system schedules `DiscountService.ActivateDiscountByIdAsync(discountId)`. When the `StartDate` UTC timestamp is reached, the worker thread picks up the job, dynamically evaluates the Entity Framework queries, and updates the live catalog.
+* **Deactivation Job:** Expiration is treated as a strict system event. The system schedules `DiscountService.DeactivateDiscountByIdAsync(discountId)` at the exact `EndDate` timestamp. The worker thread reverses the price changes, safely moving `PreviousPrice` back to the live `Price` column.
 
 ### Fault Tolerance and Eventual Consistency
 Background workers introduce the risk of execution failure (e.g., the worker attempts to activate a discount, but the database is undergoing a temporary restart or experiencing a deadlock). 
@@ -452,7 +452,7 @@ Lilishop enforces a **strict Priority Rules**:
 * **Single Discount Override:** `ProductDiscount` entities carry absolute priority. If a product has a direct single discount, the background worker explicitly excludes it from any dynamic `DiscountGroup` LINQ queries.
 * **Failsafe Clamping:** Regardless of mathematical combinations or overlapping executions, the `ApplyTierToProducts` method enforces a strict `Math.Max(0, calculatedPrice)` boundary, guaranteeing the database never persists a negative integer for a customer-facing price.
 
-### 2. Mid-Flight Rule Mutations (The Clean Slate Pattern)
+### 2. Rule Changes During an Active Sale (The Clean Slate Pattern)
 If an administrator modifies the targeting rules of an *actively running* campaign (e.g., changing the target from "Nike" to "Adidas"), the system risks leaving the original Nike products "orphaned" on sale permanently.
 
 To prevent this, `DiscountService.UpdateDiscountAndNotifyAsync()` utilizes a **Clean Slate Pattern**. Before applying any new rules to the database, the service forcefully executes `RestorePricesForAffectedProductsAsync()` against the *existing* conditions. Only after the catalog is restored to base prices does the system save the new rules and immediately re-trigger the activation sequence.
@@ -541,7 +541,7 @@ private async Task RestorePricesForAffectedProductsAsync(int discountId)
 ```
 </details>
 
-### 3. Concurrent Base Price Mutations
+### 3. Base Price Changes During a Sale
 A critical race condition occurs if a store manager manually updates a product's base price in the dashboard while that product is currently on sale. If unhandled, the system would overwrite the active sale price and corrupt the `PreviousPrice` backup.
 
 Lilishop intercepts this via a state-aware mapping layer (`MapUpdateDtoToProductAsync`). If the system detects an active discount (`StartDate <= UtcNow <= EndDate`), it intercepts the inbound base price update, routes it directly to the `PreviousPrice` column to preserve the new base value, and dynamically recalculates the active `Price` inline before persisting to SQL.
@@ -704,6 +704,6 @@ The Lilishop discount engine was designed by prioritizing read-performance and d
 * **The Benefit:** The system is infinitely extensible. By utilizing the `DiscountGroupCondition` pattern, adding a new targeting vector in the future (e.g., "Discount by Color" or "Discount by User VIP Tier") simply requires appending one enum and one `WHERE` clause to the query builder, without requiring database schema migrations or breaking existing campaign logic.
 
 ### Conclusion
-By strictly separating the synchronous REST API from asynchronous Hangfire state mutations, and by wrapping all complex relational operations within the `IUnitOfWork` transaction boundary, Lilishop successfully balances a highly flexible pricing engine with strict data integrity and uncompromising frontend performance.
+By strictly separating the synchronous REST API from asynchronous Hangfire background updates, and by wrapping all complex relational operations within the `IUnitOfWork` transaction boundary, Lilishop successfully balances a highly flexible pricing engine with strict data integrity and uncompromising frontend performance.
 
 
