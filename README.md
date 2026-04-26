@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### 45. Discount System Documentation (Lilishop)
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0045_discount-system-lilishop.md)
+
 ### 44. Stripe Payment Process in Lilishop
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0044_stripe-payment-process.md)
 
