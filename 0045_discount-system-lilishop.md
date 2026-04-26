@@ -74,6 +74,10 @@ This method performs the following steps:
 
 Below is the complete implementation of this activation logic:
 
+<details>
+<summary><b>Code: ActivateDiscountByIdAsync(int discountId)</b></summary>
+<br>
+
 ```csharp
 public async Task<IOperationResult> ActivateDiscountByIdAsync(int discountId)
 {
@@ -155,6 +159,7 @@ public async Task<IOperationResult> ActivateDiscountByIdAsync(int discountId)
     return new SuccessOperationResult("Discount activated successfully.");
 }
 ```
+</details>
 
 ***
 
@@ -266,6 +271,10 @@ For critical operations like creating or deleting a complex campaign, the servic
 
 Below is the architectural pattern utilized inside the `DiscountService` to ensure safety:
 
+<details>
+<summary><b>Code: CreateDiscountAsync(CreateDiscountDto dto)</b></summary>
+<br>
+  
 ```csharp
 public async Task<IOperationResult<Discount>> CreateDiscountAsync(CreateDiscountDto dto)
 {
@@ -360,6 +369,7 @@ public async Task<IOperationResult<Discount>> CreateDiscountAsync(CreateDiscount
     }
 }
 ```
+</details>
 
 ***
 
@@ -447,6 +457,10 @@ If an administrator modifies the targeting rules of an *actively running* campai
 
 To prevent this, `DiscountService.UpdateDiscountAndNotifyAsync()` utilizes a **Clean Slate Pattern**. Before applying any new rules to the database, the service forcefully executes `RestorePricesForAffectedProductsAsync()` against the *existing* conditions. Only after the catalog is restored to base prices does the system save the new rules and immediately re-trigger the activation sequence.
 
+<details>
+<summary><b>Code: RestorePricesForAffectedProductsAsync(int discountId)</b></summary>
+<br>
+  
 ```csharp
 private async Task RestorePricesForAffectedProductsAsync(int discountId)
 {
@@ -525,11 +539,16 @@ private async Task RestorePricesForAffectedProductsAsync(int discountId)
     }
 }
 ```
+</details>
 
 ### 3. Concurrent Base Price Mutations
 A critical race condition occurs if a store manager manually updates a product's base price in the dashboard while that product is currently on sale. If unhandled, the system would overwrite the active sale price and corrupt the `PreviousPrice` backup.
 
 Lilishop intercepts this via a state-aware mapping layer (`MapUpdateDtoToProductAsync`). If the system detects an active discount (`StartDate <= UtcNow <= EndDate`), it intercepts the inbound base price update, routes it directly to the `PreviousPrice` column to preserve the new base value, and dynamically recalculates the active `Price` inline before persisting to SQL.
+
+<details>
+<summary><b>Code: MapUpdateDtoToProductAsync(IProductInputDto dto, Product targetProduct)</b></summary>
+<br>
 
 ```csharp
 public async Task<Product> MapUpdateDtoToProductAsync(IProductInputDto dto, Product targetProduct)
@@ -664,7 +683,9 @@ public async Task<Product> MapUpdateDtoToProductAsync(IProductInputDto dto, Prod
     return targetProduct;
 }
 ```
----
+</details>
+
+***
 
 ## J. Architecture Analysis & Engineering Trade-Offs
 
