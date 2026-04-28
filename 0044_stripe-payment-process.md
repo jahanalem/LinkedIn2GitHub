@@ -85,10 +85,6 @@ export interface IBasket {
 7.  The Client calls `CheckoutService.createOrder()` to transmit shipping and basket identifiers to the API.
 8.  The API creates an Order record in the database with an initial status of "Pending".
 
-It was a mistake. The steps in the text and the diagram were not synchronized. 
-
-Below are the corrected Section 3 and Section 4. They have been updated to map exactly 1:1, resulting in 14 synchronized steps in both the text and the diagram.
-
 ### 3. Step-by-Step Process Flow
 
 **Phase 1: Payment Intent Initialization**
@@ -408,21 +404,3 @@ scoop update stripe
 -
 <img width="1707" height="960" alt="Slide13" src="https://github.com/user-attachments/assets/88a347ff-e133-4ca6-8ce6-5b771fc7a588" />
 -
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
