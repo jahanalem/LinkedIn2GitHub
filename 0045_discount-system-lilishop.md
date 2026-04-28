@@ -703,7 +703,111 @@ public async Task<Product> MapUpdateDtoToProductAsync(IProductInputDto dto, Prod
 
 ***
 
-## J. Architecture Analysis & Engineering Trade-Offs
+## J. Comprehensive Price Management Workflow (Flowchart)
+
+The following flowchart synthesizes the entire pricing lifecycle. It illustrates how the system seamlessly handles standard campaign scheduling (via Hangfire) alongside critical edge cases, such as concurrent base price updates and mid-sale rule modifications, without compromising data integrity.
+
+```mermaid
+---
+title: Comprehensive Price Management Workflow
+---
+flowchart TD
+    classDef trigger fill:#2E86C1,stroke:#fff,stroke-width:2px,color:#fff
+    classDef decision fill:#D68910,stroke:#fff,stroke-width:2px,color:#fff
+    classDef action fill:#8E44AD,stroke:#fff,stroke-width:2px,color:#fff
+    classDef database fill:#27AE60,stroke:#fff,stroke-width:2px,color:#fff
+    
+    %% SCENARIO 1: ADMIN MANUAL UPDATE
+    subgraph Scenario1 ["Scenario 1: Admin Updates Base Price (ProductMapper)"]
+        direction TB
+        A1([Admin submits New Base Price]):::trigger
+        A2{Is a Single Discount Active?}:::decision
+        A3[Backup: Set PreviousPrice = New Base Price]:::action
+        A4[Recalculate: Live Price = New Base Price - Discount.Amount]:::action
+        A5[Failsafe: Clamp Price to Min 0]:::action
+        A6[Set Live Price = New Base Price]:::action
+        A7[Clear: Set PreviousPrice = NULL]:::action
+        A8[(Database: Save Product)]:::database
+
+        A1 --> A2
+        A2 -- YES --> A3
+        A3 --> A4
+        A4 --> A5
+        A5 --> A8
+        A2 -- NO --> A6
+        A6 --> A7
+        A7 --> A8
+    end
+
+    %% SCENARIO 2: BACKGROUND ACTIVATION
+    subgraph Scenario2 ["Scenario 2: Campaign Activation via Hangfire"]
+        direction TB
+        B1([Worker: StartDate Reached]):::trigger
+        B2{Discount Type?}:::decision
+        
+        %% Single Discount Branch
+        B3_S[Fetch Product via ProductDiscount]:::action
+        B7_S{Has PreviousPrice?}:::decision
+        B8_S[Backup: Set PreviousPrice = Live Price]:::action
+        B9_S[Keep Existing PreviousPrice]:::action
+        B10_S[Calculate Price using Discount Entity Amount]:::action
+        
+        %% Group Discount Branch
+        B4_G[Evaluate Rules: Target Entity / ALL rule]:::action
+        B5_G[Execute Dynamic LINQ Query]:::action
+        B6_G[Fetch Matching Products]:::action
+        B7_G{Has PreviousPrice?}:::decision
+        B8_G[Backup: Set PreviousPrice = Live Price]:::action
+        B9_G[Keep Existing PreviousPrice]:::action
+        B10_G[Calculate Price using DiscountTier Amount]:::action
+
+        B11[(Database: Commit Transaction)]:::database
+
+        %% Connections
+        B1 --> B2
+        
+        B2 -- Single --> B3_S
+        B3_S --> B7_S
+        B7_S -- NO --> B8_S
+        B7_S -- YES --> B9_S
+        B8_S --> B10_S
+        B9_S --> B10_S
+        B10_S --> B11
+
+        B2 -- Group --> B4_G
+        B4_G --> B5_G
+        B5_G --> B6_G
+        B6_G --> B7_G
+        B7_G -- NO --> B8_G
+        B7_G -- YES --> B9_G
+        B8_G --> B10_G
+        B9_G --> B10_G
+        B10_G --> B11
+    end
+
+    %% SCENARIO 3: BACKGROUND DEACTIVATION
+    subgraph Scenario3 ["Scenario 3: Clean Slate & Expiration"]
+        direction TB
+        C1([Worker: EndDate Reached OR Rules Modified]):::trigger
+        C2[Find All Products Affected by Campaign]:::action
+        C3{Product has PreviousPrice?}:::decision
+        C4[Restore: Set Live Price = PreviousPrice]:::action
+        C5[Clear: Set PreviousPrice = NULL]:::action
+        C6[Skip Product]:::action
+        C7[(Database: Commit Restored Base Prices)]:::database
+
+        C1 --> C2
+        C2 --> C3
+        C3 -- YES --> C4
+        C4 --> C5
+        C5 --> C7
+        C3 -- NO --> C6
+        C6 --> C7
+    end
+```
+***
+
+## K. Architecture Analysis & Engineering Trade-Offs
 
 The Lilishop discount engine was designed by prioritizing read-performance and data safety over write-simplicity. Below is an analysis of the architectural trade-offs made to achieve enterprise-grade performance.
 
