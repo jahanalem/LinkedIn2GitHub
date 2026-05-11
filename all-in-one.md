@@ -1,4 +1,4 @@
-# 46. Building a Fail-Safe Email System in .NET: Fallback Pattern & Polly Resilience
+# Building a Fail-Safe Email System in .NET: Fallback Pattern & Polly Resilience
 
 Relying on a single third-party service for critical features like user registration is a risk. In this article, I explain how I architected a highly resilient, fault-tolerant email delivery system for LiliShop using advanced .NET design patterns and tools.
 
