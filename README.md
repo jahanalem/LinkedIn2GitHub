@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### 46. Building a Fail-Safe Email System in .NET: A Practical Guide to Fallback and Resilience
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0046_Building-a-Fail-Safe-Email-System-in-NET.md)
+
 ### 45. Discount System Documentation (Lilishop)
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0045_discount-system-lilishop.md)
 
