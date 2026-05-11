@@ -1,3 +1,16 @@
+# 46. Building a Fail-Safe Email System in .NET: Fallback Pattern & Polly Resilience
+
+Relying on a single third-party service for critical features like user registration is a risk. In this article, I explain how I architected a highly resilient, fault-tolerant email delivery system for LiliShop using advanced .NET design patterns and tools.
+
+**Key Topics Covered:**
+* **The Fallback Pattern:** Creating a wrapper to seamlessly switch from a primary email provider (SendGrid) to a backup provider (Gmail SMTP) without impacting core business logic.
+* **Polly Library Integration:** Implementing an Exponential Backoff retry policy to gracefully handle transient network failures.
+* **Secure Azure Configuration:** Managing sensitive SMTP credentials in production using Azure Environment Variables instead of hardcoded strings.
+
+🔗 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0046_Building-a-Fail-Safe-Email-System-in-NET.md)
+
+***
+
 # Discount System Documentation (Lilishop)
 A detailed look at the discount and pricing system behind Lilishop.  
 To avoid runtime price calculations, the system uses a **Pre-calculated Read Strategy**, which keeps product reads fast with $O(1)$ performance on the storefront and moves large discount updates to asynchronous **Hangfire** background jobs.
