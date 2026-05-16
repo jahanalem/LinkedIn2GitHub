@@ -996,7 +996,7 @@ The diagram defines **17 transitions**. Below, each is listed with its trigger, 
 
 ## 6. Conclusion
 
-The discount lifecycle state diagram provides a complete, deterministic map of how any discount moves from creation to deletion. It complements the multi‑discount price management workflow by showing *when* price calculations occur and *what triggers* them. Combined, these two documents form the backbone of LiliShop’s discount engine documentation.
+The discount lifecycle state diagram provides a complete, deterministic map of how any discount moves from creation to deletion. It complements the multi‑discount price management workflow by showing *when* price calculations occur and *what triggers* them.
 
 ***
 ***
