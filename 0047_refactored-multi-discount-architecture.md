@@ -1,12 +1,62 @@
+# Refactored Multi Discount Architecture In Lilishop
 
+## Introduction
 
-* [Discount System – Entity Relationship Diagram (ERD)](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0047_refactored-multi-discount-architecture.md#discount-system--entity-relationship-diagram-erd)
-* [Discount System – Service Architecture Class Diagram](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0047_refactored-multi-discount-architecture.md#discount-system--service-architecture-class-diagram)
-* [Sequence Diagram – Admin Updates an Active Campaign](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0047_refactored-multi-discount-architecture.md#sequence-diagram--admin-updates-an-active-campaign)
-* [Multi-Discount Price Management Workflow](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0047_refactored-multi-discount-architecture.md#multi-discount-price-management-workflow)
-* [Discount Lifecycle State Diagram – Technical Documentation](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0047_refactored-multi-discount-architecture.md#discount-lifecycle-state-diagram--technical-documentation)
-* [Understanding Optimistic Concurrency in the Discount System](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0047_refactored-multi-discount-architecture.md#understanding-optimistic-concurrency-in-the-discount-system)
-* [Discount Sweeper – Failsafe for Expired Campaigns](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0047_refactored-multi-discount-architecture.md#discount-sweeper--failsafe-for-expired-campaigns)
+Welcome to the complete technical documentation for the refactored multi-discount system of LiliShop. This document describes everything you need to understand how discounts work, how they are stored in the database, how the services are organized, and how the system keeps product prices correct even when multiple promotions overlap.
+
+### What This Document Covers
+
+This is not just one diagram or one explanation. It is a collection of six independent but connected documents, each focusing on a different angle of the discount engine:
+
+- **Entity Relationship Diagram (ERD)** – the database tables, their roles, and dummy data to make the structure concrete.
+- **Service Architecture Class Diagram** – how the code is split into four focused services after the refactoring.
+- **Sequence Diagram** – the exact step-by-step flow when an admin updates an active campaign.
+- **Multi-Discount Price Management Workflow** – the three main operational scenarios (activation, deactivation, live update).
+- **Discount Lifecycle State Diagram** – the four states every discount moves through and all 17 possible transitions.
+- **Optimistic Concurrency Guide** – how the system prevents lost updates when multiple jobs modify prices at the same time.
+- **Discount Sweeper Documentation** – the failsafe mechanism that catches expired discounts missed by background jobs.
+
+### Why a New Version Was Needed
+
+The original discount system (documented in [0045_discount-system-lilishop.md](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0045_discount-system-lilishop.md)) supported only **one active discount at a time**. A single `DiscountService` class handled everything: database operations, price calculations, background job scheduling, cache invalidation, and audit logging. This "God Class" became difficult to maintain, test, and extend.
+
+The refactored version solves these problems in three big ways:
+
+1. **Separation of Concerns** – The old `DiscountService` was split into four focused services: `DiscountCrudService`, `DiscountQueryService`, `DiscountPriceService`, and `DiscountLifecycleService`. Each has a single, clear responsibility.
+
+2. **Multi-Discount Support** – Multiple campaigns can now run at the same time. The system automatically evaluates all active discounts for each product and applies the lowest possible price. When one discount expires, the system finds the next best active promotion instead of leaving the product at full price.
+
+3. **Reliability** – A "Clean Slate" pattern ensures old prices are always removed before new rules are applied. An optimistic concurrency mechanism with automatic retries prevents data corruption when multiple background jobs modify the same product simultaneously. A recurring sweeper job acts as a safety net for any missed deactivations.
+
+### Key Concepts in Simple Terms
+
+| Concept | What It Means |
+|---------|---------------|
+| **Best-Price Engine** | The system checks all active discounts for a product and picks the lowest price, not just the first one it finds. |
+| **Clean Slate Pattern** | Before applying new discount rules, the system restores all products to their original prices. This prevents double-discounting or orphaned sale prices. |
+| **Optimistic Concurrency** | Instead of locking database rows, the system uses a version number (`RowVersion`). If two jobs try to update the same product at once, the second one reloads the latest data and retries. |
+| **Tier-Based Rewards** | A single discount can have multiple reward levels (e.g., "Buy 1 get 10%, Buy 2 get 20%"). Each tier is linked to its own set of conditions. |
+| **Sweeper Failsafe** | A recurring background job that runs every 5 minutes to find and deactivate any discounts that should have expired but were missed due to server restarts or job failures. |
+
+### How to Use This Document
+
+Each section stands on its own. You can read them in any order depending on what you need:
+
+- If you want to understand the **database structure**, start with the ERD.
+- If you need to understand the **code organization**, read the Class Diagram.
+- If you are debugging an **update issue**, the Sequence Diagram and Workflow Flowchart show exactly what happens.
+- If you want to understand the **discount lifecycle**, the State Diagram maps every possible transition.
+- If you are concerned about **data safety**, the Concurrency Guide and Sweeper documentation explain the protection mechanisms.
+
+### Table of Contents
+
+- [Discount System – Entity Relationship Diagram (ERD)](#discount-system--entity-relationship-diagram-erd)
+- [Discount System – Service Architecture Class Diagram](#discount-system--service-architecture-class-diagram)
+- [Sequence Diagram – Admin Updates an Active Campaign](#sequence-diagram--admin-updates-an-active-campaign)
+- [Multi-Discount Price Management Workflow](#multi-discount-price-management-workflow)
+- [Discount Lifecycle State Diagram – Technical Documentation](#discount-lifecycle-state-diagram--technical-documentation)
+- [Understanding Optimistic Concurrency in the Discount System](#understanding-optimistic-concurrency-in-the-discount-system)
+- [Discount Sweeper – Failsafe for Expired Campaigns](#discount-sweeper--failsafe-for-expired-campaigns)
 
 ***
 
