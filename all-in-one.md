@@ -1,3 +1,10 @@
+# Refactored Multi-Discount Architecture In Lilishop
+To support complex promotional strategies, I completely refactored the discount engine in LiliShop. This updated architecture allows multiple discount campaigns to overlap seamlessly, automatically calculating the best possible price for the customer. The article explores the "Best-Price Evaluation Engine," the "Clean-Slate" update pattern, and how the system uses optimistic concurrency to safely manage overlapping database updates.
+
+[Read More](0047_refactored-multi-discount-architecture.md)
+
+***
+
 # Building a Fail-Safe Email System in .NET: Fallback Pattern & Polly Resilience
 
 Relying on a single third-party service for critical features like user registration is a risk. In this article, I explain how I architected a highly resilient, fault-tolerant email delivery system for LiliShop using advanced .NET design patterns and tools.
