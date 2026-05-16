@@ -1393,3 +1393,187 @@ The discount lifecycle state diagram provides a complete, deterministic map of h
 
 ***
 ***
+
+# Understanding Optimistic Concurrency in the Discount System
+
+**Version:** 1.0  
+**Project:** LiliShop – Discount System  
+**Date:** 2026-05-16
+
+---
+
+## 1. The Problem – Two Jobs, One Product
+
+Imagine two background workers running at the same time:
+
+- **Worker A** wants to apply a 20 % summer discount to Product X.  
+  It reads the current price ($100), calculates $80, and is ready to save.
+- **Worker B** has just expired an old flash sale on the same product and wants to restore the original price ($100).  
+  It reads the price ($100), keeps it unchanged, and is about to save.
+
+If both simply write their numbers without checking, the one that saves last wins. Worker A might set $80, then Worker B instantly overwrites it back to $100. The summer discount disappears. This is called a **lost update**.
+
+We need a way to detect such collisions and **retry the operation using the latest data**.
+
+---
+
+## 2. How Entity Framework Detects Collisions – The `RowVersion` Token
+
+Every row in the `Product` table has a hidden “version number” called `RowVersion`:
+
+```csharp
+[Timestamp]
+public byte[] RowVersion { get; set; }
+```
+
+- The database automatically changes this number every time the row is updated.
+- When Entity Framework saves a product, it adds a condition to the SQL:  
+  `WHERE RowVersion = @oldValue`.  
+- If another process has already changed the row, the version in the database no longer matches. Zero rows are updated, and EF throws a `DbUpdateConcurrencyException`.
+
+This is called **optimistic concurrency** – we *hope* no one else changed the data, and we check only at the last moment. If we’re wrong, we get an exception and can react.
+
+---
+
+## 3. The Retry Loop – How We React
+
+The discount system uses a simple retry loop (up to 3 attempts) around the price‑saving logic:
+
+```csharp
+for (int retry = 0; retry < 3; retry++)
+{
+    try
+    {
+        // … (A) business logic that sets Price and PreviousPrice …
+        await _unitOfWork.CompleteAsync();   // (B) try to save
+        break; // success
+    }
+    catch (DbUpdateConcurrencyException ex)
+    {
+        // (C) fix the change tracker (explained below)
+        await ResolveProductConcurrencyConflictsAsync(ex);
+        // (D) wait a moment before retrying
+        await Task.Delay(100);
+    }
+}
+```
+
+The trick is step (C) – we cannot simply call `CompleteAsync()` again with the same data; we must first refresh our in‑memory objects from the database. That’s what the resolution method does.
+
+---
+
+## 4. The Resolution Method – A Simple Step‑by‑Step Guide
+
+Here is the method, followed by a line‑by‑line explanation in plain English.
+
+```csharp
+private async Task ResolveProductConcurrencyConflictsAsync(DbUpdateConcurrencyException ex)
+{
+    foreach (var entry in ex.Entries)
+    {
+        if (entry.Entity is Product conflictedProduct)
+        {
+            var databaseValues = await entry.GetDatabaseValuesAsync();
+            if (databaseValues != null)
+            {
+                // 1. Tell EF: "Forget what you thought – the original version is the one now in the DB."
+                entry.OriginalValues.SetValues(databaseValues);
+
+                // 2. Also update the current values so the tracker shows the latest data.
+                entry.CurrentValues.SetValues(databaseValues);
+
+                // 3. Explicitly set the two fields we will recalculate in the next loop.
+                conflictedProduct.Price = (decimal)databaseValues[nameof(Product.Price)];
+                conflictedProduct.PreviousPrice = (decimal?)databaseValues[nameof(Product.PreviousPrice)];
+            }
+            else
+            {
+                // The product was deleted by another thread – stop tracking it.
+                entry.State = EntityState.Detached;
+            }
+        }
+    }
+}
+```
+
+### Step‑by‑step explanation
+
+1. **The method receives a `DbUpdateConcurrencyException`** – this exception carries a list of all the database rows that failed to save because of a version mismatch.
+
+2. **Loop through each failed row** – `ex.Entries` contains only the problematic ones. Usually there’s just one product, but we check them all.
+
+3. **Is this failed row a `Product`?**  
+   We only know how to fix products. If another type of entity is in the list, we skip it.
+
+4. **Fetch the latest version from the database** – `GetDatabaseValuesAsync()` asks the database for the current, real values of that row, including the brand‑new `RowVersion`.
+
+5. **If the row still exists (`databaseValues != null`)**:
+   - **Reset EF Core’s memory about the “original” row.**  
+     By overwriting `entry.OriginalValues` with the database snapshot, we tell EF Core, “This is the version you read. Forget the old one.” The next save will use this fresh `RowVersion` for the `WHERE` clause – so it will pass.
+   - **Update the “current” in‑memory values to match the database.**  
+     This step removes any leftover changes that the other thread made and aligns EF’s internal state with reality.
+   - **Explicitly set the two price fields** – `Price` and `PreviousPrice` – to whatever the database now contains. This ensures that when the retry loop runs again, our pricing logic will start from the correct, up‑to‑date numbers. The method doesn’t decide the final price; it just provides a clean base for recalculation.
+
+6. **If the row has been deleted (`databaseValues == null`)** – another process removed the product entirely. We set the entity’s state to `Detached` so EF Core stops tracking it. This prevents any accidental attempt to update a non‑existent row.
+
+After this method finishes, the retry loop jumps back to step (A). The business logic recalculates the discount using the fresh price values, and then tries `CompleteAsync()` again. This time the `RowVersion` matches, and the save succeeds.
+
+---
+
+## 5. Why a Simple `for`‑Loop Instead of Polly?
+
+You already use **Polly** beautifully for sending emails:
+
+```csharp
+var retryPolicy = Policy
+    .Handle<Exception>()
+    .WaitAndRetryAsync(3, attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)), ...);
+await retryPolicy.ExecuteAsync(() => _emailService.SendEmailAsync(...));
+```
+
+Polly is perfect for **stateless** retries – network calls, email, or any operation where the data doesn’t change between attempts. If the first email fails, the second attempt sends exactly the same content.
+
+A `DbUpdateConcurrencyException` is **stateful**. The database has moved on. If we simply told Polly to retry `SaveChangesAsync`, it would send the same outdated `RowVersion` again – every attempt would fail instantly. We **must** reload the entity and re‑apply business logic before saving. That “reload + recalculate” step has to happen inside the catch block.
+
+- Polly can run an `onRetryAsync` delegate, but cramming the EF Core tracker‑manipulation logic there would make the code messy and hard to follow.  
+- The `for` loop keeps everything together: catch the conflict, refresh the data, loop again. It follows the [official Microsoft recommendation for handling concurrency tokens](https://learn.microsoft.com/en-us/ef/core/saving/concurrency#resolving-concurrency-conflicts).
+
+So we use:
+
+| Scenario | Tool | Reason |
+|----------|------|--------|
+| Sending email, calling external APIs | **Polly** | The operation is identical on retry; only transient network faults matter. |
+| Saving product prices with `RowVersion` | **Manual `for`‑loop** | The in‑memory state must be refreshed from the database before every retry. |
+
+---
+
+## 6. A Whiteboard Analogy
+
+Think of a whiteboard where two people write a price.
+
+- The board has a small “version number” in the corner.  
+- You read the price and the version (say, version 3).  
+- While you do your maths, someone else wipes the board, writes a new price, and bumps the version to 4.  
+- You return with your new number, but see the version is now 4, not 3. You know you’re about to overwrite their work.
+
+Instead of ignoring the change (the “last writer wins” mistake), you:
+1. Read the new price and version they wrote.  
+2. Re‑do your calculation using the **new** number.  
+3. Write the correct final price and increase the version to 5.
+
+The retry loop with the resolution method does exactly this – it reloads the board, recalculates, and then writes the best price.
+
+---
+
+## 7. Conclusion
+
+- **`RowVersion`** gives us automatic conflict detection.  
+- **`DbUpdateConcurrencyException`** tells us that someone else changed the data while we were working on it.  
+- The **resolution method** refreshes our in‑memory objects from the database and resets EF Core’s tracker.  
+- The **retry loop** then reapplies the pricing logic on the latest data.  
+- The manual `for`‑loop is the right choice because we need to manipulate the EF Core change tracker before retrying – something Polly is not designed for. Polly remains the perfect tool for stateless network retries like sending emails.
+
+With this simple but robust approach, even when multiple jobs collide, LiliShop’s product prices stay correct and trustworthy.
+
+***********************************************************
+***********************************************************
