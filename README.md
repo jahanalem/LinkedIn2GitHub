@@ -14,7 +14,7 @@ You can find all articles combined in one file here:
 ## 📚 Articles:
 
 ### 47. Refactored Multi-Discount Architecture In Lilishop
-[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0047_refactored-multi-discount-architecture.md#understanding-optimistic-concurrency-in-the-discount-system)
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0047_refactored-multi-discount-architecture.md)
 
 ### 46. Building a Fail-Safe Email System in .NET: A Practical Guide to Fallback and Resilience
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0046_Building-a-Fail-Safe-Email-System-in-NET.md)
