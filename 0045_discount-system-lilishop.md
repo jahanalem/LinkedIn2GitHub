@@ -1,3 +1,10 @@
+> ⚠️ **Update Notice: New Architecture Available**
+>
+> This document outlines the original, single-discount system architecture. The discount engine has since been completely refactored to support simultaneous overlapping campaigns, a best-price evaluation engine, and optimistic concurrency handling.
+> 
+> 👉 **[Read the updated documentation here: Refactored Multi-Discount Architecture in LiliShop](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0047_refactored-multi-discount-architecture.md)**
+
+---
 # Discount System Documentation (Lilishop)
 
 ## A. Introduction to the Discount System in Lilishop
