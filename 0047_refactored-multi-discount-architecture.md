@@ -1455,7 +1455,7 @@ The discount lifecycle state diagram provides a complete, deterministic map of h
 ***
 ***
 
-# Understanding Optimistic Concurrency in the Discount System
+# Understanding Optimistic [Concurrency](https://learn.microsoft.com/en-us/ef/core/saving/concurrency?tabs=data-annotations#resolving-concurrency-conflicts) in the Discount System
 
 **Version:** 1.0  
 **Project:** LiliShop – Discount System  
