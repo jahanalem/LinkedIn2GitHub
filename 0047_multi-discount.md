@@ -1,4 +1,15 @@
 
+
+* [Discount System – Entity Relationship Diagram (ERD)](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0047_multi-discount.md#discount-system--entity-relationship-diagram-erd)
+* [Discount System – Service Architecture Class Diagram](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0047_multi-discount.md#discount-system--service-architecture-class-diagram)
+* [Sequence Diagram – Admin Updates an Active Campaign](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0047_multi-discount.md#sequence-diagram--admin-updates-an-active-campaign)
+* [Multi-Discount Price Management Workflow](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0047_multi-discount.md#multi-discount-price-management-workflow)
+* [Discount Lifecycle State Diagram – Technical Documentation](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0047_multi-discount.md#discount-lifecycle-state-diagram--technical-documentation)
+* [Understanding Optimistic Concurrency in the Discount System](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0047_multi-discount.md#understanding-optimistic-concurrency-in-the-discount-system)
+* [Discount Sweeper – Failsafe for Expired Campaigns](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0047_multi-discount.md#discount-sweeper--failsafe-for-expired-campaigns)
+
+***
+
 # Discount System – Entity Relationship Diagram (ERD)
 
 **Version:** 1.0  
