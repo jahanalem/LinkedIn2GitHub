@@ -1577,3 +1577,157 @@ With this simple but robust approach, even when multiple jobs collide, LiliShop�
 
 ***********************************************************
 ***********************************************************
+
+# Discount Sweeper – Failsafe for Expired Campaigns
+
+**Version:** 1.0  
+**Project:** LiliShop – Discount System  
+**Date:** 2026-05-17
+
+---
+
+## 1. Introduction – What Is the Sweep?
+
+In the discount system, every active campaign has an `EndDate`. When that date arrives, a Hangfire background job automatically deactivates the discount and restores product prices. But what if that job is missed – because the server restarted, a job was deleted by accident, or the Hangfire queue was temporarily unavailable?
+
+The **Sweep** (the method `SweepExpiredDiscountsAsync`) is a safety net. It runs on a regular schedule (every 5 minutes) and looks for any discount that is still marked **Active** but whose `EndDate` has already passed. It then deactivates those discounts exactly as if the original job had done it.
+
+---
+
+## 2. The Problem – Why We Need a Safety Net
+
+Under normal circumstances, a discount moves from **Active** to **Expired** via a scheduled Hangfire job:
+
+- When a discount becomes active, a Hangfire job is scheduled for its `EndDate`.
+- That job calls `DeactivateDiscountByIdAsync`.
+
+However, several things can go wrong:
+
+- **Server restart:** If the Hangfire server restarts at the exact moment the job should fire, the job might be skipped.
+- **Manual deletion:** An admin could accidentally delete the background job.
+- **Queue overload:** A very long queue could delay the job, leaving the discount active past its end date for minutes or hours.
+- **Hangfire storage issues:** In rare cases, job data might become corrupted.
+
+In any of these scenarios, a discount stays active beyond its intended end date. Customers would see expired sales, and prices would not be restored. The Sweep fixes this by periodically checking for “stuck” active discounts and deactivating them.
+
+---
+
+## 3. How the Sweep Works
+
+The Sweep method is simple and idempotent (running it multiple times does no harm). It works in three steps:
+
+1. **Find expired discounts that are still active** – Queries the database for discounts where `IsActive == true`, `EndDate` is not null, and `EndDate <= current time`.
+2. **Deactivate each one** – For each found discount, it calls the standard deactivation method `DeactivateDiscountByIdAsync`. This restores product prices and applies fallback discounts.
+3. **Report the result** – Returns a success message with the number of discounts swept.
+
+Because the Sweep uses the same deactivation logic as the normal expiration job, it guarantees that prices are always restored correctly, no matter how many times it runs.
+
+---
+
+## 4. Hangfire Configuration
+
+The Sweep is set up as a **recurring job** in Hangfire. Here’s the configuration from the `Program.cs` (or equivalent startup code):
+
+```csharp
+builder.Services.AddHangfire(config =>
+{
+    config.SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+        .UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"),
+            new Hangfire.SqlServer.SqlServerStorageOptions
+            {
+                CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                QueuePollInterval = TimeSpan.FromSeconds(15),
+                UseRecommendedIsolationLevel = true,
+                DisableGlobalLocks = true
+            });
+
+    // Runs every 5 minutes to act as a failsafe for crashed background workers
+    RecurringJob.AddOrUpdate<IDiscountLifecycleService>(
+        "sweep-expired-discounts-failsafe",
+        service => service.SweepExpiredDiscountsAsync(),
+        "*/5 * * * *"
+    );
+});
+```
+
+- **`RecurringJob.AddOrUpdate`** registers the job. It will be executed by the Hangfire server at the specified interval.
+- **`"sweep-expired-discounts-failsafe"`** is a unique identifier for the recurring job. If the method signature changes, you can update the job by keeping the same ID.
+- **`service => service.SweepExpiredDiscountsAsync()`** points to the method on the `IDiscountLifecycleService`.
+- **`"*/5 * * * *"`** is a **cron expression** that means “every 5 minutes”. (Every minute divisible by 5, e.g., 00:00, 00:05, 00:10, etc.)
+
+This setup ensures that even if the original deactivation job fails, no discount stays active more than 5 minutes past its expiration.
+
+---
+
+## 5. The Sweep Method – Code Explained
+
+```csharp
+public async Task<IOperationResult> SweepExpiredDiscountsAsync()
+{
+    // Step 1: Find discounts that should be expired but are still active
+    var expiredDiscounts = await _unitOfWork.Repository<Discount>()
+        .GetByCriteria(d => d.IsActive && d.EndDate.HasValue && d.EndDate.Value <= DateTimeOffset.UtcNow)
+        .Select(d => d.Id)
+        .ToListAsync();
+
+    // Step 2: If none, return early (avoids unnecessary work)
+    if (!expiredDiscounts.Any())
+    {
+        return new SuccessOperationResult("No expired discounts found.");
+    }
+
+    // Step 3: Deactivate each one using the standard deactivation logic
+    foreach (var discountId in expiredDiscounts)
+    {
+        await DeactivateDiscountByIdAsync(discountId);
+    }
+
+    // Step 4: Report what was done
+    return new SuccessOperationResult($"Swept and deactivated {expiredDiscounts.Count} expired discounts.");
+}
+```
+
+**Walkthrough:**
+
+1. **Fetch the IDs** of all discounts that are `IsActive == true`, have an `EndDate`, and where `EndDate <= now`.  
+   We only select `Id` to keep the query lightweight – we don’t need the full entity because `DeactivateDiscountByIdAsync` will load everything it needs.
+
+2. **Check for any results.** If the list is empty, the Sweep does nothing and logs “No expired discounts found.” This is the normal case most of the time.
+
+3. **Loop through each expired discount** and call `DeactivateDiscountByIdAsync`. This is the exact same method that the scheduled deactivation job would use, so all price restoration and fallback logic is identical.
+
+4. **Return a success result** with a count of how many discounts were cleaned up. Hangfire records this result in its job history for monitoring.
+
+Because the method only deactivates discounts that are **currently active**, it is safe to run many times. A discount that has already been deactivated (either by the original job or a previous sweep) will not be picked up again.
+
+---
+
+## 6. Benefits of the Sweep Approach
+
+- **Reliability:** No discount stays active forever due to a missed job. The failsafe runs independently of any single scheduled task.
+- **Simplicity:** The Sweep is only a few lines of code. It reuses existing, well‑tested deactivation logic.
+- **Lightweight:** It only fetches IDs, and usually returns immediately because there are no expired active discounts.
+- **Observability:** Every run is logged in Hangfire’s dashboard, so you can see if the sweep ever had to fix something.
+- **Low overhead:** Running every 5 minutes adds almost no load to the database.
+
+---
+
+## 7. When Does the Sweep Act?
+
+- During normal operation, the scheduled deactivation jobs fire on time, and the Sweep finds nothing to do.
+- If a job is missed (server restart, queue delay, etc.), the Sweep will catch the overdue discount on the next 5‑minute interval.
+- The maximum delay before an expired discount is deactivated is therefore **5 minutes** (the cron interval).
+
+---
+
+## 8. Conclusion
+
+The Sweep is a simple yet powerful safety net. It guarantees that expired discounts are always deactivated, even if the primary mechanism (scheduled Hangfire jobs) fails temporarily. By reusing the same `DeactivateDiscountByIdAsync` method, it ensures consistent price restoration and fallback logic.
+
+Together with the primary scheduled activation/deactivation jobs, the Sweep makes the discount lifecycle robust and fully automatic.
+
+*****************************************************************************
+*****************************************************************************
