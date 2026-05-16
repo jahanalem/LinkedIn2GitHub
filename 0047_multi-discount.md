@@ -1,5 +1,398 @@
 
+# Discount System – Entity Relationship Diagram (ERD)
 
+**Version:** 1.0  
+**Project:** LiliShop – Discount System  
+**Date:** 2026-05-16
+
+---
+
+## 1. Introduction
+
+The discount system of LiliShop is built around a set of database tables that store campaign rules, reward tiers, targeting conditions, and execution results. The Entity Relationship Diagram (ERD) below visualises how these tables are connected and how they work together to turn a marketing idea into a real‑time price on the storefront.
+
+This document describes each table’s purpose, its columns, and its relationships. It also includes realistic dummy data so you can immediately see how a discount campaign is stored and evaluated.
+
+---
+
+## 2. Entity Relationship Diagram
+
+```mermaid
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'background': '#ffffff',
+    'primaryColor': '#EBF5FB',
+    'primaryBorderColor': '#2980B9',
+    'primaryTextColor': '#2C3E50',
+    'lineColor': '#D35400',
+    'fontFamily': 'Arial, sans-serif'
+  }
+}}%%
+erDiagram
+    %% CORE CAMPAIGN TABLES
+    DISCOUNT_GROUP {
+        int Id PK
+        string Name
+        string Description
+    }
+
+    DISCOUNT {
+        int Id PK
+        int DiscountGroupId FK "Nullable"
+        string Name
+        decimal Amount "Base Amount"
+        bool IsPercentage
+        bool IsFreeShipping
+        datetime StartDate
+        datetime EndDate
+        bool IsActive
+        string StartJobId
+        string EndJobId
+    }
+
+    DISCOUNT_TIER {
+        int Id PK
+        int DiscountId FK
+        decimal Amount
+        bool IsPercentage
+        bool IsFreeShipping
+    }
+
+    %% TARGETING & LOGIC TABLES
+    CONDITION_GROUP {
+        int Id PK
+        int DiscountGroupId FK
+        int DiscountTierId FK
+    }
+
+    DISCOUNT_GROUP_CONDITION {
+        int Id PK
+        int ConditionGroupId FK
+        string TargetEntity "Enum: All, Product, Brand..."
+        int ProductBrandId FK "Nullable"
+        int ProductTypeId FK "Nullable"
+        int SizeClassificationId FK "Nullable"
+        int ProductId FK "Nullable"
+        bool ShouldNotify
+    }
+
+    %% EXECUTION & DOMAIN TABLES
+    PRODUCT {
+        int Id PK
+        decimal Price
+        decimal PreviousPrice "Nullable"
+        byte[] RowVersion "Concurrency Token"
+    }
+
+    PRODUCT_DISCOUNT {
+        int Id PK
+        int ProductId FK
+        int DiscountId FK
+        decimal ScheduledPrice
+    }
+
+    DISCOUNT_AUDIT_LOG {
+        int Id PK
+        int DiscountId FK
+        string OldVersionJson
+        string NewVersionJson
+        string ChangedBy
+        datetime ChangedAt
+    }
+
+    %% RELATIONSHIPS
+    DISCOUNT_GROUP ||--o{ DISCOUNT : "Groups multiple campaigns"
+    DISCOUNT_GROUP ||--o{ CONDITION_GROUP : "Owns logic paths"
+    DISCOUNT ||--|{ DISCOUNT_TIER : "Defines reward levels"
+    DISCOUNT_TIER ||--o{ CONDITION_GROUP : "Reward is granted by"
+    CONDITION_GROUP ||--|{ DISCOUNT_GROUP_CONDITION : "Evaluates target rules"
+    PRODUCT ||--o{ DISCOUNT_GROUP_CONDITION : "Is specifically targeted by"
+    DISCOUNT ||--o{ PRODUCT_DISCOUNT : "Calculates final prices for"
+    PRODUCT ||--o{ PRODUCT_DISCOUNT : "Has active sale price in"
+    DISCOUNT ||--o{ DISCOUNT_AUDIT_LOG : "Tracks config history"
+```
+
+---
+
+## 3. Table Descriptions and Dummy Data
+
+### 3.1 `DISCOUNT_GROUP`
+
+**Goal:**  
+A logical container that holds a set of targeting conditions (via `CONDITION_GROUP`). It acts as a “rule book” that can be reused by one or more `DISCOUNT` campaigns.
+
+**Columns:**
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `Id` | int (PK) | Unique identifier |
+| `Name` | string | Friendly name, e.g. “Nike Summer Campaign” |
+| `Description` | string | Optional internal notes |
+
+**Relationships:**
+
+- One `DISCOUNT_GROUP` can have many `DISCOUNT` records (a rule book shared by multiple time‑based campaigns).
+- One `DISCOUNT_GROUP` owns many `CONDITION_GROUP` records.
+
+**Dummy Data:**
+
+| Id | Name | Description |
+|----|------|-------------|
+| 1 | Nike Shoes Promo | All conditions targeting Nike footwear |
+| 2 | Sitewide Free Shipping | Conditions that apply to all products |
+
+---
+
+### 3.2 `DISCOUNT`
+
+**Goal:**  
+The central campaign entity. It defines the marketing promotion: name, type of reward (percentage, amount, free shipping), and its active time window. It also stores background job IDs for automatic activation and deactivation.
+
+**Columns:**
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `Id` | int (PK) | Unique identifier |
+| `DiscountGroupId` | int? (FK) | Links to the rule book; null means a direct product discount |
+| `Name` | string | Campaign name, e.g. “Summer Sale – 20% off” |
+| `Amount` | decimal | Primary discount amount (used if the campaign has a single tier) |
+| `IsPercentage` | bool | True if `Amount` is a percentage, false if fixed amount |
+| `IsFreeShipping` | bool | True if the discount includes free shipping |
+| `StartDate` | datetime | When the discount becomes active (null = immediately) |
+| `EndDate` | datetime | When the discount expires (null = manual only) |
+| `IsActive` | bool | Whether the discount is currently live |
+| `StartJobId` | string | Hangfire job ID for automatic activation |
+| `EndJobId` | string | Hangfire job ID for automatic deactivation |
+
+**Relationships:**
+
+- Belongs to zero or one `DISCOUNT_GROUP`.
+- Defines many `DISCOUNT_TIER` records.
+- Has many `PRODUCT_DISCOUNT` records (direct product links).
+- Has many `DISCOUNT_AUDIT_LOG` records.
+
+**Dummy Data:**
+
+| Id | DiscountGroupId | Name | Amount | IsPercentage | IsFreeShipping | StartDate | EndDate | IsActive | StartJobId | EndJobId |
+|----|-----------------|------|--------|--------------|----------------|-----------|---------|----------|------------|----------|
+| 10 | 1 | Summer Nike 20% | 20.00 | true | false | 2026-06-01 | 2026-08-31 | true | job‑123 | job‑456 |
+| 11 | NULL | Flash Sale – $5 Off Product #99 | 5.00 | false | false | 2026-05-15 | 2026-05-16 | true | NULL | job‑789 |
+| 12 | 2 | Free Shipping Weekend | 0 | false | true | 2026-05-20 | 2026-05-22 | false | job‑101 | job‑102 |
+
+---
+
+### 3.3 `DISCOUNT_TIER`
+
+**Goal:**  
+Represents a reward level for a discount. A single campaign can have multiple tiers, e.g. “Buy 1 get 10%, Buy 2 get 20%”. Each tier can be linked to a specific `CONDITION_GROUP` that determines when it is applied.
+
+**Columns:**
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `Id` | int (PK) | Unique identifier |
+| `DiscountId` | int (FK) | The parent discount |
+| `Amount` | decimal | The discount value for this tier |
+| `IsPercentage` | bool | True if percentage, false if fixed amount |
+| `IsFreeShipping` | bool | True if free shipping for this tier |
+
+**Relationships:**
+
+- Belongs to one `DISCOUNT`.
+- May be linked to one or more `CONDITION_GROUP` (via `DiscountTierId` in `CONDITION_GROUP`).
+
+**Dummy Data:**
+
+| Id | DiscountId | Amount | IsPercentage | IsFreeShipping |
+|----|------------|--------|--------------|----------------|
+| 100 | 10 | 20.00 | true | false |
+| 101 | 11 | 5.00 | false | false |
+| 102 | 12 | 0.00 | false | true |
+
+---
+
+### 3.4 `CONDITION_GROUP`
+
+**Goal:**  
+A bridge between a `DISCOUNT_GROUP` and a specific `DISCOUNT_TIER`. It groups a set of `DISCOUNT_GROUP_CONDITION` rows that must **all** be true for the linked tier to be awarded.
+
+**Columns:**
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `Id` | int (PK) | Unique identifier |
+| `DiscountGroupId` | int (FK) | The rule book this condition group belongs to |
+| `DiscountTierId` | int (FK) | The specific tier that is granted when the conditions are met |
+
+**Relationships:**
+
+- Belongs to one `DISCOUNT_GROUP`.
+- Points to one `DISCOUNT_TIER`.
+- Contains many `DISCOUNT_GROUP_CONDITION` rows.
+
+**Dummy Data:**
+
+| Id | DiscountGroupId | DiscountTierId |
+|----|-----------------|----------------|
+| 200 | 1 | 100 |
+| 201 | 2 | 102 |
+
+---
+
+### 3.5 `DISCOUNT_GROUP_CONDITION`
+
+**Goal:**  
+The finest level of targeting. Each row describes a single condition that must be met for the parent `CONDITION_GROUP` to succeed. The `TargetEntity` field selects what kind of object is being matched (Product, ProductBrand, ProductType, Size, or All).
+
+**Columns:**
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `Id` | int (PK) | Unique identifier |
+| `ConditionGroupId` | int (FK) | Parent condition group |
+| `TargetEntity` | string (Enum) | `ProductType`, `ProductBrand`, `Size`, `Product`, or `All` |
+| `ProductBrandId` | int? (FK) | Required when TargetEntity = `ProductBrand` |
+| `ProductTypeId` | int? (FK) | Required when TargetEntity = `ProductType` |
+| `SizeClassificationId` | int? (FK) | Required when TargetEntity = `Size` |
+| `ProductId` | int? (FK) | Required when TargetEntity = `Product` |
+| `ShouldNotify` | bool | Whether subscribers should be notified when the discount is applied |
+
+**Relationships:**
+
+- Belongs to one `CONDITION_GROUP`.
+- Optionally references a `PRODUCT`, `ProductBrand`, `ProductType`, or `SizeClassification` (not shown in detail in the ERD) depending on `TargetEntity`.
+
+**Dummy Data for Discount Group 1 (Nike Shoes Promo):**
+
+| Id | ConditionGroupId | TargetEntity | ProductBrandId | ProductTypeId | SizeClassificationId | ProductId | ShouldNotify |
+|----|------------------|--------------|----------------|----------------|----------------------|-----------|--------------|
+| 301 | 200 | ProductBrand | 5 (Nike) | NULL | NULL | NULL | false |
+| 302 | 200 | ProductType | NULL | 12 (Shoes) | NULL | NULL | false |
+
+**Dummy Data for Discount Group 2 (Sitewide Free Shipping):**
+
+| Id | ConditionGroupId | TargetEntity | ProductBrandId | ProductTypeId | SizeClassificationId | ProductId | ShouldNotify |
+|----|------------------|--------------|----------------|----------------|----------------------|-----------|--------------|
+| 303 | 201 | All | NULL | NULL | NULL | NULL | false |
+
+---
+
+### 3.6 `PRODUCT`
+
+**Goal:**  
+The product entity (simplified for the discount system). It holds the current `Price` and an optional `PreviousPrice` that stores the original price when a discount is applied. The `RowVersion` column is a concurrency token used by Entity Framework to detect and handle simultaneous updates.
+
+**Columns (only discount‑relevant fields shown):**
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `Id` | int (PK) | Product identifier |
+| `Price` | decimal | Current selling price |
+| `PreviousPrice` | decimal? | Original price before discount was applied (null if not discounted) |
+| `RowVersion` | byte[] | Concurrency token (timestamp) |
+
+**Relationships:**
+
+- Has many `PRODUCT_DISCOUNT` records.
+- Can be specifically targeted by many `DISCOUNT_GROUP_CONDITION` rows (when `TargetEntity = Product`).
+
+**Dummy Data:**
+
+| Id | Price | PreviousPrice | RowVersion |
+|----|-------|---------------|------------|
+| 500 | 80.00 | 100.00 | 0x00000000000007D1 |
+| 501 | 60.00 | NULL | 0x00000000000007D2 |
+| 502 | 5.00 | 10.00 | 0x00000000000007D3 |
+
+(Product 500 is discounted from $100 to $80; product 501 is not on sale; product 502 has a $5 discount from $10.)
+
+---
+
+### 3.7 `PRODUCT_DISCOUNT`
+
+**Goal:**  
+A fast, direct link between a product and a discount, together with the pre‑calculated `ScheduledPrice`. This table is used when a discount is directly assigned to specific products (single discount) without using condition groups. It allows the system to instantly fetch the discounted price without recalculating rules every time.
+
+**Columns:**
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `Id` | int (PK) | Unique identifier |
+| `ProductId` | int (FK) | The product |
+| `DiscountId` | int (FK) | The directly linked discount |
+| `ScheduledPrice` | decimal | The pre‑computed price after this discount |
+
+**Relationships:**
+
+- Belongs to one `PRODUCT`.
+- Belongs to one `DISCOUNT`.
+
+**Dummy Data:**
+
+| Id | ProductId | DiscountId | ScheduledPrice |
+|----|-----------|------------|----------------|
+| 400 | 502 | 11 | 5.00 |
+| 401 | 500 | 10 | 80.00 |
+
+(Product 502 gets a direct $5 off from discount 11; product 500 is part of the Nike group discount, and the system stores the calculated price here for fast retrieval.)
+
+---
+
+### 3.8 `DISCOUNT_AUDIT_LOG`
+
+**Goal:**  
+A complete history of changes made to a `DISCOUNT`. Every time a discount is created or updated, the system serialises the old and new state as JSON and records who made the change and when.
+
+**Columns:**
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `Id` | int (PK) | Unique identifier |
+| `DiscountId` | int (FK) | The discount that was changed |
+| `OldVersionJson` | string | JSON snapshot of the discount before the change |
+| `NewVersionJson` | string | JSON snapshot after the change |
+| `ChangedBy` | string | Email of the admin or “System” |
+| `ChangedAt` | datetime | Timestamp of the change |
+
+**Relationships:**
+
+- Belongs to one `DISCOUNT`.
+
+**Dummy Data:**
+
+| Id | DiscountId | OldVersionJson | NewVersionJson | ChangedBy | ChangedAt |
+|----|------------|----------------|----------------|-----------|-----------|
+| 1001 | 10 | {"Name":"Summer Nike 20%","Amount":15.00,...} | {"Name":"Summer Nike 20%","Amount":20.00,...} | admin@lilishop.com | 2026-05-14T10:30:00Z |
+| 1002 | 11 | NULL | {"Name":"Flash Sale – $5 Off","Amount":5.00,...} | admin@lilishop.com | 2026-05-15T08:00:00Z |
+
+---
+
+## 4. How the Tables Work Together – A Small Story
+
+1. The marketing team creates a **Discount Group** “Nike Shoes Promo” (Id=1).  
+2. Inside that group they define a **Condition Group** (Id=200) that points to **Tier** 100 (20% off).  
+3. The Condition Group has two **Discount Group Conditions**: one requiring `ProductBrand = Nike` and one requiring `ProductType = Shoes`. Both must be true.  
+4. A **Discount** (Id=10) is created, linked to that group, set to active from June 1 to August 31. Hangfire jobs are stored in `StartJobId` and `EndJobId`.  
+5. When the discount becomes active, the system finds all products that satisfy the two conditions (e.g., Product 500).  
+6. The price service calculates the best price, sets `Product.PreviousPrice = 100.00` and `Product.Price = 80.00`. A **ProductDiscount** row may be inserted for fast lookups.  
+7. Every modification to the discount is recorded in **Discount Audit Log**.
+
+This ERD and the dummy data illustrate exactly how the database supports the flexible, multi‑tier, rule‑based discount engine of LiliShop.
+
+---
+
+## 5. Conclusion
+
+The discount system ERD is designed to separate the “what” (the discount reward), the “when” (the time window), the “who” (the target conditions), and the “result” (the applied prices). This separation allows:
+
+- Reusing the same rule book for multiple time‑limited campaigns.
+- Overlapping discounts with automatic best‑price resolution.
+- Full traceability of every change through audit logs.
+- Direct product discounts when needed, without the complexity of condition groups.
+
+*************************************************************************************
+*************************************************************************************
 
 # Discount System – Service Architecture Class Diagram
 
