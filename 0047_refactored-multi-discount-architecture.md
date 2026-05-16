@@ -1,4 +1,4 @@
-# Refactored Multi Discount Architecture In Lilishop
+# Refactored Multi-Discount Architecture In Lilishop
 
 ## Introduction
 
