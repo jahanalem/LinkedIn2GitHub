@@ -300,6 +300,243 @@ The refactored architecture ensures that extending the discount system remains s
 ***
 ***
 
+# Sequence Diagram – Admin Updates an Active Campaign
+
+**Version:** 1.0  
+**Project:** LiliShop – Discount System  
+**Date:** 2026-05-16
+
+---
+
+## 1. Overview
+
+When an administrator modifies the rules, dates, or tiers of an already active discount campaign, the system must update the discount safely without leaving any product with an incorrect price. This sequence diagram models the entire interaction between the controller, the refactored services, the database, Hangfire, and the cache.
+
+The flow implements the **Clean Slate** pattern: first, all effects of the old discount are removed (prices restored), then the new rules are persisted, then new prices are calculated using the updated rules, and finally side effects (background jobs, cache) are updated.
+
+The diagram corresponds to **Scenario 3: Admin Updates an Active Campaign** from the Multi‑Discount Price Management Workflow and to the **Active → Active** self‑transition in the Discount Lifecycle State Diagram.
+
+---
+
+## 2. Sequence Diagram
+
+```mermaid
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'background': '#ffffff',
+    'primaryColor': '#ffffff',
+    'primaryTextColor': '#2C3E50',
+    'primaryBorderColor': '#34495E',
+    'lineColor': '#34495E',
+    'fontFamily': 'Arial, sans-serif'
+  }
+}}%%
+sequenceDiagram
+    autonumber
+     
+    actor Admin
+    participant API as DiscountsController
+    participant Life as LifecycleService
+    participant Price as PriceService
+    participant Crud as CrudService
+    participant DB as SQL Database
+    participant HF as Hangfire Worker
+    participant Cache as CacheManager
+
+    Admin->>API: PUT /api/discounts/update/{id} (New Rules)
+    activate API
+    API->>Life: UpdateDiscountAndNotifyAsync(dto)
+    activate Life
+
+    %% PHASE 1: CLEAN SLATE
+    rect rgb(253, 237, 236)
+        Note over Life,DB: Phase 1: Clean Slate (Restore Baseline)
+        Life->>Price: RestorePricesForAffectedProductsAsync(id)
+        activate Price
+        Price->>DB: Fetch old affected products
+        Price->>DB: Revert Price = PreviousPrice (Optimistic Concurrency)
+        DB-->>Price: Commit successful
+        Price-->>Life: Return List<Product> restoredProducts
+        deactivate Price
+    end
+
+    %% PHASE 2: APPLY RULE CHANGES
+    rect rgb(234, 250, 241)
+        Note over Life,DB: Phase 2: Persist New Campaign Rules
+        Life->>Crud: UpdateDiscountAsync(dto)
+        activate Crud
+        Crud->>DB: Delete old ConditionGroups
+        Crud->>DB: Insert new Tiers & ConditionGroups
+        DB-->>Crud: Commit successful (Audit Log generated)
+        Crud-->>Life: Return UpdateDiscountDto (New State)
+        deactivate Crud
+    end
+
+    %% PHASE 3: RE-EVALUATION
+    rect rgb(235, 245, 251)
+        Note over Life,DB: Phase 3: Recalculate New Reality
+         
+        alt Campaign is currently Active
+            Life->>Life: ActivateDiscountByIdAsync(id)
+            Life->>Price: GetProductsAffectedByDiscountGroupAsync()
+            Price->>DB: Query products matching new rules
+            DB-->>Price: Return new targeted products
+            Life->>Price: ApplyBestDiscountsToRestoredProducts()
+            Price->>DB: Save new lowest prices (Handling Conflicts)
+        end
+         
+        Note over Life,Price: Ensure products that "lost" the discount<br/>get the next-best active campaign fallback.
+        Life->>Price: ApplyBestDiscountsToRestoredProducts(restoredProducts)
+        activate Price
+        Price->>DB: Calculate & Commit fallbacks
+        DB-->>Price: Commit successful
+        Price-->>Life: Done
+        deactivate Price
+    end
+
+    %% PHASE 4: SIDE EFFECTS
+    rect rgb(244, 236, 247)
+        Note over Life,Cache: Phase 4: Handle Side Effects (Jobs & Cache)
+         
+        Life->>HF: Delete old Start/End Jobs
+         
+        opt StartDate is in the future
+            Life->>HF: Schedule ActivateDiscountByIdAsync
+        end
+        opt EndDate is in the future
+            Life->>HF: Schedule DeactivateDiscountByIdAsync
+        end
+         
+        Life->>Cache: InvalidateDiscountCacheAsync()
+        Cache-->>Life: Cache Cleared
+    end
+
+    Life-->>API: Success Result
+    deactivate Life
+    API-->>Admin: HTTP 200 OK
+    deactivate API
+```
+
+---
+
+## 3. Participants
+
+| Participant | Abbreviation | Role |
+|-------------|--------------|------|
+| **Admin** | – | The human user updating the discount from the admin panel. |
+| **DiscountsController** | API | The ASP.NET Core controller that receives the HTTP request. |
+| **DiscountLifecycleService** | Life | The orchestrator that coordinates the entire update flow. |
+| **DiscountPriceService** | Price | Domain service for price restoration, tier resolution, and best‑price calculation. |
+| **DiscountCrudService** | Crud | Persistence service that updates discount entities and generates audit logs. |
+| **SQL Database** | DB | The relational database storing discounts, products, conditions, and prices. |
+| **Hangfire Worker** | HF | Background job scheduler for future activation/deactivation. |
+| **CacheManager** | Cache | In‑memory or distributed cache for product data. |
+
+---
+
+## 4. The Four Phases
+
+The diagram is split into four coloured regions, each representing a distinct phase of the update process.
+
+### Phase 1: Clean Slate – Restore Baseline (Red)
+
+**Goal:** Remove all price effects of the old discount before applying new rules.
+
+| Step | Caller → Callee | Method | Description |
+|------|-----------------|--------|-------------|
+| 1–2 | Admin → API → Life | `UpdateDiscountAndNotifyAsync(dto)` | Request enters the system. |
+| 3 | Life → Price | `RestorePricesForAffectedProductsAsync(id)` | Asks the price service to undo the old discount. |
+| 4–5 | Price → DB | Fetch & Update | Retrieves products that were affected by the old discount. For each product, sets `Price = PreviousPrice` (original price) and clears `PreviousPrice`. Uses optimistic concurrency (`RowVersion`) to prevent overwrites. |
+| 6 | Price → Life | Return | Returns the list of restored products (`restoredProducts`). |
+
+**Outcome:** All products are back to their original prices. No trace of the old discount remains.
+
+---
+
+### Phase 2: Persist New Campaign Rules (Green)
+
+**Goal:** Save the administrator’s updated discount definition to the database.
+
+| Step | Caller → Callee | Method | Description |
+|------|-----------------|--------|-------------|
+| 7 | Life → Crud | `UpdateDiscountAsync(dto)` | Hands the updated DTO to the CRUD service. |
+| 8 | Crud → DB | Delete + Insert | Deletes all old `ConditionGroup` entities, inserts new tiers and condition groups, updates the discount’s fields. An audit log is created with a before/after JSON snapshot. Everything runs in a single database transaction. |
+| 9 | Crud → Life | Return | Returns the updated `UpdateDiscountDto` reflecting the persisted state. |
+
+**Outcome:** The database now holds exactly the new rules, but no product prices have changed yet.
+
+---
+
+### Phase 3: Recalculate New Reality (Blue)
+
+**Goal:** Apply the new discount rules to products and ensure products that no longer match get the next‑best active discount.
+
+#### Sub‑flow A: Campaign is currently Active
+
+| Step | Caller → Callee | Method | Description |
+|------|-----------------|--------|-------------|
+| 10 | Life → Life | `ActivateDiscountByIdAsync(id)` | Triggers the full activation flow for the updated discount. |
+| 11 | Life → Price | `GetProductsAffectedByDiscountGroupAsync()` | Finds all products that match the **new** condition groups. |
+| 12 | Price → DB | Query | Rule engine query to fetch matching products. |
+| 13 | Life → Price | `ApplyBestDiscountsToRestoredProducts(…)` | For these products, loads all active discounts, resolves tiers, calculates the lowest price, and updates `Price`/`PreviousPrice`. Concurrency conflicts are handled with a retry loop. |
+
+#### Sub‑flow B: Fallback for products that “lost” the discount
+
+| Step | Caller → Callee | Method | Description |
+|------|-----------------|--------|-------------|
+| 14 | Life → Price | `ApplyBestDiscountsToRestoredProducts(restoredProducts)` | The products that were restored in Phase 1 but do **not** match the new rules still need the next‑best active discount. The current discount is excluded from this evaluation. |
+| 15 | Price → DB | Calculate & Commit | For each product, the system finds the best alternative discount and updates the price. Committed with concurrency protection. |
+
+**Outcome:**  
+- Products that still match the campaign get the new (or best) discounted price.  
+- Products that no longer match get the next‑best price from any other active discount.  
+- No product is left without a valid discount if one exists.
+
+---
+
+### Phase 4: Handle Side Effects – Jobs & Cache (Purple)
+
+**Goal:** Update Hangfire background jobs and clear the product cache so that the frontend reflects the latest prices.
+
+| Step | Caller → Callee | Method | Description |
+|------|-----------------|--------|-------------|
+| 16 | Life → HF | Delete | Removes the old activation and deactivation Hangfire jobs (identified by `StartJobId` and `EndJobId`). |
+| 17 | Life → HF | Schedule (optional) | If the new `StartDate` is in the future, schedules a new `ActivateDiscountByIdAsync` job. If the new `EndDate` is in the future, schedules a `DeactivateDiscountByIdAsync` job. |
+| 18 | Life → Cache | `InvalidateDiscountCacheAsync()` | Clears the product cache so that the next page load fetches fresh prices. |
+| 19–20 | Life → API → Admin | Return | Returns a success result to the controller, and the controller responds with HTTP 200 OK. |
+
+---
+
+## 5. Key Design Points
+
+- **Clean Slate First:** Prices are always restored before any new rules are applied. This prevents double‑discounting or orphaned sale prices.
+- **Transactional Integrity:** Phase 2 (the database update) is wrapped in a transaction; if anything fails, the whole discount update is rolled back.
+- **Best‑Price Guarantee:** Phase 3 doesn’t just apply the updated discount – it evaluates **all** active discounts to ensure the customer always sees the lowest price.
+- **Concurrency Safety:** The price service uses a `DbUpdateConcurrencyException` retry loop with `RowVersion` to handle simultaneous updates from other jobs or admin actions.
+- **Orchestrator Pattern:** The `LifecycleService` coordinates everything but doesn’t do the heavy lifting itself. This keeps the code modular and testable.
+- **Separation of Concerns:** The diagram directly maps to the refactored services: `PriceService` for pricing logic, `CrudService` for persistence, `LifecycleService` for orchestration and side effects.
+
+---
+
+## 6. Mapping to Code
+
+| Phase | Primary Method(s) |
+|-------|-------------------|
+| **Phase 1** | `DiscountLifecycleService.UpdateDiscountAndNotifyAsync` → `DiscountPriceService.RestorePricesForAffectedProductsAsync` |
+| **Phase 2** | `DiscountCrudService.UpdateDiscountAsync` |
+| **Phase 3** | `DiscountLifecycleService.ActivateDiscountByIdAsync` + `DiscountPriceService.GetProductsAffectedByDiscountGroupAsync` + `DiscountPriceService.ApplyBestDiscountsToRestoredProductsAsync` |
+| **Phase 4** | Hangfire job deletion/rescheduling calls inside `UpdateDiscountAndNotifyAsync`, `InvalidateDiscountCacheAsync` |
+
+---
+
+## 7. Conclusion
+
+This sequence diagram captures one of the most intricate operations in LiliShop’s discount engine. By following the clean‑slate, four‑phase approach, the system guarantees that product prices are always accurate, even when an active campaign is modified on the fly.
+
+****************************************************************************
+****************************************************************************
+
 # Multi-Discount Price Management Workflow
 
 **Version:** 1.0  
