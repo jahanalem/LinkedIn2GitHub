@@ -1009,7 +1009,7 @@ The discount system in LiliShop must handle overlapping promotions, scheduled ac
 - **`DiscountCrudService`** – handles persistence, audit logs, and transaction management.
 - **`DiscountQueryService`** – serves all read‑only queries (rule engine, paginated product retrieval).
 
-This document describes the three main operational workflows using a flowchart and maps every step to the responsible method(s). The diagram and text assume you have the refactored code from the previous step.
+This document describes the three main operational workflows using a flowchart and maps every step to the responsible method(s).
 
 ---
 
