@@ -245,7 +245,7 @@ The central campaign entity. It defines the marketing promotion: name, type of r
 ### 3.3 `DISCOUNT_TIER`
 
 **Goal:**  
-Represents a reward level for a discount. A single campaign can have multiple tiers, e.g. “Buy 1 get 10%, Buy 2 get 20%”. Each tier can be linked to a specific `CONDITION_GROUP` that determines when it is applied.
+Represents a reward level for a discount. A campaign can have one or more tiers. Each tier is linked to a specific `CONDITION_GROUP` that decides when it should be applied.
 
 **Columns:**
 
