@@ -709,7 +709,7 @@ The diagram illustrates a clean dependency hierarchy:
 
 1. **Interfaces define contracts** – The rest of the application depends only on `IDiscountCrudService`, `IDiscountQueryService`, etc. Controllers or Hangfire jobs never reference concrete classes.
 2. **Concrete classes implement contracts** – Each concrete class fulfils exactly one interface.
-3. **The Lifecycle service depends on the other three interfaces** – This makes it the orchestrator. It does **not** inherit from them; it uses them as injected services. This is a classic **Facade with Mediator** pattern.
+3. **The Lifecycle service depends on the other three interfaces** – This makes it the orchestrator. It does **not** inherit from them; it uses them as injected services. This is a classic **Facade** pattern.
 4. **No circular dependencies** – The query, price, and CRUD services have no knowledge of the lifecycle service or each other. This keeps the system modular and testable.
 
 The dependency graph can be summarised as:
