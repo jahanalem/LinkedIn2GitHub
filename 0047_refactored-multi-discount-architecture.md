@@ -35,7 +35,6 @@ The refactored version solves these problems in three big ways:
 | **Best-Price Engine** | The system checks all active discounts for a product and picks the lowest price, not just the first one it finds. |
 | **Clean Slate Pattern** | Before applying new discount rules, the system restores all products to their original prices. This prevents double-discounting or orphaned sale prices. |
 | **Optimistic Concurrency** | Instead of locking database rows, the system uses a version number (`RowVersion`). If two jobs try to update the same product at once, the second one reloads the latest data and retries. |
-| **Tier-Based Rewards** | A single discount can have multiple reward levels (e.g., "Buy 1 get 10%, Buy 2 get 20%"). Each tier is linked to its own set of conditions. |
 | **Sweeper Failsafe** | A recurring background job that runs every 5 minutes to find and deactivate any discounts that should have expired but were missed due to server restarts or job failures. |
 
 ### How to Use This Document
