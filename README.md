@@ -13,7 +13,7 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
-### 48. Discount System Unit Tests – Technical Documentation (Lilishop)
+### 48. Discount System Unit Tests – Technical Documentation (Lilishop) 🔬🧪🔎🕵️
 [Read More](https://github.com/jahanalem/LiliShop-backend-dotnet-test/blob/main/README.md)
 
 ### 47. Refactored Multi-Discount Architecture In Lilishop
