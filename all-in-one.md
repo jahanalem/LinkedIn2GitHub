@@ -1,3 +1,11 @@
+# Discount System Unit Tests – Technical Documentation
+
+This document explains how I built the unit tests for the LiliShop discount system. It focuses on the two most important parts: the price calculation logic and the workflow orchestrator. By using tools like xUnit and Moq to fake the database and background jobs, all 42 tests run in less than 5 seconds. The article shows how the tests prove that the system always calculates the correct price and performs actions in the right order.
+
+[Read More](https://github.com/jahanalem/LiliShop-backend-dotnet-test/blob/main/README.md)
+
+***
+
 # Refactored Multi-Discount Architecture In Lilishop
 To support complex promotional strategies, I completely refactored the discount engine in LiliShop. This updated architecture allows multiple discount campaigns to overlap seamlessly, automatically calculating the best possible price for the customer. The article explores the "Best-Price Evaluation Engine," the "Clean-Slate" update pattern, and how the system uses optimistic concurrency to safely manage overlapping database updates.
 
