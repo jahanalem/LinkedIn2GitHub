@@ -56,6 +56,7 @@ Each section stands on its own. You can read them in any order depending on what
 - [Discount Lifecycle State Diagram – Technical Documentation](#discount-lifecycle-state-diagram--technical-documentation)
 - [Understanding Optimistic Concurrency in the Discount System](#understanding-optimistic-concurrency-in-the-discount-system)
 - [Discount Sweeper – Failsafe for Expired Campaigns](#discount-sweeper--failsafe-for-expired-campaigns)
+- [Discount System Unit Tests](https://github.com/jahanalem/LiliShop-backend-dotnet-test/tree/main#discount-system-unit-tests--technical-documentation)
 
 ***
 
