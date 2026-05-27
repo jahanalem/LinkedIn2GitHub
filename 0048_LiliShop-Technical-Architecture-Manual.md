@@ -552,12 +552,12 @@ The system does not combine or add different discount percentages together. Inst
 
 The calculation for the final price ($P_{\text{final}}$) based on the product's base price ($P_{\text{base}}$) uses this formula:
 
-$$P_{\text{final}} = P_{\text{base}} \times (1 - \text{ActiveDiscount}_{\%})$$
+$$P_{\text{final}} = P_{\text{base}} \times (1 - \text{ActiveDiscount\%})$$
 
-The selected $\text{ActiveDiscount}_{\%}$ value is determined by this priority chain:
+The selected $\text{ActiveDiscount\%}$ value is determined by this priority chain:
 
-* **Rule 1:** If $\text{SingleDiscount}$ exists $\rightarrow \text{ActiveDiscount}_{\%} = \text{SingleDiscount}$
-* **Rule 2:** Else $\rightarrow \text{ActiveDiscount}_{\%} = \max(\text{GroupDiscount}_1, \text{GroupDiscount}_2, \dots)$
+- **Rule 1:** If $\text{SingleDiscount}$ exists $\rightarrow \text{ActiveDiscount\%} = \text{SingleDiscount}$
+- **Rule 2:** Else $\rightarrow \text{ActiveDiscount\%} = \max(\text{GroupDiscount}_1, \text{GroupDiscount}_2, \dots)$
 
 To keep the codebase clean, modular, and easy to maintain, the discount system is split across four focused interfaces instead of using one large, heavy service:
 
