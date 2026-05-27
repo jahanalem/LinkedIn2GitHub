@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### 49. LiliShop: Comprehensive Technical Architecture, Design Patterns, and Structure Manual
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0048_LiliShop-Technical-Architecture-Manual.md)
+
 ### 48. Discount System Unit Tests – Technical Documentation (Lilishop) 🔬🧪🔎🕵️
 [Read More](https://github.com/jahanalem/LiliShop-backend-dotnet-test/blob/main/README.md)
 
