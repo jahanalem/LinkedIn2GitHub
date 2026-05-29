@@ -1,3 +1,14 @@
+# **LiliShop – Complete Technical Architecture Manual** (PDF, 160+ pages)  
+Full documentation covering Clean Architecture, design patterns, backend (.NET 10), frontend (Angular 21), and all subsystems.  
+[📄 Read the full manual](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/LiliShop_Technical_Architecture_Manual.pdf)
+
+***
+
+# LiliShop: Comprehensive Technical Architecture, Design Patterns, and Structure Manual
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0048_LiliShop-Technical-Architecture-Manual.md)
+
+***
+
 # Discount System Unit Tests – Technical Documentation
 
 This document explains how I built the unit tests for the LiliShop discount system. It focuses on the two most important parts: the price calculation logic and the workflow orchestrator. By using tools like xUnit and Moq to fake the database and background jobs, all 42 tests run in less than 5 seconds. The article shows how the tests prove that the system always calculates the correct price and performs actions in the right order.
