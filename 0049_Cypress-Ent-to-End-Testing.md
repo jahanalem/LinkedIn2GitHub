@@ -487,7 +487,7 @@ Cypress.Commands.add('handleMaterialDialog', (expectedTitle: string) => {
     .should('be.visible')
     .and('contain.text', expectedTitle);
 
-  cy.get('mat-dialog-container').find('button').click();
+  return cy.get('mat-dialog-container').find('button').click();
 });
 
 /**
@@ -498,7 +498,10 @@ Cypress.Commands.add('handleMaterialDialog', (expectedTitle: string) => {
 Cypress.Commands.add('loginViaUI', (email: string, password: string) => {
   cy.typeInAppInput('email', email);
   cy.typeInAppInput('password', password);
-  cy.get('[data-cy="submit-button"]').should('not.be.disabled').click();
+
+  return cy.get<HTMLButtonElement>('[data-cy="submit-button"]')
+    .should('not.be.disabled')
+    .click();
 });
 ```
 
