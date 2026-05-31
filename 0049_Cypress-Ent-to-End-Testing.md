@@ -1,6 +1,7 @@
-# Cypress End-to-End Testing: A Complete Guide with LiliShop
+# Cypress End‑to‑End Testing: A Complete Beginner’s Guide with LiliShop
 
-> **A practical, step‑by‑step learning resource**  
+> **From zero to production‑ready, professional testing**  
+> Learn Cypress from the ground up and apply enterprise‑grade patterns to your Angular application.
 
 ---
 
@@ -29,37 +30,42 @@
 5. [Writing Your First Tests for LiliShop](#writing-your-first-tests-for-lilishop)  
    - [Login Feature Test (`login.cy.ts`)](#login-feature-test-logincyts)  
    - [Registration Feature Test (`register.cy.ts`)](#registration-feature-test-registercyts)  
-6. [How to Run Your Tests](#how-to-run-your-tests)  
-7. [Next Steps and Best Practices](#next-steps-and-best-practices)
+6. [Scaling to Professional Architecture](#scaling-to-professional-architecture)  
+   - [Step 1: Restructure the Directory Layout](#step-1-restructure-the-directory-layout)  
+   - [Step 2: Isolate Test Data Using Fixtures](#step-2-isolate-test-data-using-fixtures)  
+   - [Step 3: Implement Reusable Custom Commands](#step-3-implement-reusable-custom-commands)  
+   - [Step 4: Refactored Test Files](#step-4-refactored-test-files)  
+7. [How to Run Your Tests](#how-to-run-your-tests)  
+8. [Next Steps and Best Practices](#next-steps-and-best-practices)
 
 ---
 
 ## What Is Cypress and Why Is It Important?
 
-Cypress is a **modern, JavaScript‑based end‑to‑end testing framework** designed specifically for web applications. Unlike older tools (like Selenium) that run outside the browser and communicate over the network, Cypress **executes directly inside the browser**. This gives it native access to everything happening on your page – DOM, network requests, timers, local storage – without the need for drivers or browser plugins.
+Cypress is a **modern, JavaScript‑based end‑to‑end testing framework** built specifically for web applications. Unlike older tools (such as Selenium) that run outside the browser and communicate over the network, Cypress **executes directly inside the browser**. This gives it native access to everything happening on your page – DOM elements, network requests, timers, local storage – without the need for external drivers or browser plugins.
 
 ### Why Cypress matters for your project
 
-- **Fast, reliable tests**: Because Cypress runs in the same event loop as your application, tests are less flaky and execute quickly.
-- **Developer‑friendly**: It offers an interactive, visual Test Runner that lets you see what happens step by step, time‑travel through snapshots, and debug with familiar browser developer tools.
-- **Automatic waiting**: Cypress automatically waits for commands and assertions, so you rarely need to add arbitrary `sleep` or `wait` statements.
-- **Powerful network control**: You can stub, spy on, and modify network requests (`cy.intercept()`), making it easy to test edge cases without a real backend.
-- **Rich ecosystem**: It comes with built‑in support for screenshots, videos, and integration with continuous integration (CI) services.
+- **Fast, reliable tests** – Because Cypress operates in the same event loop as your application, tests are less flaky and run quickly.
+- **Developer‑friendly** – It offers an interactive, visual Test Runner that lets you see exactly what happens step by step. You can time‑travel through DOM snapshots, see before/after states, and debug using familiar browser developer tools.
+- **Automatic waiting** – Cypress automatically waits for commands and assertions to become true, so you rarely need to add arbitrary `sleep` or `wait` statements.
+- **Powerful network control** – You can stub, spy on, and modify network requests with `cy.intercept()`, making it easy to test edge cases without a real backend.
+- **Rich ecosystem** – Built‑in support for screenshots, videos, and seamless integration with continuous integration (CI) services.
 
-In short, Cypress lets you test your application exactly the way your users interact with it, giving you confidence that your features work correctly.
+In essence, Cypress enables you to test your application exactly the way your users experience it, giving you confidence that your features work correctly at every stage.
 
 ---
 
 ## Cypress Architecture in a Nutshell
 
-Understanding how Cypress is put together helps you write better tests.
+Understanding how Cypress is put together helps you write more effective tests.
 
-1. **Test Runner (GUI)** – The interactive application you see when you run `npx cypress open`. It lists test files, launches browsers, and displays live test execution.
-2. **Node Process** – Cypress uses a background Node.js process to orchestrate the browser, read configuration, manage files, and communicate with the test runner.
-3. **Browser Process** – The actual browser (Chrome, Edge, Electron, etc.) where your application and the test code both run. Cypress injects a script that bridges the test commands and your app.
-4. **Plugins / Support Layer** – The `cypress/support/` and `cypress/plugins/` directories contain code that extends Cypress (custom commands, event listeners, etc.). They run before your test files and can modify the behaviour of Cypress itself.
+1. **Test Runner (GUI)** – The interactive application launched by `npx cypress open`. It lists test files, launches browsers, and displays live test execution with full debug capabilities.
+2. **Node Process** – A background Node.js process that orchestrates the browser, reads configuration, manages file system operations, and communicates with the Test Runner.
+3. **Browser Process** – The actual browser (Chrome, Edge, Electron, Firefox, etc.) where your application and the test code both run. Cypress injects a script that bridges your test commands and your app.
+4. **Plugins / Support Layer** – The `cypress/support/` and `cypress/plugins/` directories contain code that extends Cypress (custom commands, global event listeners, etc.). They run before your test files and can modify the behaviour of Cypress itself.
 
-Because the test code and the application code share the same origin and run in the same window, Cypress can directly manipulate and observe the DOM, console logs, and network traffic – no WebDriver protocol or network lag.
+Because the test code and the application share the same origin and run in the same window, Cypress can directly manipulate and observe the DOM, console logs, and network traffic – no WebDriver protocol or network lag involved.
 
 ---
 
@@ -70,12 +76,12 @@ Let’s add Cypress to the **LiliShop‑frontend‑angular** repository step by 
 ### Prerequisites
 
 - Node.js (LTS version recommended, e.g. 18 or 20)
-- A working Angular project (yours is already set up)
+- A working Angular project (your LiliShop frontend is already set up)
 - A package manager (npm, included with Node.js)
 
 ### Installation Command
 
-Open a terminal, navigate to the **root folder** of your project (where `package.json` lives) and install Cypress as a development dependency:
+Open a terminal in the **root folder** of your project (where `package.json` lives) and install Cypress as a development dependency:
 
 ```bash
 npm install cypress --save-dev
@@ -85,13 +91,13 @@ This downloads Cypress and adds it to your `devDependencies`.
 
 ### Opening the Interactive Launchpad
 
-After installation, you can launch the Cypress **Launchpad** – the setup wizard that helps you configure your first tests.
+After installation, launch the Cypress **Launchpad** – the setup wizard that helps you configure your first tests.
 
 ```bash
 npx cypress open
 ```
 
-This command starts the Cypress Test Runner. The first time you run it, the Launchpad will appear and ask you to choose a testing type:
+The first time you run this, the Launchpad appears and asks you to choose a testing type:
 
 - **E2E Testing** – for full end‑to‑end browser tests (what we need).  
 - Component Testing – for isolated component tests (not covered here).
@@ -102,7 +108,7 @@ Select **E2E Testing**. Cypress then generates the necessary configuration and f
 
 After the initial setup, Cypress adds (or modifies) these items in your project:
 
-```
+```text
 your-project/
 ├── cypress/
 │   ├── e2e/             <-- Your test files go here
@@ -117,15 +123,13 @@ Let’s break down each one:
 
 - **`cypress.config.ts`** – The main configuration file. Here you define settings like the base URL, browser, viewport size, environment variables, and how Cypress should handle plugins. It is the single source of truth for your test configuration.
 
-- **`cypress/e2e/`** – The directory where all your end‑to‑end test files live. Each file typically tests one feature or page. By convention, test files have the `.cy.ts` extension (TypeScript) or `.cy.js` (JavaScript). For example: `login.cy.ts`, `register.cy.ts`, etc. Cypress will automatically discover and list all files inside this folder.
+- **`cypress/e2e/`** – The directory where all your end‑to‑end test files live. Each file typically tests one feature or page. By convention, test files have the `.cy.ts` extension (TypeScript) or `.cy.js` (JavaScript). For example: `login.cy.ts`, `register.cy.ts`, etc. Cypress automatically discovers and lists all files inside this folder.
 
 - **`cypress/fixtures/`** – A folder for static data that you can load inside tests. For instance, you might put a `users.json` file here with dummy user credentials and then use `cy.fixture('users.json')` to load that data. Fixtures keep your test code clean by separating data from logic.
 
 - **`cypress/support/`** – Contains files that run **before** every test file.  
   - `e2e.ts` is the entry point for E2E tests – it is executed once before all test files. You can add global `beforeEach` hooks, import custom commands, or configure plugins here.  
   - `commands.ts` is where you define your own custom Cypress commands (like `cy.login()`). This helps avoid repeating complex sequences across tests.
-
-Together, these building blocks give you a clean, maintainable testing structure.
 
 ### Understanding `cypress.config.ts`
 
@@ -149,14 +153,14 @@ export default defineConfig({
 - **`defineConfig()`** – A helper function that provides TypeScript autocompletion for the Cypress configuration object.
 - **`allowCypressEnv: false`** – A security setting that prevents certain environment variables from being overwritten in the test environment.
 - **`e2e`** – The configuration block specific to end‑to‑end testing.
-- **`baseUrl: 'http://localhost:4200'`** – The base URL of your application. When you use `cy.visit('/account/login')`, Cypress automatically prepends this base URL, so you don’t have to type the full address every time. **This must match the URL where your Angular dev server is running.**
+- **`baseUrl: 'http://localhost:4200'`** – The base URL of your Angular application. When you use `cy.visit('/account/login')`, Cypress automatically prepends this base URL, so you don’t have to type the full address every time. **This must match the URL where your Angular dev server is running.**
 - **`setupNodeEvents(on, config)`** – A place to hook into the Node‑side lifecycle of Cypress. You can listen for events (like `before:run`, `after:screenshot`) or modify the configuration dynamically. For basic tests you can leave it empty or use plugins like code coverage.
 
 ---
 
 ## Essential Cypress Commands – The Building Blocks
 
-Cypress provides a rich set of chainable commands. Understanding these core commands is the key to writing any test.
+Cypress provides a rich set of chainable commands. Mastering these core commands is the foundation of writing any test.
 
 ### Navigation: `cy.visit()`
 
@@ -343,7 +347,7 @@ With the commands above, let’s examine two real test files from our project: t
 
 ### Login Feature Test (`login.cy.ts`)
 
-File location: `cypress/e2e/auth/login.cy.ts`
+File location: `cypress/e2e/auth/login.cy.ts` (after restructuring)
 
 ```typescript
 describe('Login Feature', () => {
@@ -387,7 +391,7 @@ describe('Login Feature', () => {
     // Click the submit button
     cy.get('button[type="submit"]').click();
 
-    // Verify that the exact HTTP request was sent to the .NET backend
+    // Verify that the exact HTTP request was sent to the backend
     cy.wait('@loginRequest');
 
     // Confirm that the user is redirected away from the login page upon success
@@ -396,22 +400,7 @@ describe('Login Feature', () => {
 });
 ```
 
-**Walkthrough:**
-
-1. The `describe` block groups all tests related to the login page.
-2. `beforeEach` visits the login page before every test, so each test starts fresh.
-3. **Test 1** – Checks that an empty form disables the submit button.
-4. **Test 2** – Types valid email and password, then asserts that the submit button becomes enabled.
-5. **Test 3** – Clicks the “Forgot password” link and verifies that the URL changes to the forgot‑password route.
-6. **Test 4** – Tests a full login flow by:
-   - Stubbing the login API with `cy.intercept()` and giving it an alias.
-   - Filling the form and clicking submit.
-   - Waiting for the stubbed request with `cy.wait('@loginRequest')` to confirm the frontend actually called the backend.
-   - Asserting that the user is redirected to `/shop`.
-
 ### Registration Feature Test (`register.cy.ts`)
-
-File location: `cypress/e2e/auth/register.cy.ts`
 
 ```typescript
 describe('Registration Feature', () => {
@@ -491,14 +480,277 @@ describe('Registration Feature', () => {
 });
 ```
 
-**Walkthrough of the key test (last one):**
+These tests work perfectly, but as your test suite grows, maintaining such files becomes challenging. Let’s elevate them to an enterprise‑grade standard.
 
-- **Intercepts** – Two network stubs are set up: one for the email‑availability check (`GET /api/account/emailexists*`) and one for the registration itself (`POST /api/account/register`). Both return fake 200 responses.
-- **Form filling** – Each field is typed into, followed by a `.blur()` to trigger Angular validation. After typing the email, we `cy.wait('@emailExistsCheck')` to make sure the stub is called before proceeding.
-- **Submission** – The button should now be enabled; we click it.
-- **Waiting for the register request** – `cy.wait('@registerSuccessRequest')` ensures the frontend actually made the POST request and received our fake response.
-- **Dialog interaction** – Cypress waits up to 5 seconds for the Material Dialog to appear. It asserts the dialog is visible and contains “Email Confirmation Sent”, then clicks the button inside it.
-- **Route check** – Finally we verify that the pathname is exactly `/shop` after the dialog closes.
+---
+
+## Scaling to Professional Architecture
+
+A professional, maintainable test suite requires a clean separation of concerns: **test data**, **reusable actions**, and **test specifications**. We’ll transition to that structure in four clean steps.
+
+### Step 1: Restructure the Directory Layout
+
+Organize your end‑to‑end specs by feature domain. Move your authentication tests into an `auth` subdirectory within the `e2e` directory.
+
+**Target Structure:**
+
+```text
+cypress/
+├── e2e/
+│   └── auth/
+│       ├── login.cy.ts
+│       └── register.cy.ts
+├── fixtures/
+│   └── auth-data.json
+└── support/
+    └── commands.ts
+```
+
+This groups tests logically and makes the suite easy to navigate as more features are added.
+
+### Step 2: Isolate Test Data Using Fixtures
+
+Create a file named `cypress/fixtures/auth-data.json` to keep credentials and expected responses out of your test logic.
+
+```json
+{
+  "validUser": {
+    "displayName": "John Doe",
+    "email": "newuser@example.com",
+    "password": "SecurePass123!",
+    "token": "mock-jwt-token-string"
+  },
+  "invalidUser": {
+    "displayName": "John Doe",
+    "email": "invalid-email",
+    "password": "123",
+    "confirmPassword": "456"
+  },
+  "mismatchedUser": {
+    "displayName": "John Doe",
+    "email": "john.doe@example.com",
+    "password": "SecurePass123!",
+    "confirmPassword": "DifferentPass123!"
+  },
+  "matchingFormUser": {
+    "displayName": "John Doe",
+    "email": "john.doe@example.com",
+    "password": "SecurePass123!"
+  },
+  "loginUser": {
+    "email": "user@example.com",
+    "password": "Password123!",
+    "token": "mock-jwt-token-string"
+  }
+}
+```
+
+Now any test can load the relevant data set with `cy.fixture('auth-data')`, making the tests cleaner and data changes effortless.
+
+### Step 3: Implement Reusable Custom Commands
+
+Abstract the selection of your custom Angular elements (`app-text-input`) and the handling of the Angular Material Dialog inside `cypress/support/commands.ts`.
+
+#### 1. Update `cypress/support/commands.ts`:
+
+```typescript
+/// <reference types="cypress" />
+
+Cypress.Commands.add('typeInAppInput', (formControlName: string, text: string) => {
+  cy.get(`app-text-input[formControlName="${formControlName}"]`)
+    .find('input')
+    .type(text)
+    .blur();
+});
+
+Cypress.Commands.add('handleMaterialDialog', (expectedTitle: string) => {
+  cy.get('mat-dialog-container', { timeout: 5000 })
+    .should('be.visible')
+    .and('contain.text', expectedTitle);
+
+  cy.get('mat-dialog-container').find('button').click();
+});
+
+Cypress.Commands.add('loginViaUI', (email: string, password: string) => {
+  cy.typeInAppInput('email', email);
+  cy.typeInAppInput('password', password);
+  cy.get('button[type="submit"]').should('not.be.disabled').click();
+});
+```
+
+- `typeInAppInput` encapsulates the recurring pattern of finding the `app-text-input` component, drilling into its `<input>`, typing, and blurring (to trigger Angular validations).
+- `handleMaterialDialog` waits for the dialog to appear, asserts its text, and clicks the confirm button.
+- `loginViaUI` bundles the login form filling and submission into a single, semantically meaningful command.
+
+#### 2. Register TypeScript Types
+
+In `cypress/support/e2e.ts` (or a dedicated `index.d.ts`), add the type declarations so your IDE provides autocomplete:
+
+```typescript
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      /**
+       * Custom command to type text into an app-text-input component and blur the input field.
+       */
+      typeInAppInput(formControlName: string, text: string): Chainable<void>;
+
+      /**
+       * Custom command to verify Material Dialog content and click its action button to close it.
+       */
+      handleMaterialDialog(expectedTitle: string): Chainable<void>;
+
+      /**
+       * Fills out the email and password fields, then submits the login form.
+       */
+      loginViaUI(email: string, password: string): Chainable<void>;
+    }
+  }
+}
+export {};
+```
+
+Now you can use these commands everywhere with full type safety.
+
+### Step 4: Refactored Test Files
+
+With fixtures and custom commands in place, the test files become declarative and much easier to read.
+
+**`cypress/e2e/auth/register.cy.ts`:**
+
+```typescript
+describe('Registration Feature', () => {
+  beforeEach(() => {
+    cy.visit('/account/register');
+  });
+
+  it('should disable the register button by default when the form is empty', () => {
+    cy.get('button[type="submit"]').should('be.disabled');
+  });
+
+  it('should display the Google Sign-In container element', () => {
+    cy.get('#buttonDiv').should('exist');
+  });
+
+  it('should keep the register button disabled if passwords do not match', () => {
+    cy.fixture('auth-data').then((data) => {
+      const user = data.mismatchedUser;
+
+      cy.typeInAppInput('displayName', user.displayName);
+      cy.typeInAppInput('email', user.email);
+      cy.typeInAppInput('password', user.password);
+      cy.typeInAppInput('confirmPassword', user.confirmPassword);
+
+      cy.get('button[type="submit"]').should('be.disabled');
+    });
+  });
+
+  it('should enable the register button when all inputs are valid and match', () => {
+    cy.fixture('auth-data').then((data) => {
+      const user = data.matchingFormUser;
+
+      cy.typeInAppInput('displayName', user.displayName);
+      cy.typeInAppInput('email', user.email);
+      cy.typeInAppInput('password', user.password);
+      cy.typeInAppInput('confirmPassword', user.password);
+
+      cy.get('button[type="submit"]').should('not.be.disabled');
+    });
+  });
+
+  it('should submit registration successfully, handle the confirmation dialog, and redirect to the shop', () => {
+    cy.fixture('auth-data').then((data) => {
+      const user = data.validUser;
+
+      // 1. Intercept the async email availability check
+      cy.intercept('GET', '/api/account/emailexists*', {
+        statusCode: 200,
+        body: false
+      }).as('emailExistsCheck');
+
+      // 2. Intercept the successful registration endpoint
+      cy.intercept('POST', '/api/account/register', {
+        statusCode: 200,
+        body: {
+          displayName: user.displayName,
+          email: user.email,
+          token: user.token
+        }
+      }).as('registerSuccessRequest');
+
+      // 3. Fill out the form fields and trigger validations via custom command
+      cy.typeInAppInput('displayName', user.displayName);
+      cy.typeInAppInput('email', user.email);
+      cy.wait('@emailExistsCheck');
+
+      cy.typeInAppInput('password', user.password);
+      cy.typeInAppInput('confirmPassword', user.password);
+
+      // 4. Submit the form and wait for the network response
+      cy.get('button[type="submit"]').should('not.be.disabled').click();
+      cy.wait('@registerSuccessRequest');
+
+      // 5. Interact with the Angular Material Dialog via custom command
+      cy.handleMaterialDialog('Email Confirmation Sent');
+
+      // 6. Assert that the application routes to the shop after closure
+      cy.location('pathname').should('eq', '/shop');
+    });
+  });
+});
+```
+
+**`cypress/e2e/auth/login.cy.ts`:**
+
+```typescript
+describe('Login Feature', () => {
+  beforeEach(() => {
+    cy.visit('/account/login');
+  });
+
+  it('should enforce form validation rules by disabling the sign-in button initially', () => {
+    cy.get('button[type="submit"]').should('be.disabled');
+  });
+
+  it('should enable the sign-in button only when valid input data is provided', () => {
+    cy.fixture('auth-data').then((data) => {
+      const user = data.loginUser;
+
+      cy.typeInAppInput('email', user.email);
+      cy.typeInAppInput('password', user.password);
+
+      cy.get('button[type="submit"]').should('not.be.disabled');
+    });
+  });
+
+  it('should navigate to the forgot password route when clicking the corresponding link', () => {
+    cy.get('.forgot-password a').click();
+    cy.location('pathname').should('eq', '/account/forgot-password');
+  });
+
+  it('should successfully submit valid credentials and redirect the user to the shop dashboard', () => {
+    cy.fixture('auth-data').then((data) => {
+      const user = data.loginUser;
+
+      cy.intercept('POST', '/api/account/login', {
+        statusCode: 200,
+        body: { token: user.token, email: user.email }
+      }).as('loginRequest');
+
+      // Execute programmatic form submission via custom command
+      cy.loginViaUI(user.email, user.password);
+
+      // Verify that the exact HTTP request was sent to the backend
+      cy.wait('@loginRequest');
+
+      // Confirm that the user is redirected away from the login page upon success
+      cy.location('pathname').should('eq', '/shop');
+    });
+  });
+});
+```
+
+Notice how the test logic now reads almost like plain English. Any future changes to the UI or data only need to happen in one place (the fixture file or the custom commands).
 
 ---
 
@@ -524,9 +776,9 @@ Open a **second terminal** and launch the Test Runner:
 npx cypress open
 ```
 
-The Launchpad will appear. Select **E2E Testing**, choose your preferred browser (Chrome is recommended), and click the **Start E2E Testing** button. You’ll see a list of test files. Click on `login.cy.ts` or any other file to run it.
+The Launchpad will appear. Select **E2E Testing**, choose your preferred browser, and click **Start E2E Testing**. You’ll see a list of test files. Click on any of them to run it.
 
-The interactive runner will execute the test step by step, showing you the application state and letting you debug with snapshots and the browser console.
+The interactive runner executes the test step by step, showing you the application state and allowing you to debug with DOM snapshots, network logs, and the browser console.
 
 ### 3. Run Cypress in headless mode (command line)
 
@@ -536,10 +788,11 @@ For continuous integration or a quick check, run Cypress without the GUI:
 npx cypress run --spec "cypress/e2e/auth/login.cy.ts"
 ```
 
-This executes the specified test file in a headless Electron browser and outputs the results to your terminal. Videos and screenshots are saved by default in the `cypress/videos` and `cypress/screenshots` folders.
+This executes the specified test file in a headless Electron browser and outputs the results to your terminal. Videos and screenshots are saved by default in `cypress/videos` and `cypress/screenshots`.
 
 To run all E2E tests, simply use:
 
 ```bash
 npx cypress run
 ```
+
