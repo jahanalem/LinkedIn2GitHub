@@ -5,6 +5,13 @@
 
 ---
 
+**Test code availability**  
+All test files discussed in this guide are available in the project’s GitHub repository:  
+[LiliShop‑frontend‑angular / cypress](https://github.com/jahanalem/LiliShop-frontend-angular/tree/main/cypress)
+
+---
+
+
 ## Table of Contents
 
 1. [What Is Cypress and Why Is It Important?](#what-is-cypress-and-why-is-it-important)  
