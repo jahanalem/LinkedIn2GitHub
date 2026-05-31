@@ -1,6 +1,6 @@
 # Cypress End‑to‑End Testing: A Complete Beginner’s Guide with LiliShop
 
-> **From zero to production‑ready, professional testing**  
+> **From zero knowledge to a professional, production‑ready test suite**  
 > Learn Cypress from the ground up and apply enterprise‑grade patterns to your Angular application.
 
 ---
@@ -27,17 +27,17 @@
    - [Narrowing Down Selections: `.find()`](#narrowing-down-selections-find)  
    - [Creating Aliases: `.as()`](#creating-aliases-as)  
    - [Test Structure: `describe()`, `beforeEach()` and `it()`](#test-structure-describe-beforeeach-and-it)  
-5. [Writing Your First Tests for LiliShop](#writing-your-first-tests-for-lilishop)  
-   - [Login Feature Test (`login.cy.ts`)](#login-feature-test-logincyts)  
-   - [Registration Feature Test (`register.cy.ts`)](#registration-feature-test-registercyts)  
-6. [Scaling to Professional Architecture](#scaling-to-professional-architecture)  
-   - [Step 1: Restructure the Directory Layout](#step-1-restructure-the-directory-layout)  
-   - [Step 2: Isolate Test Data Using Fixtures](#step-2-isolate-test-data-using-fixtures)  
-   - [Step 3: Implement Reusable Custom Commands](#step-3-implement-reusable-custom-commands)  
-   - [Step 4: Refactored Test Files](#step-4-refactored-test-files)  
-7. [How to Run Your Tests](#how-to-run-your-tests)  
+5. [From Simple Tests to Professional Architecture](#from-simple-tests-to-professional-architecture)  
+   - [The problem with raw selectors](#the-problem-with-raw-selectors)  
+   - [Step 1: Introduce `data-cy` attributes in your components](#step-1-introduce-data-cy-attributes-in-your-components)  
+   - [Step 2: Restructure the directory layout](#step-2-restructure-the-directory-layout)  
+   - [Step 3: Isolate test data using fixtures](#step-3-isolate-test-data-using-fixtures)  
+   - [Step 4: Implement reusable custom commands](#step-4-implement-reusable-custom-commands)  
+   - [Step 5: Refactored test files](#step-5-refactored-test-files)  
+6. [How to Run Your Tests](#how-to-run-your-tests)
 
----
+
+   
 
 <img width="3068" height="1096" alt="Cypress-End-to-End-Testing_register" src="https://github.com/user-attachments/assets/039eb9d0-fc5d-42c4-bcd8-115038a84fcf" />
 
@@ -192,7 +192,7 @@ Finds one or more DOM elements using a CSS selector. The command **retries** aut
 **Examples:**
 - `cy.get('button[type="submit"]')` – selects the submit button  
 - `cy.get('.forgot-password a')` – selects the anchor inside an element with class “forgot-password”  
-- `cy.get('app-text-input[formControlName="email"]')` – selects the Angular component `app-text-input` that has a `formControlName` attribute equal to “email”
+- `cy.get('[data-cy="email"]')` – selects an element that has a `data-cy` attribute equal to `"email"` (recommended for stable selectors)
 
 ### Finding by Text: `cy.contains()`
 
@@ -220,9 +220,9 @@ cy.get(selector).type(text)
 
 **Example:**
 ```typescript
-cy.get('app-text-input[formControlName="email"]').find('input').type('user@example.com');
+cy.get('[data-cy="email"]').find('input').type('user@example.com');
 ```
-This first finds the `app-text-input` component for the email control, then drills down to its `<input>` child using `.find()`, and finally types the email.
+This first finds the custom component with `data-cy="email"`, drills down to its `<input>` child using `.find()`, and types the email.
 
 ### Assertions: `.should()`
 
@@ -238,9 +238,6 @@ Common assertions:
 - `should('not.be.disabled')` – element is not disabled
 - `should('exist')` – element exists in the DOM
 - `should('include', text)` – element’s text includes the given string (works with `cy.url()` too)
-
-**Example from our tests:**  
-`cy.get('button[type="submit"]').should('be.disabled');`
 
 ### Waiting: `cy.wait()`
 
@@ -266,7 +263,7 @@ Spies on or stubs network requests. You can:
 - **Spy on a request** – observe that a request was made, without changing the response.
 - **Wait for a request** – using `.as()` and `cy.wait()`.
 
-**Example from our login test:**
+**Example:**
 ```typescript
 cy.intercept('POST', '/api/account/login', {
   statusCode: 200,
@@ -280,7 +277,6 @@ This intercepts any POST to `/api/account/login` and immediately returns a fake 
 ```typescript
 cy.location()
 cy.location('pathname')
-cy.location('hash')
 ```
 
 Gets information about the current URL. Commonly used to verify navigation after an action.
@@ -295,13 +291,12 @@ Gets information about the current URL. Commonly used to verify navigation after
 cy.get(selector).find(subSelector)
 ```
 
-Searches for a child element **within** the previously selected element. This is a chained command that helps you traverse the DOM from a known parent.
+Searches for a child element **within** the previously selected element.
 
 **Example:**
 ```typescript
-cy.get('app-text-input[formControlName="email"]').find('input').type('user@example.com');
+cy.get('[data-cy="email"]').find('input').type('user@example.com');
 ```
-`cy.get(...)` gets the custom component, and `.find('input')` looks inside it for the actual `<input>` tag.
 
 ### Creating Aliases: `.as()`
 
@@ -311,22 +306,13 @@ cy.get('app-text-input[formControlName="email"]').find('input').type('user@examp
 
 Gives a custom name to a DOM element, a network intercept, or a route. You can then refer to it later using `cy.get('@alias')`.
 
-**Example:**
-```typescript
-cy.intercept('POST', '/api/login').as('loginRequest');
-cy.wait('@loginRequest');
-cy.get('button').as('submitButton');
-cy.get('@submitButton').should('be.disabled');
-```
-Aliases make your tests more readable and reusable.
-
 ### Test Structure: `describe()`, `beforeEach()` and `it()`
 
 Cypress uses Mocha’s syntax for organising tests.
 
-- **`describe(description, callback)`** – Groups together several test cases that belong to the same feature or component. Think of it as a “test suite”.
-- **`beforeEach(callback)`** – Runs the given callback **before each** `it` block inside the `describe`. Commonly used to navigate to the page under test, reset state, or set up intercepts.
-- **`it(description, callback)`** – Defines a single test case (also known as a “spec”). Inside, you write your commands and assertions.
+- **`describe(description, callback)`** – Groups together several test cases that belong to the same feature.
+- **`beforeEach(callback)`** – Runs the given callback **before each** `it` block inside the `describe`.
+- **`it(description, callback)`** – Defines a single test case (a “spec”).
 
 **Basic blueprint:**
 ```typescript
@@ -338,167 +324,87 @@ describe('Feature Name', () => {
   it('should do something specific', () => {
     // test steps and assertions
   });
-
-  it('should do another thing', () => {
-    // ...
-  });
 });
 ```
 
 ---
 
-## Writing Your First Tests for LiliShop
+## From Simple Tests to Professional Architecture
 
-With the commands above, let’s examine two real test files from our project: the login and registration features.
+When you first write Cypress tests, it’s natural to target elements using CSS classes, IDs, or tag attributes. While that works, it creates a fragile test suite: any change to the component’s styling or structure can break your tests, even if the functionality remains correct.
 
-### Login Feature Test (`login.cy.ts`)
+Professional test suites follow a few key principles:
+- **Selectors are stable and independent** of CSS/JS changes.
+- **Test data is separated** from test logic.
+- **Repetitive UI actions are abstracted** into reusable commands.
+- **Tests read like plain English** and focus on behaviour, not implementation details.
 
-File location: `cypress/e2e/auth/login.cy.ts` (after restructuring)
+We’ll now transform the basic LiliShop tests into this professional architecture.
 
+### The problem with raw selectors
+
+Look at these typical raw selectors:
 ```typescript
-describe('Login Feature', () => {
-  beforeEach(() => {
-    // Navigate to the login page before every test case
-    cy.visit('/account/login'); 
-  });
+cy.get('app-text-input[formControlName="email"]').find('input').type(...)
+cy.get('button[type="submit"]').should('be.disabled');
+```
+If the component’s attribute names change, or if you restructure the template, these selectors break. A better approach is to use **dedicated test attributes** – `data-cy` – that you add to your HTML solely for the purpose of testing.
 
-  it('should enforce form validation rules by disabling the sign-in button initially', () => {
-    // The form is empty, so the submit button must be disabled
-    cy.get('button[type="submit"]').should('be.disabled');
-  });
+### Step 1: Introduce `data-cy` attributes in your components
 
-  it('should enable the sign-in button only when valid input data is provided', () => {
-    // Target inputs inside your custom <app-text-input> components
-    cy.get('app-text-input[formControlName="email"]').find('input').type('user@example.com');
-    cy.get('app-text-input[formControlName="password"]').find('input').type('Password123!');
+In your Angular component templates, add `data-cy` attributes to key interactive elements.
 
-    // The form should now satisfy validation conditions
-    cy.get('button[type="submit"]').should('not.be.disabled');
-  });
+**Login component** (simplified snippet):
+```html
+<div class="login-container">
+  <mat-card>
+    <mat-card-title>Login</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <app-text-input data-cy="email" formControlName="email" [label]="'Email address'">
+        </app-text-input>
 
-  it('should navigate to the forgot password route when clicking the corresponding link', () => {
-    cy.get('.forgot-password a').click();
-    
-    // Verify that the router successfully changed the URL path
-    cy.url().should('include', '/account/forgot-password');
-  });
+        <app-text-input data-cy="password" formControlName="password" [label]="'Password'" [type]="'password'">
+        </app-text-input>
 
-  it('should successfully submit valid credentials and redirect the user to the shop dashboard', () => {
-    // Mock the backend API authentication request to keep tests isolated and fast
-    cy.intercept('POST', '/api/account/login', {
-      statusCode: 200,
-      body: { token: 'mock-jwt-token-string', email: 'user@example.com' }
-    }).as('loginRequest');
+        <button data-cy="submit-button" mat-raised-button color="primary"
+                [disabled]="!isFormValid()" type="submit">
+          <mat-icon>login</mat-icon> Sign in
+        </button>
 
-    // Fill out the login form
-    cy.get('app-text-input[formControlName="email"]').find('input').type('user@example.com');
-    cy.get('app-text-input[formControlName="password"]').find('input').type('Password123!');
-    
-    // Click the submit button
-    cy.get('button[type="submit"]').click();
-
-    // Verify that the exact HTTP request was sent to the backend
-    cy.wait('@loginRequest');
-
-    // Confirm that the user is redirected away from the login page upon success
-    cy.url().should('include', '/shop');
-  });
-});
+        <div class="forgot-password">
+          <a data-cy="forgot-password-link" routerLink="/account/forgot-password">Forgot password?</a>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
 ```
 
-### Registration Feature Test (`register.cy.ts`)
+**Registration component** (simplified snippet):
+```html
+<section class="register-container">
+  ...
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit($event)">
+    <app-text-input data-cy="display-name-container" formControlName="displayName" [label]="'Display Name'"></app-text-input>
+    <app-text-input data-cy="email-container" formControlName="email" [label]="'Email address'"></app-text-input>
+    <app-text-input data-cy="password-container" formControlName="password" [label]="'Password'" [type]="'password'"></app-text-input>
+    <app-text-input data-cy="confirm-password-container" formControlName="confirmPassword" [label]="'Confirm Password'" [type]="'password'"></app-text-input>
 
-```typescript
-describe('Registration Feature', () => {
-  beforeEach(() => {
-    // Navigate to the registration route
-    cy.visit('/account/register');
-  });
-
-  it('should disable the register button by default when the form is empty', () => {
-    cy.get('button[type="submit"]').should('be.disabled');
-  });
-
-  it('should display the Google Sign-In container element', () => {
-    cy.get('#buttonDiv').should('exist');
-  });
-
-  it('should keep the register button disabled if passwords do not match', () => {
-    cy.get('app-text-input[formControlName="displayName"]').find('input').type('John Doe');
-    cy.get('app-text-input[formControlName="email"]').find('input').type('john.doe@example.com');
-    cy.get('app-text-input[formControlName="password"]').find('input').type('SecurePass123!');
-
-    // Enter a non-matching password
-    cy.get('app-text-input[formControlName="confirmPassword"]').find('input').type('DifferentPass123!');
-
-    cy.get('button[type="submit"]').should('be.disabled');
-  });
-
-  it('should enable the register button when all inputs are valid and match', () => {
-    cy.get('app-text-input[formControlName="displayName"]').find('input').type('John Doe');
-    cy.get('app-text-input[formControlName="email"]').find('input').type('john.doe@example.com');
-    cy.get('app-text-input[formControlName="password"]').find('input').type('SecurePass123!');
-    cy.get('app-text-input[formControlName="confirmPassword"]').find('input').type('SecurePass123!');
-
-    cy.get('button[type="submit"]').should('not.be.disabled');
-  });
-
-  it('should submit registration successfully, handle the confirmation dialog, and redirect to the shop', () => {
-    // 1. Intercept the async email availability check
-    cy.intercept('GET', '/api/account/emailexists*', {
-      statusCode: 200,
-      body: false
-    }).as('emailExistsCheck');
-
-    // 2. Intercept the successful registration endpoint
-    cy.intercept('POST', '/api/account/register', {
-      statusCode: 200,
-      body: {
-        displayName: 'John Doe',
-        email: 'newuser@example.com',
-        token: 'mock-jwt-token'
-      }
-    }).as('registerSuccessRequest');
-
-    // 3. Fill out the form fields and trigger micro-validations
-    cy.get('app-text-input[formControlName="displayName"]').find('input').type('John Doe').blur();
-    cy.get('app-text-input[formControlName="email"]').find('input').type('newuser@example.com').blur();
-    cy.wait('@emailExistsCheck');
-
-    cy.get('app-text-input[formControlName="password"]').find('input').type('SecurePass123!').blur();
-    cy.get('app-text-input[formControlName="confirmPassword"]').find('input').type('SecurePass123!').blur();
-
-    // 4. Submit the form and wait for the successful network response
-    cy.get('button[type="submit"]').should('not.be.disabled').click();
-    cy.wait('@registerSuccessRequest');
-
-    // 5. Interact with the Angular Material Dialog
-    cy.get('mat-dialog-container', { timeout: 5000 })
-      .should('be.visible')
-      .and('contain.text', 'Email Confirmation Sent');
-
-    // Click the confirmation button inside the dialog to close it
-    cy.get('mat-dialog-container').find('button').click();
-
-    // 6. Assert that the application routes to the shop after the dialog closes
-    cy.location('pathname').should('eq', '/shop');
-  });
-});
+    <button data-cy="submit-button" [disabled]="!isFormValid()" type="submit" mat-raised-button color="primary">
+      Register
+    </button>
+  </form>
+  ...
+  <div id="buttonDiv" data-cy="google-signin-btn"></div>
+</section>
 ```
 
-These tests work perfectly, but as your test suite grows, maintaining such files becomes challenging. Let’s elevate them to an enterprise‑grade standard.
+Now your tests can target `[data-cy="email"]` instead of fragile component selectors. This decouples your test from internal DOM structure and class names.
 
----
+### Step 2: Restructure the directory layout
 
-## Scaling to Professional Architecture
-
-A professional, maintainable test suite requires a clean separation of concerns: **test data**, **reusable actions**, and **test specifications**. We’ll transition to that structure in four clean steps.
-
-### Step 1: Restructure the Directory Layout
-
-Organize your end‑to‑end specs by feature domain. Move your authentication tests into an `auth` subdirectory within the `e2e` directory.
-
-**Target Structure:**
+Organize your end‑to‑end specs by feature domain.
 
 ```text
 cypress/
@@ -512,11 +418,9 @@ cypress/
     └── commands.ts
 ```
 
-This groups tests logically and makes the suite easy to navigate as more features are added.
+### Step 3: Isolate test data using fixtures
 
-### Step 2: Isolate Test Data Using Fixtures
-
-Create a file named `cypress/fixtures/auth-data.json` to keep credentials and expected responses out of your test logic.
+Create `cypress/fixtures/auth-data.json`:
 
 ```json
 {
@@ -525,12 +429,6 @@ Create a file named `cypress/fixtures/auth-data.json` to keep credentials and ex
     "email": "newuser@example.com",
     "password": "SecurePass123!",
     "token": "mock-jwt-token-string"
-  },
-  "invalidUser": {
-    "displayName": "John Doe",
-    "email": "invalid-email",
-    "password": "123",
-    "confirmPassword": "456"
   },
   "mismatchedUser": {
     "displayName": "John Doe",
@@ -551,24 +449,32 @@ Create a file named `cypress/fixtures/auth-data.json` to keep credentials and ex
 }
 ```
 
-Now any test can load the relevant data set with `cy.fixture('auth-data')`, making the tests cleaner and data changes effortless.
+Each test will load the relevant user object with `cy.fixture('auth-data')`.
 
-### Step 3: Implement Reusable Custom Commands
+### Step 4: Implement reusable custom commands
 
-Abstract the selection of your custom Angular elements (`app-text-input`) and the handling of the Angular Material Dialog inside `cypress/support/commands.ts`.
-
-#### 1. Update `cypress/support/commands.ts`:
+In `cypress/support/commands.ts`, we encapsulate repeated patterns:
 
 ```typescript
 /// <reference types="cypress" />
 
-Cypress.Commands.add('typeInAppInput', (formControlName: string, text: string) => {
-  cy.get(`app-text-input[formControlName="${formControlName}"]`)
+/**
+ * Types text into an <app-text-input> component identified by its data-cy attribute,
+ * then triggers a blur event to activate Angular validations.
+ * @returns The input element wrapped in a Cypress chainable.
+ */
+Cypress.Commands.add('typeInAppInput', (dataCy: string, text: string) => {
+  return cy.get(`[data-cy="${dataCy}"]`)
     .find('input')
     .type(text)
     .blur();
 });
 
+/**
+ * Waits for the Angular Material Dialog to appear, asserts it contains the expected title,
+ * and clicks the first button inside the dialog (typically the "OK" button).
+ * @returns The clicked button element.
+ */
 Cypress.Commands.add('handleMaterialDialog', (expectedTitle: string) => {
   cy.get('mat-dialog-container', { timeout: 5000 })
     .should('be.visible')
@@ -577,137 +483,38 @@ Cypress.Commands.add('handleMaterialDialog', (expectedTitle: string) => {
   cy.get('mat-dialog-container').find('button').click();
 });
 
+/**
+ * Fills out the email and password fields (using data-cy="email" / "password")
+ * and clicks the submit button. Assumes the button becomes enabled.
+ * @returns The clicked submit button element.
+ */
 Cypress.Commands.add('loginViaUI', (email: string, password: string) => {
   cy.typeInAppInput('email', email);
   cy.typeInAppInput('password', password);
-  cy.get('button[type="submit"]').should('not.be.disabled').click();
+  cy.get('[data-cy="submit-button"]').should('not.be.disabled').click();
 });
 ```
 
-- `typeInAppInput` encapsulates the recurring pattern of finding the `app-text-input` component, drilling into its `<input>`, typing, and blurring (to trigger Angular validations).
-- `handleMaterialDialog` waits for the dialog to appear, asserts its text, and clicks the confirm button.
-- `loginViaUI` bundles the login form filling and submission into a single, semantically meaningful command.
-
-#### 2. Register TypeScript Types
-
-In `cypress/support/e2e.ts` (or a dedicated `index.d.ts`), add the type declarations so your IDE provides autocomplete:
+Now register the TypeScript types so that your IDE provides autocomplete and type checking. Add this inside `cypress/support/e2e.ts` (or a dedicated `index.d.ts`):
 
 ```typescript
 declare global {
   namespace Cypress {
     interface Chainable {
-      /**
-       * Custom command to type text into an app-text-input component and blur the input field.
-       */
-      typeInAppInput(formControlName: string, text: string): Chainable<void>;
-
-      /**
-       * Custom command to verify Material Dialog content and click its action button to close it.
-       */
-      handleMaterialDialog(expectedTitle: string): Chainable<void>;
-
-      /**
-       * Fills out the email and password fields, then submits the login form.
-       */
-      loginViaUI(email: string, password: string): Chainable<void>;
+      typeInAppInput(dataCy: string, text: string): Chainable<JQuery<HTMLInputElement>>;
+      handleMaterialDialog(expectedTitle: string): Chainable<JQuery<HTMLButtonElement>>;
+      loginViaUI(email: string, password: string): Chainable<JQuery<HTMLButtonElement>>;
     }
   }
 }
 export {};
 ```
 
-Now you can use these commands everywhere with full type safety.
+### Step 5: Refactored test files
 
-### Step 4: Refactored Test Files
-
-With fixtures and custom commands in place, the test files become declarative and much easier to read.
-
-**`cypress/e2e/auth/register.cy.ts`:**
-
-```typescript
-describe('Registration Feature', () => {
-  beforeEach(() => {
-    cy.visit('/account/register');
-  });
-
-  it('should disable the register button by default when the form is empty', () => {
-    cy.get('button[type="submit"]').should('be.disabled');
-  });
-
-  it('should display the Google Sign-In container element', () => {
-    cy.get('#buttonDiv').should('exist');
-  });
-
-  it('should keep the register button disabled if passwords do not match', () => {
-    cy.fixture('auth-data').then((data) => {
-      const user = data.mismatchedUser;
-
-      cy.typeInAppInput('displayName', user.displayName);
-      cy.typeInAppInput('email', user.email);
-      cy.typeInAppInput('password', user.password);
-      cy.typeInAppInput('confirmPassword', user.confirmPassword);
-
-      cy.get('button[type="submit"]').should('be.disabled');
-    });
-  });
-
-  it('should enable the register button when all inputs are valid and match', () => {
-    cy.fixture('auth-data').then((data) => {
-      const user = data.matchingFormUser;
-
-      cy.typeInAppInput('displayName', user.displayName);
-      cy.typeInAppInput('email', user.email);
-      cy.typeInAppInput('password', user.password);
-      cy.typeInAppInput('confirmPassword', user.password);
-
-      cy.get('button[type="submit"]').should('not.be.disabled');
-    });
-  });
-
-  it('should submit registration successfully, handle the confirmation dialog, and redirect to the shop', () => {
-    cy.fixture('auth-data').then((data) => {
-      const user = data.validUser;
-
-      // 1. Intercept the async email availability check
-      cy.intercept('GET', '/api/account/emailexists*', {
-        statusCode: 200,
-        body: false
-      }).as('emailExistsCheck');
-
-      // 2. Intercept the successful registration endpoint
-      cy.intercept('POST', '/api/account/register', {
-        statusCode: 200,
-        body: {
-          displayName: user.displayName,
-          email: user.email,
-          token: user.token
-        }
-      }).as('registerSuccessRequest');
-
-      // 3. Fill out the form fields and trigger validations via custom command
-      cy.typeInAppInput('displayName', user.displayName);
-      cy.typeInAppInput('email', user.email);
-      cy.wait('@emailExistsCheck');
-
-      cy.typeInAppInput('password', user.password);
-      cy.typeInAppInput('confirmPassword', user.password);
-
-      // 4. Submit the form and wait for the network response
-      cy.get('button[type="submit"]').should('not.be.disabled').click();
-      cy.wait('@registerSuccessRequest');
-
-      // 5. Interact with the Angular Material Dialog via custom command
-      cy.handleMaterialDialog('Email Confirmation Sent');
-
-      // 6. Assert that the application routes to the shop after closure
-      cy.location('pathname').should('eq', '/shop');
-    });
-  });
-});
-```
+Now the test files are clean, declarative, and resilient.
 
 **`cypress/e2e/auth/login.cy.ts`:**
-
 ```typescript
 describe('Login Feature', () => {
   beforeEach(() => {
@@ -715,7 +522,7 @@ describe('Login Feature', () => {
   });
 
   it('should enforce form validation rules by disabling the sign-in button initially', () => {
-    cy.get('button[type="submit"]').should('be.disabled');
+    cy.get('[data-cy="submit-button"]').should('be.disabled');
   });
 
   it('should enable the sign-in button only when valid input data is provided', () => {
@@ -725,12 +532,12 @@ describe('Login Feature', () => {
       cy.typeInAppInput('email', user.email);
       cy.typeInAppInput('password', user.password);
 
-      cy.get('button[type="submit"]').should('not.be.disabled');
+      cy.get('[data-cy="submit-button"]').should('not.be.disabled');
     });
   });
 
   it('should navigate to the forgot password route when clicking the corresponding link', () => {
-    cy.get('.forgot-password a').click();
+    cy.get('[data-cy="forgot-password-link"]').click();
     cy.location('pathname').should('eq', '/account/forgot-password');
   });
 
@@ -743,20 +550,85 @@ describe('Login Feature', () => {
         body: { token: user.token, email: user.email }
       }).as('loginRequest');
 
-      // Execute programmatic form submission via custom command
       cy.loginViaUI(user.email, user.password);
-
-      // Verify that the exact HTTP request was sent to the backend
       cy.wait('@loginRequest');
 
-      // Confirm that the user is redirected away from the login page upon success
       cy.location('pathname').should('eq', '/shop');
     });
   });
 });
 ```
 
-Notice how the test logic now reads almost like plain English. Any future changes to the UI or data only need to happen in one place (the fixture file or the custom commands).
+**`cypress/e2e/auth/register.cy.ts`:**
+```typescript
+describe('Registration Feature', () => {
+  beforeEach(() => {
+    cy.visit('/account/register');
+  });
+
+  it('should disable the register button by default when the form is empty', () => {
+    cy.get('[data-cy="submit-button"]').should('be.disabled');
+  });
+
+  it('should display the Google Sign-In container element', () => {
+    cy.get('[data-cy="google-signin-btn"]').should('exist');
+  });
+
+  it('should keep the register button disabled if passwords do not match', () => {
+    cy.fixture('auth-data').then((data) => {
+      const user = data.mismatchedUser;
+
+      cy.typeInAppInput('display-name-container', user.displayName);
+      cy.typeInAppInput('email-container', user.email);
+      cy.typeInAppInput('password-container', user.password);
+      cy.typeInAppInput('confirm-password-container', user.confirmPassword);
+
+      cy.get('[data-cy="submit-button"]').should('be.disabled');
+    });
+  });
+
+  it('should enable the register button when all inputs are valid and match', () => {
+    cy.fixture('auth-data').then((data) => {
+      const user = data.matchingFormUser;
+
+      cy.typeInAppInput('display-name-container', user.displayName);
+      cy.typeInAppInput('email-container', user.email);
+      cy.typeInAppInput('password-container', user.password);
+      cy.typeInAppInput('confirm-password-container', user.password);
+
+      cy.get('[data-cy="submit-button"]').should('not.be.disabled');
+    });
+  });
+
+  it('should submit registration successfully, handle the confirmation dialog, and redirect to the shop', () => {
+    cy.fixture('auth-data').then((data) => {
+      const user = data.validUser;
+
+      cy.intercept('GET', '/api/account/emailexists*', { statusCode: 200, body: false }).as('emailExistsCheck');
+      cy.intercept('POST', '/api/account/register', {
+        statusCode: 200,
+        body: { displayName: user.displayName, email: user.email, token: user.token }
+      }).as('registerSuccessRequest');
+
+      cy.typeInAppInput('display-name-container', user.displayName);
+      cy.typeInAppInput('email-container', user.email);
+      cy.wait('@emailExistsCheck');
+
+      cy.typeInAppInput('password-container', user.password);
+      cy.typeInAppInput('confirm-password-container', user.password);
+
+      cy.get('[data-cy="submit-button"]').should('not.be.disabled').click();
+      cy.wait('@registerSuccessRequest');
+
+      cy.handleMaterialDialog('Email Confirmation Sent');
+
+      cy.location('pathname').should('eq', '/shop');
+    });
+  });
+});
+```
+
+Notice how the tests now read as a clear sequence of high‑level actions. Any changes to the underlying UI implementation only require updating the `data-cy` attributes or the custom commands – not every test case.
 
 ---
 
@@ -766,37 +638,29 @@ Before running Cypress, your Angular application **must be running locally**.
 
 ### 1. Start the Angular development server
 
-Open a terminal and run:
-
 ```bash
 npm start
 ```
 
-Wait until you see `Compiled successfully` and the app is available at `http://localhost:4200`.
+Wait until the app is available at `http://localhost:4200`.
 
 ### 2. Run Cypress in interactive mode (GUI)
 
-Open a **second terminal** and launch the Test Runner:
+In a second terminal:
 
 ```bash
 npx cypress open
 ```
 
-The Launchpad will appear. Select **E2E Testing**, choose your preferred browser, and click **Start E2E Testing**. You’ll see a list of test files. Click on any of them to run it.
+Select **E2E Testing**, choose your browser, and click on any test file to run it. The interactive runner lets you debug step by step, view DOM snapshots, and inspect network requests.
 
-The interactive runner executes the test step by step, showing you the application state and allowing you to debug with DOM snapshots, network logs, and the browser console.
-
-### 3. Run Cypress in headless mode (command line)
-
-For continuous integration or a quick check, run Cypress without the GUI:
+### 3. Run Cypress in headless mode (CI / terminal)
 
 ```bash
 npx cypress run --spec "cypress/e2e/auth/login.cy.ts"
 ```
 
-This executes the specified test file in a headless Electron browser and outputs the results to your terminal. Videos and screenshots are saved by default in `cypress/videos` and `cypress/screenshots`.
-
-To run all E2E tests, simply use:
+To run all E2E tests:
 
 ```bash
 npx cypress run
