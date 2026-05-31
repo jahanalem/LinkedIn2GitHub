@@ -36,7 +36,13 @@
    - [Step 3: Implement Reusable Custom Commands](#step-3-implement-reusable-custom-commands)  
    - [Step 4: Refactored Test Files](#step-4-refactored-test-files)  
 7. [How to Run Your Tests](#how-to-run-your-tests)  
-8. [Next Steps and Best Practices](#next-steps-and-best-practices)
+
+---
+
+<img width="3068" height="1096" alt="Cypress-End-to-End-Testing_register" src="https://github.com/user-attachments/assets/039eb9d0-fc5d-42c4-bcd8-115038a84fcf" />
+
+<img width="3066" height="1822" alt="Cypress-End-to-End-Testing_login" src="https://github.com/user-attachments/assets/bb650cb6-9769-48fe-8f26-1fc5280836e3" />
+
 
 ---
 
