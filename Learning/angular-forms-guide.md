@@ -360,6 +360,97 @@ Two things worth knowing:
 
 For anything beyond a simple HTTP call (WebSockets, IndexedDB, custom caching), there is a lower‑level `validateAsync()`. For most apps, `validateHttp()` is all you need.
 
+#### Going Deeper: `validateAsync` + `rxResource` (the engine behind `validateHttp`)
+
+`validateHttp()` is the friendly, easy version — but it is really just a **shortcut**. Under the hood it uses a more powerful function called `validateAsync()`. You will want `validateAsync()` whenever your check is *not* a simple URL call: for example, when you call a **service method** that returns an Observable, or when you need RxJS features like debouncing.
+
+This part looks scary at first, so we will take it very slowly. Here is the exact same "email must be unique" rule, written the powerful way:
+
+```typescript
+import { validateAsync } from '@angular/forms/signals';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { timer, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+
+// inside the schema function:
+validateAsync(path.email, {
+  params: (ctx) => ctx.value(),
+  factory: (emailSignal) =>
+    rxResource({
+      params: () => emailSignal(),
+      stream: (loaderParams) => {
+        const emailValue = loaderParams.params;
+        return emailValue
+          ? timer(400).pipe(switchMap(() => accountService.isEmailTaken(emailValue)))
+          : of(false); // empty box → "not taken", don't call the server
+      },
+    }),
+  onSuccess: (isTaken) =>
+    isTaken
+      ? { kind: 'emailTaken', message: 'This email is already registered' }
+      : undefined,
+  onError: () => ({
+    kind: 'emailCheckFailed',
+    message: 'Could not verify the email. Please try again.',
+  }),
+});
+```
+
+It looks like a lot, but it is only **four simple pieces**. Let's name them in plain words:
+
+1. **`params` — "What does this check depend on?"** Here it is `(ctx) => ctx.value()`, which is just the current email text. Angular watches this value; whenever it changes, the check runs again.
+2. **`factory` — "How do I do the async work?"** It receives the value from `params` (as a signal called `emailSignal`) and must return a **resource** that does the work. Here we return an `rxResource`.
+3. **`onSuccess` — "What does the answer mean?"** The resource gives back a value (`isTaken`). If it is `true`, we return an error. If not, we return `undefined`, which means "this field is valid".
+4. **`onError` — "What if the server fails?"** If the request throws, we show a friendly error instead of crashing the form.
+
+**So what is `rxResource`?**
+
+A **resource** is Angular's way of wrapping *asynchronous data* — data that arrives later, like a server response — so that it behaves like a normal signal. You give it an input and a way to fetch, and it hands you the result back as a signal you can read.
+
+There are two versions:
+
+- `resource()` — for fetching with a **Promise**.
+- `rxResource()` — for fetching with an **Observable** (RxJS). Since most Angular services return Observables (especially `HttpClient`), this is usually the one you reach for.
+
+**The waiter analogy.** Think of `rxResource` as a smart waiter in a restaurant:
+
+- You tell the waiter your order → this is `params`.
+- The waiter walks to the kitchen to get it → this is `stream`, which returns an Observable.
+- If you change your mind and order something else *before* the first dish arrives, the waiter throws away the old order and brings only the new one. You never get served a stale, outdated dish.
+- You simply watch your table to see when the food arrives → you read the result as a signal.
+
+That "throw away the old order" behavior matters a lot. If the user types quickly — `a`, then `an`, then `ann` — `rxResource` automatically cancels the older, out‑of‑date checks and keeps only the result for the latest text. This prevents a classic bug where a slow old response lands *after* a newer one and shows the wrong answer. You get this protection for free; you never wire up `switchMap` or unsubscribe by hand.
+
+**Reading the `rxResource` inside the factory.** Our `rxResource` has two parts:
+
+- `params: () => emailSignal()` — this is the waiter's order. It reads the email value. Whenever the email changes, the kitchen runs again.
+- `stream: (loaderParams) => { ... }` — this is the trip to the kitchen. `loaderParams.params` holds the current email. If the email is empty, we return `of(false)` (a finished Observable that just says "not taken"), so we never bother the server for an empty box. Otherwise we run:
+
+```typescript
+timer(400).pipe(switchMap(() => accountService.isEmailTaken(emailValue)))
+```
+
+The `timer(400)` is a small **debounce**: "wait 400 milliseconds before calling the server." If the user is still typing, a new value arrives, the old timer is cancelled, and we start fresh. The result: we call the server only once the user *pauses*, instead of on every keystroke. This is much kinder to your backend.
+
+**The full journey, step by step.** When the user types in the email box:
+
+1. The email value changes, so `params` produces a new value (`emailSignal`).
+2. `rxResource` sees the new value and runs `stream` again.
+3. `stream` waits 400 ms (the debounce). If the user keeps typing, this restarts, so only a real pause leads to a call.
+4. After the pause, it calls `accountService.isEmailTaken(email)`, which returns an Observable.
+5. `rxResource` subscribes for you, and cancels any older request still in flight.
+6. While waiting for the answer, the field's `pending()` signal is `true` — perfect for showing a "Checking…" message.
+7. When the answer arrives, `onSuccess(isTaken)` decides: taken → show the `emailTaken` error; not taken → `undefined` (valid). If the request failed, `onError` shows `emailCheckFailed`.
+
+**One thing to remember:** async validation only runs *after* the simple (synchronous) rules pass. So `required` and `email` run first, and the server is contacted only once the email is actually well‑formed — efficiency you get for free.
+
+**When to use which:**
+
+- Use `validateHttp()` when your check is a simple call to a URL. Less code, fewer moving parts.
+- Use `validateAsync()` + `rxResource()` when you call a service method, need debouncing or other RxJS operators, or fetch from somewhere that is not a plain HTTP GET.
+
+Both finish with the same outcome: an error on the field, or a valid field.
+
 ### 2.4 Cross‑Field: Confirmation Email Must Match
 
 This is where Signal Forms really shines compared to Reactive Forms. We use `validate()` and place the rule **right on the field that should show the error** — `confirmEmail`. Inside, `value()` is the current field, and `valueOf(...)` reads any other field.
