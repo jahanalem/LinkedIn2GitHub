@@ -393,13 +393,13 @@ We want City and Street to be filled together or left empty together. The rule l
 import { validateTree } from '@angular/forms/signals';
 
 // inside the schema function:
-validateTree(path.address, ({ value, field }) => {
+validateTree(path.address, ({ value, fieldTreeOf }) => {
   const { city, street } = value();
   const onlyOneFilled = !!city !== !!street; // exactly one is filled
 
   return onlyOneFilled
     ? {
-        field: field.street, // put the error on the street field
+        fieldTree: fieldTreeOf(path.address.street), // put the error on the street field
         kind: 'incompleteAddress',
         message: 'Please fill both City and Street, or leave both empty',
       }
@@ -410,7 +410,7 @@ validateTree(path.address, ({ value, field }) => {
 The difference in one line:
 
 - `validate(field, …)` → the error lands on **that** field.
-- `validateTree(group, …)` → you look at a whole group and **aim** the error wherever you want with `field: field.x`.
+- `validateTree(group, …)` → you look at a whole group and **aim** the error wherever you want with `fieldTree: fieldTreeOf(path.x)`.
 
 ### 2.6 Skills: A Dynamic Array
 
@@ -534,12 +534,12 @@ export class Signup {
     });
 
     // Cross-field: address both or neither
-    validateTree(path.address, ({ value, field }) => {
+    validateTree(path.address, ({ value, fieldTreeOf }) => {
       const { city, street } = value();
       const onlyOneFilled = !!city !== !!street;
       return onlyOneFilled
         ? {
-            field: field.street,
+            fieldTree: fieldTreeOf(path.address.street),
             kind: 'incompleteAddress',
             message: 'Please fill both City and Street, or leave both empty',
           }
@@ -780,7 +780,7 @@ myForm().valid()          → whole form validity
 
 - `required`, `email`, `minLength`, … → simple, single‑field rules.
 - `validate(field, ctx => …)` → custom rule on one field; can read others via `valueOf`.
-- `validateTree(group, ctx => …)` → rule across a group; aim the error with `field: field.x`.
+- `validateTree(group, ctx => …)` → rule across a group; aim the error with `fieldTree: fieldTreeOf(path.x)`.
 - `validateHttp(field, { request, onSuccess, onError })` → server‑backed async rule.
 
 **Two array tools:**
