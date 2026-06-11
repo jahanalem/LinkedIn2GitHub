@@ -1,3 +1,9 @@
+# Migrating LiliShop to Angular 22: A Practical Report
+[Read MOre](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0050_lilishop-angular-22-migration.md)
+
+# Cypress End‑to‑End Testing: A Complete Beginner’s Guide with LiliShop 🔬🧪🔎🕵️
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0049_Cypress-Ent-to-End-Testing.md)
+
 # **LiliShop – Complete Technical Architecture Manual** (PDF, 160+ pages)  
 Full documentation covering Clean Architecture, design patterns, backend (.NET 10), frontend (Angular 21), and all subsystems.  
 [📄 Read the full manual](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/LiliShop_Technical_Architecture_Manual.pdf)
