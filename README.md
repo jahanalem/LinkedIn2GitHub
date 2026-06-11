@@ -14,7 +14,7 @@ You can find all articles combined in one file here:
 ## 📚 Articles:
 
 ### 52. Migrating LiliShop to Angular 22: A Practical Report
-[Read MOre](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0050_lilishop-angular-22-migration.md)
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0050_lilishop-angular-22-migration.md)
 
 ### 51. Cypress End‑to‑End Testing: A Complete Beginner’s Guide with LiliShop 🔬🧪🔎🕵️
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0049_Cypress-Ent-to-End-Testing.md)
