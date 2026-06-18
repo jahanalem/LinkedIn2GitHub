@@ -21,7 +21,7 @@
 
 Als Full-Stack-Entwickler mit Schwerpunkt auf **C#/.NET** und **Angular** ist eine hohe Code-Qualität für mich das Fundament jeder stabilen Anwendung. In meinen bisherigen Projekten habe ich bereits mit automatisierten Tests gearbeitet, um die Zuverlässigkeit meiner Software sicherzustellen.
 
-Einen Einblick in meine Arbeit mit **Unit-Tests (xUnit)** und API-Testing bieten folgende Projekte:
+Einen Einblick in meine Arbeit mit **Unit-Tests (xUnit)**, API-Testing sowie End-to-End-Tests mit Cypress bieten folgende Projekte:
 * **[CatchEleven](https://github.com/jahanalem/CatchEleven/tree/master/tests/CatchEleven.Tests):** Umfangreiche Test-Suiten für Core-Logik.
 * **[SmartSupervisorBot](https://github.com/jahanalem/SmartSupervisorBot/blob/main/SmartSupervisorBot.Test.Core/BotServiceTests.cs):** Tests für Bot-Services und Datenzugriff.
 * **[RectanglesCalculator](https://github.com/jahanalem/RectanglesCalculator/tree/main/Nineteen.Rectangle.Test):** Mathematische Validierung und parallele Verarbeitung.
