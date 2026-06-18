@@ -4,6 +4,19 @@
 
 Am **18.06.2026 um 10 Uhr** habe ich am Webinar „Keyword-Driven Testing" von **imbus** teilgenommen, gehalten von **Rolf Glunz** und **Christian Kupfer**. Im Folgenden fasse ich zusammen, was ich aus diesem Webinar mitgenommen habe – nicht als Protokoll, sondern als persönliche Lernzusammenfassung. Ich erkläre alles so einfach wie möglich, denn viele Begriffe waren für mich als Entwickler ohne Testerfahrung komplett neu.
 
+## Mein Hintergrund
+
+Als Full-Stack-Entwickler mit Schwerpunkt auf **C#/.NET** und **Angular** ist eine hohe Code-Qualität für mich das Fundament jeder stabilen Anwendung. In meinen bisherigen Projekten habe ich bereits mit automatisierten Tests gearbeitet, um die Zuverlässigkeit meiner Software sicherzustellen.
+
+Einen Einblick in meine Arbeit mit Unit-Tests (xUnit), API-Testing sowie End-to-End-Tests mit Cypress bieten folgende Projekte:
+* **[CatchEleven](https://github.com/jahanalem/CatchEleven/tree/master/tests/CatchEleven.Tests):** Umfangreiche Test-Suiten für Core-Logik.
+* **[SmartSupervisorBot](https://github.com/jahanalem/SmartSupervisorBot/blob/main/SmartSupervisorBot.Test.Core/BotServiceTests.cs):** Tests für Bot-Services und Datenzugriff.
+* **[RectanglesCalculator](https://github.com/jahanalem/RectanglesCalculator/tree/main/Nineteen.Rectangle.Test):** Mathematische Validierung und parallele Verarbeitung.
+* **[LiliShop](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/lilishop-unit-tests-xunit.md):** Unit-Tests in einer E-Commerce-Architektur.
+* **[Postman REST API Testing](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/postman-certification-completion.md):** Zertifizierte Erfahrung im Bereich API-Automatisierung.
+* **[Discount System Unit Tests](https://github.com/jahanalem/LiliShop-backend-dotnet-test/tree/main#discount-system-unit-tests--technical-documentation)**
+* **[Cypress End‑to‑End Testing](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0049_Cypress-Ent-to-End-Testing.md)**
+
 ## Die Leitfrage des Webinars
 
 Im Mittelpunkt stand die Frage, ob Keyword-Driven Testing (kurz: KDT) der **„Königsweg"** zum wirtschaftlichen Testen ist – also der beste und elegantste Weg, um Software effizient zu testen. Am Ende habe ich darauf eine klare, aber auch ehrliche Antwort gelernt, dazu komme ich am Schluss.
