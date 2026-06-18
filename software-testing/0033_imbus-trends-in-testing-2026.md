@@ -28,6 +28,7 @@ Einen Einblick in meine Arbeit mit **Unit-Tests (xUnit)** und API-Testing bieten
 * **[LiliShop](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/lilishop-unit-tests-xunit.md):** Unit-Tests in einer E-Commerce-Architektur.
 * **[Postman REST API Testing](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/postman-certification-completion.md):** Zertifizierte Erfahrung im Bereich API-Automatisierung.
 * **[Discount System Unit Tests](https://github.com/jahanalem/LiliShop-backend-dotnet-test/tree/main#discount-system-unit-tests--technical-documentation)**
+* **Cypress End‑to‑End Testing(https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0049_Cypress-Ent-to-End-Testing.md)**
 
 Ich bin fest davon überzeugt, dass Unit-Tests unverzichtbar sind. Gleichzeitig spielt **Künstliche Intelligenz** heute eine entscheidende Rolle dabei, Anwendungen noch sicherer, hochwertiger und leistungsfähiger zu machen. Um zu verstehen, wie KI das Testen von morgen verändert, habe ich die imbus-Konferenz besucht.
 
