@@ -131,3 +131,188 @@ In der Fragerunde kamen zwei sehr praktische Punkte:
 ## Mein persönliches Fazit
 
 Als Entwickler hatte ich beim Zuhören oft ein vertrautes Gefühl. Keyword-Driven Testing ist im Kern nichts anderes, als **gute Prinzipien aus der Softwareentwicklung auf das Testen zu übertragen**: Aufgaben trennen, Dinge wiederverwenden, sauber benennen und regelmäßig aufräumen. Vieles, was ich beim Programmieren ganz selbstverständlich mache, gilt hier eben für die Tests. Genau das macht das Thema für mich als Einsteiger gut zugänglich – und überraschend logisch.
+
+
+# 📘 Deutscher Fachwortschatz – Webinar „Keyword-Driven Testing"
+
+> **Berufsdeutsch B2–C1** · Vokabelliste aus dem imbus-Webinar (Rolf Glunz & Christian Kupfer)
+> Spalten: **Deutsch · English · فارسی · Beispielsatz (Deutsch)**
+
+---
+
+## 1. Substantive – Arbeit, Firma & Projekt
+
+| Deutsch | English | فارسی | Beispielsatz |
+| --- | --- | --- | --- |
+| die Vertriebsleitung | sales management | مدیریت فروش | Die Vertriebsleitung stellt das neue Produkt vor. |
+| die Geschäftsstellenleitung | branch office management | مدیریت شعبه | Er hat die Geschäftsstellenleitung in Frankfurt übernommen. |
+| die Veranstaltungsreihe | event series | مجموعه رویدادها | Dieses Webinar ist Teil einer Veranstaltungsreihe. |
+| die Qualitätssicherung | quality assurance | تضمین کیفیت | Die Qualitätssicherung prüft jede neue Version der Software. |
+| die Teamleitung | team leadership | سرپرستی تیم | Sie übernimmt die Teamleitung des Projekts. |
+| die Einführung | introduction / rollout | پیاده‌سازی، معرفی | Die Einführung des neuen Systems dauerte mehrere Monate. |
+| der Lösungsansatz | solution approach | رویکرد حل مسئله | Wir brauchen einen neuen Lösungsansatz für dieses Problem. |
+| die Zielsetzung | objective / goal-setting | هدف‌گذاری | Die Zielsetzung des Projekts ist klar definiert. |
+| der Geschäftsprozess | business process | فرایند کسب‌وکار | Jeder Geschäftsprozess wird durch eigene Tests abgedeckt. |
+| die Toollandschaft | tool landscape / tool ecosystem | اکوسیستم ابزارها | Die Toollandschaft im Unternehmen ist sehr komplex. |
+| die Synergie | synergy | هم‌افزایی | Durch die Zusammenarbeit entstehen wertvolle Synergien. |
+| die Nachverfolgbarkeit | traceability | قابلیت ردیابی | Die Nachverfolgbarkeit der Testfälle ist sehr wichtig. |
+| der Implementierungsaufwand | implementation effort | میزان تلاش لازم برای پیاده‌سازی | Der Implementierungsaufwand für diese Funktion ist hoch. |
+| der Reifegrad | maturity level | سطح بلوغ | Der Reifegrad der Testautomatisierung steigt mit der Zeit. |
+| die Arbeitsanweisung | work instruction | دستورالعمل کاری | Die Keywords dienen als klare Arbeitsanweisung für den Tester. |
+| der Fachbereich | department / specialist area | بخش تخصصی شرکت | Der Fachbereich versteht die Testfälle, ohne Code zu lesen. |
+| die Schnittstelle | interface | رابط، نقطه اتصال | An der Schnittstelle zwischen Technik und Fachbereich entstehen oft Missverständnisse. |
+| der Baustein | building block / module | بلوک سازنده | Jeder Testfall besteht aus wiederverwendbaren Bausteinen. |
+| die Hierarchie | hierarchy | سلسله‌مراتب | Eine zu tiefe Hierarchie macht das System unwartbar. |
+| die Namenskonvention | naming convention | استاندارد نام‌گذاری | Ohne klare Namenskonventionen entstehen schnell Redundanzen. |
+| die Governance | governance | حاکمیت، قوانین مدیریتی | Es braucht eine klare Governance, wer Keywords ändern darf. |
+| die Redundanz | redundancy | افزونگی، تکرار غیرضروری | Wir müssen die Redundanzen im Code eliminieren. |
+| das Refactoring | refactoring | بازسازی و بهبود ساختار کد | Regelmäßiges Refactoring hält die Keyword-Bibliothek sauber. |
+| die Wartungsphase | maintenance phase | مرحله نگهداری | Der eigentliche Nutzen zeigt sich erst in der Wartungsphase. |
+| der Initialaufwand | initial effort | هزینه و تلاش اولیه | Der Initialaufwand ist hoch, aber langfristig lohnt es sich. |
+| die Skalierung | scaling / scalability | مقیاس‌پذیری | Keyword-Driven Testing eignet sich gut für die Skalierung. |
+| die Investition | investment | سرمایه‌گذاری | Gute Tests sind eine Investition in die Zukunft. |
+| die Sackgasse | dead end | بن‌بست | Ohne Disziplin wird der Ansatz schnell zur Sackgasse. |
+| die Aufmerksamkeit | attention | توجه | Vielen Dank für Ihre Aufmerksamkeit. |
+| die Teilnahme | participation | مشارکت | Wir danken für die rege Teilnahme am Webinar. |
+
+---
+
+## 2. Verben
+
+| Deutsch | English | فارسی | Beispielsatz |
+| --- | --- | --- | --- |
+| umtreiben | to preoccupy / be on one's mind | ذهن کسی را مشغول کردن | Dieses Thema treibt uns schon lange um. |
+| preisgeben | to reveal / disclose | افشا کردن، در اختیار قرار دادن | Wir geben gerne einen Teil unseres Wissens preis. |
+| reingrätschen | to butt in / interrupt *(coll.)* | وسط صحبت پریدن | Wenn Sie eine Frage haben, grätschen Sie einfach rein. |
+| aufgeschmissen sein | to be stuck / helpless *(coll.)* | درمانده بودن | Ohne die Technik bin ich völlig aufgeschmissen. |
+| sich kümmern um | to take care of | رسیدگی کردن به | Wir kümmern uns gleich um den ersten Punkt. |
+| ansteuern | to control / drive / target | کنترل کردن، هدایت کردن | Das Skript steuert bestimmte Hardware-Zustände an. |
+| betreuen | to support / look after | پشتیبانی کردن، رسیدگی کردن | Wir betreuen eine große Lebensversicherung. |
+| sich umhören | to ask around / look around | جست‌وجو و پرس‌وجو کردن | Ich wollte mich umhören, was es Neues am Markt gibt. |
+| angehen | to tackle / address | پرداختن به، حل کردن | Keyword-Driven Testing geht diese Probleme an. |
+| nachvollziehen | to comprehend / follow | درک کردن، دنبال کردن | Es ist nicht immer leicht nachzuvollziehen, was der Test macht. |
+| rausziehen | to extract / pull out *(coll.)* | استخراج کردن | Daraus kann man wertvolle Synergien rausziehen. |
+| verschlagworten | to tag / index with keywords | برچسب‌گذاری کردن | Die Grundidee ist, Testschritte zu verschlagworten. |
+| kombinieren | to combine | ترکیب کردن | Wir kombinieren mehrere Keywords zu einem Testfall. |
+| aufführen | to list / itemize | فهرست کردن | Die Ziele sind hier noch einmal aufgeführt. |
+| verschachteln | to nest | تو در تو کردن | Man kann Keywords beliebig ineinander verschachteln. |
+| sich disziplinieren | to discipline oneself / restrain | منظم و محدود کردن | Man sollte sich bei der Anzahl der Schichten disziplinieren. |
+| umsetzen | to implement / put into practice | پیاده‌سازی کردن | Die Logik wird technisch über eine API umgesetzt. |
+| ausspielen | to leverage / play out (a strength) | به‌خوبی نشان دادن (توانایی) | Hier spielt der Ansatz seine Stärken voll aus. |
+| glauben | to believe / think | تصور کردن | Häufig wird geglaubt, Keywords lohnen sich erst beim Programmieren. |
+| eliminieren | to eliminate | حذف کردن | Damit eliminieren wir klassische Missverständnisse. |
+| standardisieren | to standardize | استانداردسازی کردن | Der manuelle Test wird dadurch standardisiert. |
+| ausformulieren | to formulate in detail / spell out | با جزئیات نوشتن | Wir haben keine schwammig ausformulierten Testschritte mehr. |
+| betreiben | to operate / run / pursue | اجرا کردن، به کار بردن | Wer Keyword-Driven Testing nachhaltig betreiben will, braucht Disziplin. |
+| sich beschränken auf | to limit / restrict oneself to | محدود کردن | Beschränken Sie sich auf maximal vier Schichten. |
+| benennen | to name | نام‌گذاری کردن | Keywords müssen eindeutig benannt sein. |
+| verändern | to change / modify | تغییر دادن | Wer darf die Keywords erstellen und verändern? |
+| entfernen | to remove | حذف کردن | Man muss veraltete Keywords regelmäßig entfernen. |
+| zusammenfassen | to summarize / merge / combine | ادغام و خلاصه کردن | Ähnliche Keywords kann man zusammenfassen. |
+| vernachlässigen | to neglect | نادیده گرفتن | Wenn man das Refactoring vernachlässigt, kollabiert das System. |
+| kollabieren | to collapse | فروپاشیدن | Irgendwann kollabiert das System unter seinem eigenen Gewicht. |
+| auslegen auf | to design (for a purpose) | طراحی کردن برای هدفی مشخص | Die TestBench ist genau auf diesen Lifecycle ausgelegt. |
+| abdecken | to cover | پوشش دادن | Die TestBench deckt den gesamten Lifecycle ab. |
+| sich einstellen | to materialize / occur | محقق شدن | Die Wirtschaftlichkeit stellt sich nicht am ersten Tag ein. |
+| schleifen lassen | to let slide / neglect | سهل‌انگاری کردن | Wenn man die Disziplin schleifen lässt, wird es eine Sackgasse. |
+
+---
+
+## 3. Adjektive & Adverbien
+
+| Deutsch | English | فارسی | Beispielsatz |
+| --- | --- | --- | --- |
+| ungünstig | unfavorable / awkward | نامناسب | Der blaue Hintergrund ist hier ziemlich ungünstig. |
+| umgehend | immediately / promptly | فوراً | Technische Details werden umgehend geklärt. |
+| tiefgreifend | profound / far-reaching | عمیق | Das war eine tiefgreifende Veränderung im Unternehmen. |
+| ineffizient | inefficient | ناکارآمد | Unsere alte Testautomatisierung war ineffizient. |
+| nachvollziehbar | comprehensible / understandable | قابل درک | Das Testziel ist nicht immer sofort nachvollziehbar. |
+| eindeutig | clear / unambiguous | واضح، بدون ابهام | Keywords müssen eindeutig benannt sein. |
+| fehleranfällig | error-prone | مستعد خطا | Handgeschriebene Testskripte sind oft fehleranfällig. |
+| nachhaltig | sustainable / lasting | پایدار | Wie setzt man Keyword-Driven Testing nachhaltig ein? |
+| wirtschaftlich | economical / cost-effective | مقرون‌به‌صرفه | Ist das wirklich der wirtschaftlichste Weg? |
+| wiederverwendbar | reusable | قابل استفاده مجدد | Wir bauen präzise, wiederverwendbare Bausteine. |
+| mäßig | moderate / mediocre | متوسط | Bei Capture & Replay ist die Klarheit nur mäßig. |
+| atomar | atomic / very granular | اتمی، بسیار جزئی | Im Low-Level stehen die atomaren Anweisungen. |
+| fachlich | technical (domain) / professional | تخصصی، حوزه کاری | Die Geschäftsprozesse bilden die fachliche Schicht. |
+| technologisch | technological | فناورانه | Die Interaktion mit dem System ist die technologische Schicht. |
+| massiv | massive / huge | بسیار زیاد | Das ist ein massiver Vorteil für die Automatisierung. |
+| strukturiert | structured | ساختارمند | High-Level-Keywords sind gut strukturierte Arbeitsanweisungen. |
+| verständlich | understandable | قابل فهم | Die Testfälle sind für jeden verständlich. |
+| schwammig | vague / wishy-washy | مبهم | Früher hatten wir schwammige Testschritte. |
+| präzise | precise | دقیق | Wir arbeiten mit präzisen Bausteinen. |
+| handfest | concrete / solid / tangible | ملموس، عملی | Jetzt kommen die handfesten Erfahrungen aus der Praxis. |
+| unwartbar | unmaintainable | غیرقابل نگهداری | Zu viele Ebenen machen das System unwartbar. |
+| veraltet | outdated / obsolete | قدیمی | Veraltete Keywords muss man entfernen. |
+| langfristig | long-term | بلندمدت | Langfristig lohnt sich die Investition. |
+| simpel | simple | ساده | Eine simple direkte Programmierung ist am Anfang schneller. |
+| kontinuierlich | continuous(ly) | پیوسته | Wenn Sie kontinuierlich aufräumen, bleibt der Aufwand klein. |
+| dediziert | dedicated | اختصاصی | Man sollte dafür dedizierte Zeiten einplanen. |
+| proprietär | proprietary | اختصاصی (متعلق به یک شرکت) | Wir nutzen ein proprietäres Testsystem. |
+
+---
+
+## 4. Redewendungen & feste Wendungen
+
+| Deutsch | English | فارسی | Beispielsatz |
+| --- | --- | --- | --- |
+| einen Überblick haben | to have an overview | دید کلی داشتن | Wir wollen einen kurzen Überblick über das Thema haben. |
+| in Interaktion treten | to interact / engage | وارد تعامل شدن | Im Live-Webinar können wir in Interaktion treten. |
+| einen Blick auf etwas werfen | to take a look at sth | نگاهی به چیزی انداختن | Werfen wir einen Blick auf die Tools und Frameworks. |
+| unter einen Hut bringen | to reconcile / bring together | هماهنگ و یکپارچه کردن | Keyword-Driven Testing bringt alle Ziele unter einen Hut. |
+| sich Gedanken machen | to think carefully / consider | فکر کردن، برنامه‌ریزی کردن | Man muss sich vorher ein paar Gedanken machen. |
+| auf etwas Wert legen | to value sth / attach importance | برای چیزی اهمیت قائل شدن | Wir legen großen Wert auf Wiederverwendbarkeit. |
+| den Überblick behalten | to keep track / stay on top | کنترل و اشراف داشتن | In großen Teams ist es schwer, den Überblick zu behalten. |
+| eine niedrige Einstiegshürde haben | to have a low barrier to entry | مانع ورود کمی داشتن | Capture & Replay hat eine niedrige Einstiegshürde. |
+| ein Dilemma lösen | to solve a dilemma | یک دوراهی یا مشکل پیچیده را حل کردن | Die mehrschichtige Spezifikation löst dieses Dilemma. |
+| seine Stärken ausspielen | to play to one's strengths | نقاط قوت خود را نشان دادن | Im manuellen Test spielt der Ansatz seine Stärken aus. |
+| ein Trugschluss sein | to be a fallacy / misconception | یک برداشت اشتباه بودن | Das ist ein Trugschluss. |
+| im Detail stecken | (the devil) is in the details | در جزئیات نهفته بودن | Der Teufel steckt wie immer im Detail. |
+| das Rad neu erfinden | to reinvent the wheel | دوباره اختراع کردن چیزی که از قبل وجود دارد | Sie müssen das Rad nicht neu erfinden. |
+| unter seinem eigenen Gewicht kollabieren | to collapse under its own weight | زیر بار پیچیدگی خودش فروپاشیدن | Sonst kollabiert das System unter seinem eigenen Gewicht. |
+| in der Praxis | in practice | در عمل | Wie groß ist der Aufwand in der Praxis? |
+| den langen Atem haben | to have staying power / persevere | صبر و پشتکار بلندمدت داشتن | Man braucht einen langen Atem für solche Projekte. |
+| sich nicht am ersten Tag einstellen | not to happen on day one | فوراً حاصل نشدن | Die Wirtschaftlichkeit stellt sich nicht am ersten Tag ein. |
+| sich perfekt ergänzen | to complement each other perfectly | کاملاً مکمل هم بودن | Python und Keywords ergänzen sich perfekt. |
+
+---
+
+## 5. Konnektoren & Signalwörter
+
+| Deutsch | English | فارسی | Beispielsatz |
+| --- | --- | --- | --- |
+| grundsätzlich | basically / in principle | اساساً | Grundsätzlich ist es ein Live-Webinar. |
+| dementsprechend | accordingly / therefore | بر این اساس، در نتیجه | Es ist ein Live-Webinar; dementsprechend können wir interagieren. |
+| häufig | often / frequently | اغلب | Das ist häufig ein Problem in der Testautomatisierung. |
+| üblicherweise | usually | معمولاً | Die Dokumentation führt man üblicherweise zentral. |
+| entsprechend | correspondingly / accordingly | متناسب با آن | Die Skripte müssen entsprechend gewartet werden. |
+| letzten Endes | ultimately / in the end | در نهایت | Letzten Endes ist das mein Testfall. |
+| letztendlich | ultimately / after all | در نهایت، بالأخره | Letztendlich kommt es auf das Konzept an, nicht auf das Tool. |
+| beispielsweise | for example | برای مثال | Beispielsweise ist das Anlegen eines Nutzers ein Keyword. |
+| hinsichtlich | regarding / with respect to | از نظر، در خصوص | Hinsichtlich der Wartbarkeit ist der Ansatz überlegen. |
+| durchaus | quite / absolutely / indeed | کاملاً، واقعاً | Das kann durchaus sehr stark sein. |
+
+---
+
+## 6. ⭐ Bonus – weitere nützliche Begriffe aus dem Transkript
+
+> Diese Wörter standen nicht in den ChatGPT-Listen, sind aber im Webinar gefallen und sehr lohnenswert.
+
+| Deutsch | English | فارسی | Beispielsatz |
+| --- | --- | --- | --- |
+| der Königsweg | the royal road / ideal solution | راه‌حل ایده‌آل | Ist Keyword-Driven Testing der Königsweg zum wirtschaftlichen Testen? |
+| der Wildwuchs | uncontrolled growth / sprawl | رشد بی‌نظم و افسارگسیخته | Ohne Konventionen entsteht schnell ein großer Wildwuchs. |
+| die Wartbarkeit | maintainability | قابلیت نگهداری | Eine gute Wartbarkeit ist eines der Hauptziele. |
+| der Wartungsaufwand | maintenance effort | هزینه نگهداری | Handgeschriebener Code verursacht hohen Wartungsaufwand. |
+| das Schlüsselwort | keyword | کلیدواژه | Ein Schlüsselwort ist die deutsche Bezeichnung für ein Keyword. |
+| die Schicht | layer | لایه | Wir empfehlen maximal drei oder vier Schichten. |
+| die Wiederverwendbarkeit | reusability | قابلیت استفاده مجدد | Die Wiederverwendbarkeit ist ein großer Vorteil des Ansatzes. |
+| der Übergabeparameter | parameter / argument | پارامتر ورودی | Benutzername und Passwort sind Übergabeparameter. |
+| das Schmankerl | a (special) treat / bonus *(coll.)* | یک چیز ویژه و جذاب | Als kleines Schmankerl zeigen wir noch einige Best Practices. |
+
+---
+
+### 📝 Lerntipp
+
+Beginne mit **Abschnitt 5 (Konnektoren)** und den **Redewendungen** – diese hörst du in fast jedem Meeting. Bilde danach mit jedem neuen Wort einen eigenen Satz aus deinem Arbeitsalltag (z. B. über LiliShop oder Angular). So bleibt der Wortschatz besser hängen.
+
