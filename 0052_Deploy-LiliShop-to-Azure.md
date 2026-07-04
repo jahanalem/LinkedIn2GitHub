@@ -69,7 +69,8 @@ If LiliShop ever became a team project with multiple environments, I'd switch to
 3. On the **Overview** page, click **Get publish profile** in the top toolbar.
 4. A file with a `.PublishSettings` extension downloads automatically.
 
-![Get publish profile button in the Azure Portal](images/01-get-publish-profile.png)
+<img width="1379" height="228" alt="01-get-publish-profile" src="https://github.com/user-attachments/assets/3ba2176a-d1e7-4fbf-a46a-859ee7921d55" />
+
 
 That file is basically a password — full deploy access to this one App Service. I don't commit it anywhere; it goes straight into a GitHub secret in the next step.
 
@@ -83,7 +84,8 @@ That file is basically a password — full deploy access to this one App Service
 4. Open the downloaded `.PublishSettings` file in a text editor, copy the **entire XML content**, and paste it as the secret's value.
 5. Click **Add secret**.
 
-![Adding the AZURE_PUBLISH_PROFILE secret in GitHub](images/02-add-publish-profile-secret.png)
+<img width="1380" height="713" alt="02-add-publish-profile-secret" src="https://github.com/user-attachments/assets/aa961dbf-6f1e-4f4f-8b63-a71278a86f9b" />
+
 
 From here, the workflow references it as `${{ secrets.AZURE_PUBLISH_PROFILE }}`. GitHub encrypts it at rest and only decrypts it inside the running job — it never shows up in logs.
 
@@ -103,11 +105,13 @@ The default `GITHUB_TOKEN` that every workflow gets automatically only has permi
 4. Under scopes, check **repo** (to clone) and **workflow** (needed since the token touches an Actions-related checkout).
 5. Click **Generate token**, and copy it immediately — GitHub only shows it once.
 
-![Generating a classic Personal Access Token on GitHub](images/03-generate-pat-token.png)
+<img width="1380" height="775" alt="03-generate-pat-token" src="https://github.com/user-attachments/assets/3735bf4b-5034-4bd7-8b8e-10096e7acef8" />
+
 
 **Saving it as a secret**, same as before: backend repo → **Settings → Secrets and variables → Actions → New repository secret**, named `GH_PAT`.
 
-![Adding the GH_PAT secret in GitHub](images/04-add-pat-secret.png)
+<img width="1379" height="320" alt="04-add-pat-secret" src="https://github.com/user-attachments/assets/e1ec5cce-c8a7-46b5-93be-e2bf0fb8c972" />
+
 
 In the workflow, it's used as the `token` input on the checkout step for the frontend repo — that's the part that turns an anonymous clone attempt into an authenticated one.
 
@@ -250,7 +254,7 @@ That "value" isn't a real setting — it's a note to myself, spelling out the ex
 
 Every other nested setting follows the exact same pattern — two underscores wherever there'd be a colon.
 
-![App settings and connection strings in the Azure Portal](images/05-app-service-configuration.png)
+<img width="1379" height="605" alt="05-app-service-configuration" src="https://github.com/user-attachments/assets/737c1794-c603-460a-8fb3-f3b40cf55a6c" />
 
 **Connection strings work a bit differently.** Notice they don't get the `Section__Key` reminder prefix in my placeholder file — that's on purpose. Azure has a dedicated **Connection strings** tab (separate from App settings), and whatever type you pick there (SQL Database, Custom, etc.) determines an internal prefix that .NET's configuration system strips off automatically, landing it in `ConnectionStrings:<Name>` without me doing anything extra:
 
