@@ -19,6 +19,7 @@ I'm skipping the very basic Azure steps here (creating a resource group, creatin
 - [Step 2 — Saving It as a GitHub Secret](#step-2--saving-it-as-a-github-secret)
 - [Step 3 — The Multi-Repo Problem: Pulling in the Angular Frontend](#step-3--the-multi-repo-problem-pulling-in-the-angular-frontend)
 - [Step 4 — The Workflow File, Step by Step](#step-4--the-workflow-file-step-by-step)
+  - 📄 Companion deep-dive: [Understanding GitHub Actions: A Line-by-Line Guide to `main_lilishop.yml`](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/Learning/github-actions-workflow-explained.md)
 - [Step 5 — Keeping Secrets Out of appsettings.json](#step-5--keeping-secrets-out-of-appsettingsjson)
 - [Step 6 — Pushing It and Checking It Worked](#step-6--pushing-it-and-checking-it-worked)
 - [A Few Things I Learned Along the Way](#a-few-things-i-learned-along-the-way)
