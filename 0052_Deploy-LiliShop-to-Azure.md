@@ -218,8 +218,6 @@ A few notes on the choices in here:
 - **The `browser` subfolder** — since Angular 17, `ng build` outputs into a `browser` folder by default (this exists to support server-side rendering setups, even though I'm not using SSR here). That's why the copy step specifically targets `ClientBuildOutput\browser\*`.
 - **No separate Azure login step** — because I'm using a publish profile, `azure/webapps-deploy` authenticates on its own. There's nothing to log into beforehand.
 
-One small thing I noticed while writing this up: my `deploy` job still has `permissions: id-token: write` left over from when I was experimenting with OIDC. It's not doing anything now that I've switched to a publish profile — harmless to leave, but safe to delete too.
-
 ---
 
 ## Step 5 — Keeping Secrets Out of appsettings.json
@@ -297,7 +295,6 @@ If the site loads but anything touching the database or Stripe fails, it's almos
 - **Two repos, one deployment, is very doable** — it just needs a PAT with the right scopes, and a clear mental model of which token can access what.
 - **Set a calendar reminder for PAT expiration.** Classic tokens with an expiry date are safer, but they will silently break your deploys the day they expire if you forget about them.
 - **The double-underscore convention removed almost all my "how do I get this secret into Azure" confusion.** Once I understood the pattern, every new setting just followed the same rule.
-- **Leftover config from earlier experiments (like my stray `id-token: write` permission) is easy to miss.** Worth a once-over on the workflow file every so often.
 
 ---
 
