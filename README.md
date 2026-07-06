@@ -13,6 +13,9 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### 53. How I Deployed LiliShop to Azure
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0052_Deploy-LiliShop-to-Azure.md)
+
 ### 52. Migrating LiliShop to Angular 22: A Practical Report
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0050_lilishop-angular-22-migration.md)
 
