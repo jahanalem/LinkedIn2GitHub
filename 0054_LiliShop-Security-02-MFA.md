@@ -547,64 +547,6 @@ sequenceDiagram
 > [!NOTE]
 > **Enrollment ≠ login.** At the end of enrollment, the admin still has **no token** — enabling MFA and logging in are deliberately separate. After saving recovery codes, they're sent to the verify screen to log in with a *fresh* code. This ensures that even right after setup, they prove they can produce a live code.
 
-#### Step 2 — `EnableAuthenticatorAsync` (confirm & turn on)
-
-```csharp
-public virtual async Task<OperationResult<EnableAuthenticatorResultDto>> EnableAuthenticatorAsync(EnableAuthenticatorDto dto)
-{
-    var user = await AuthenticateForMfaEnrolmentAsync(dto.Email, dto.Password);
-    if (user is null)
-    {
-        return OperationResult.Failure<EnableAuthenticatorResultDto>(ErrorCode.InvalidPassword, "Invalid email or password.");
-    }
-
-    var isValid = await _userManager.VerifyTwoFactorTokenAsync(
-        user, _userManager.Options.Tokens.AuthenticatorTokenProvider, NormalizeCode(dto.Code));
-
-    if (!isValid)
-    {
-        return OperationResult.Failure<EnableAuthenticatorResultDto>(ErrorCode.InvalidData, "Verification code is invalid. Please try again.");
-    }
-
-    var enableResult = await _userManager.SetTwoFactorEnabledAsync(user, true);
-    if (!enableResult.Succeeded)
-    {
-        return OperationResult.Failure<EnableAuthenticatorResultDto>(ErrorCode.UpdateOperationFailed, "Failed to enable two-factor authentication.");
-    }
-
-    _logger.LogInformation("Two-factor authentication enabled. UserId={UserId}", user.Id);
-
-    var recoveryCodes = await _userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
-
-    return OperationResult.Success<EnableAuthenticatorResultDto>(new EnableAuthenticatorResultDto
-    {
-        RecoveryCodes = recoveryCodes?.ToArray() ?? Array.Empty<string>()
-    });
-}
-```
-
-Step by step:
-
-1. **Re-verify the password** *again* (yes, again — see the box below).
-2. **`VerifyTwoFactorTokenAsync`** checks the 6-digit code the user typed. This proves the phone was set up correctly — they couldn't produce a valid code otherwise.
-3. **`SetTwoFactorEnabledAsync(user, true)`** flips the `TwoFactorEnabled` flag on the user's row to `true`. From this moment, that admin's future logins will demand a code.
-4. **`GenerateNewTwoFactorRecoveryCodesAsync(user, 10)`** creates 10 recovery codes and returns them (covered in Section 5.4).
-
-> [!IMPORTANT]
-> **Why re-check the password in *both* steps (and again at final login)?** Look at the helper's comment:
-> ```csharp
-> /// Re-authenticates a user by email + password for the MFA enrolment endpoints (which are reached
-> /// before a token exists). Honours account lockout. Returns null on any failure.
-> private async Task<ApplicationUser?> AuthenticateForMfaEnrolmentAsync(string email, string password)
-> {
->     var user = await _userManager.FindByEmailAsync(email);
->     if (user is null) return null;
->     var passwordCheck = await _signInManager.CheckPasswordSignInAsync(user, password, lockoutOnFailure: true);
->     return passwordCheck.Succeeded ? user : null;
-> }
-> ```
-> The key phrase is **"reached before a token exists."** Normally the server knows who you are from your login token — but enrollment happens *before* any token exists. So the only way the server can know who's calling is to re-verify the password on each request. This is the **secure, stateless** choice: the server never has to *remember* "this person passed step 1," which would mean storing exploitable pending state. Each step proves itself independently. Notice too that `lockoutOnFailure: true` means even these enrollment endpoints respect the account-lockout protection — an attacker can't hammer them with password guesses.
-
 Here's the full enrollment flow visualized:
 
 ```mermaid
