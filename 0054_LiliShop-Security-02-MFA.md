@@ -547,38 +547,6 @@ sequenceDiagram
 > [!NOTE]
 > **Enrollment ≠ login.** At the end of enrollment, the admin still has **no token** — enabling MFA and logging in are deliberately separate. After saving recovery codes, they're sent to the verify screen to log in with a *fresh* code. This ensures that even right after setup, they prove they can produce a live code.
 
-Here's the full enrollment flow visualized:
-
-```mermaid
-sequenceDiagram
-    participant U as 👤 Admin
-    participant FE as 🖥️ mfa-setup.component
-    participant BE as ⚙️ Backend
-    participant DB as 🗄️ Database
-
-    Note over U,DB: STEP 1 — Get the QR code
-    FE->>BE: POST /account/mfa/setup {email, password}
-    BE->>BE: Re-verify password
-    BE->>DB: Create & save secret (if none exists)
-    BE-->>FE: {sharedKey, authenticatorUri}
-    FE->>FE: Render QR from authenticatorUri
-    U->>U: Scan QR → phone now shows a 6-digit code
-
-    Note over U,DB: STEP 2 — Confirm & enable
-    U->>FE: Type the 6-digit code
-    FE->>BE: POST /account/mfa/enable {email, password, code}
-    BE->>BE: Re-verify password AGAIN
-    BE->>DB: Verify code against the secret
-    BE->>DB: Set TwoFactorEnabled = true
-    BE->>DB: Generate 10 recovery codes
-    BE-->>FE: {recoveryCodes}
-    FE->>U: Show recovery codes + "I have saved these" gate
-```
-
-> [!NOTE]
-> **Enrollment ≠ login.** At the end of enrollment, the admin still has **no token** — enabling MFA and logging in are deliberately separate. After saving recovery codes, they're sent to the verify screen to log in with a *fresh* code. This ensures that even right after setup, they prove they can produce a live code.
-
-
 ### 5.3 The Login Gate: Enforcing MFA
 
 Now the login side. This is where an admin's password-correct login gets checked for MFA *before* any token is issued. It lives inside `LoginAsync`, the same method that handles every login. Here's the relevant portion:
