@@ -551,7 +551,20 @@ sequenceDiagram
 
 ### 5.3 The Login Gate: Enforcing MFA
 
-Now the login side. This is where an admin's password-correct login gets checked for MFA *before* any token is issued. It lives inside `LoginAsync`, the same method that handles every login. Here's the relevant portion:
+Now the login side. This is where an admin's password-correct login gets checked for MFA *before* any token is issued. It lives inside `LoginAsync`, the same method that handles every login.
+
+Before looking at the code, here's the shape of the decision LiliShop makes on every login attempt, once the password and lockout checks (covered in the brute-force protection document) have already passed:
+
+```mermaid
+flowchart TD
+    A[Password correct] --> B{Does this role require MFA}
+    B -->|No| C[Issue the JWT token]
+    B -->|Yes| D{Verify the MFA code}
+    D -->|Valid code| C
+    D -->|Missing or invalid code| E[Stop here, no token issued]
+```
+
+Here's the relevant portion of the real code:
 
 ```csharp
 public virtual async Task<OperationResult<UserDto>> LoginAsync(LoginDto loginDto)
@@ -587,7 +600,8 @@ public virtual async Task<OperationResult<UserDto>> LoginAsync(LoginDto loginDto
 }
 ```
 
-The critical ordering: **password is checked first, then MFA, then (only if both pass) a token is issued.** The MFA gate sits squarely between "password correct" and "here's your token."
+> [!IMPORTANT]
+> Notice the ordering above: **no JWT token is ever created until every required authentication step — password, lockout, and (for admins) MFA — has completed successfully.** There is no code path where a partially-authenticated admin can slip through with a token. This is the single most important security guarantee this section makes.
 
 **Which roles need MFA** — a tiny helper:
 
@@ -596,7 +610,12 @@ private static bool IsMfaRequiredForRole(string role)
     => role == Role.Administrator || role == Role.SuperAdmin;
 ```
 
-**The gate itself** — `EnforceAdminMfaAsync`. Read the summary comment carefully; it explains the return contract:
+**The gate itself** — `EnforceAdminMfaAsync`. This method doesn't behave like a typical method that always returns a clear success or failure — its return value carries a special meaning of its own:
+
+- A **non-null** `OperationResult` means "stop immediately — login cannot continue."
+- **`null`** is the *only* value that means "MFA has been fully satisfied — `LoginAsync`, go ahead and issue the token."
+
+Read the summary comment on the method itself; it states this contract directly:
 
 ```csharp
 /// Enforces the admin MFA policy. Returns a non-null result when login must NOT continue:
@@ -637,13 +656,14 @@ private async Task<OperationResult<UserDto>?> EnforceAdminMfaAsync(ApplicationUs
 }
 ```
 
-This method has three possible paths, read top to bottom:
+Here's every path through this method, and exactly what each one returns:
 
-1. **MFA not enrolled yet?** → return a "setup required" pending response (no token). The admin needs to enroll first.
-2. **Enrolled, but no code was sent?** → return a "code required" pending response (no token). The admin needs to enter their code.
-3. **A code was sent?** → verify it. If the TOTP is valid *or* a recovery code redeems successfully, return `null` (meaning "proceed, issue the token"). If both fail, return an invalid-code failure.
-
-The `null` return is the "all clear" signal — it's how the gate tells `LoginAsync` "MFA is satisfied, go ahead."
+| Situation | What's returned | Effect on `LoginAsync` |
+|---|---|---|
+| MFA not enrolled yet | `OperationResult` with `RequiresTwoFactorSetup = true` | Stops here — no token issued |
+| Enrolled, but no code was sent | `OperationResult` with `RequiresTwoFactorCode = true` | Stops here — no token issued |
+| A valid TOTP or recovery code was sent | `null` | `LoginAsync` continues and issues the token |
+| An invalid code was sent | `OperationResult` failure | Stops here — no token issued |
 
 **Understanding `VerifyTwoFactorTokenAsync`** — this is the line that checks the code:
 
@@ -657,7 +677,9 @@ Internally, this does exactly the "twins" calculation from Section 4:
 2. Reads the server's current time.
 3. Recalculates what the correct 6-digit code should be right now (checking the previous/next slice too, for clock drift).
 4. Compares its own answer to `normalizedCode`.
-5. Returns `true` if they match. **It never contacts the phone.**
+5. Returns `true` if they match. **It never contacts the phone.** The phone and the server never communicate with each other at all — each independently runs the same calculation using the shared secret and the current time.
+
+If this check fails, the code falls back to `RedeemTwoFactorRecoveryCodeAsync` (the full mechanics are covered in Section 5.4). Worth knowing right here too: a successful redemption immediately consumes that recovery code, removing it from the account's valid list so it can never be used a second time.
 
 **A small thoughtful touch — `NormalizeCode`:**
 
@@ -666,7 +688,25 @@ private static string NormalizeCode(string code)
     => code.Replace(" ", string.Empty).Replace("-", string.Empty);
 ```
 
-This strips spaces and dashes before verifying, so a user who types `483 920` or `483-920` still succeeds. Small, but it prevents needless "invalid code" frustration.
+This means all of these inputs:
+
+```
+483920
+483 920
+483-920
+```
+
+normalize to the exact same value before being checked:
+
+```
+483920
+```
+
+Small, but it prevents needless "invalid code" frustration from a stray space or dash.
+
+---
+
+You can think of `EnforceAdminMfaAsync` as a **security gate** placed immediately before token issuance. Passing the password check gets an administrator to the gate; passing MFA is what opens it.
 
 ### 5.4 The Recovery Code Fallback
 
