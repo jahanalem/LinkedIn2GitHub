@@ -460,6 +460,8 @@ flowchart TD
 
 #### Step 2 — `EnableAuthenticatorAsync` (confirm & turn on)
 
+At this point the user already has the QR code from Step 1 and has scanned it — their authenticator app is now generating live 6-digit codes. This step asks them to submit one of those codes back to the server, proving the setup actually worked, before MFA is switched on for real.
+
 ```csharp
 public virtual async Task<OperationResult<EnableAuthenticatorResultDto>> EnableAuthenticatorAsync(EnableAuthenticatorDto dto)
 {
@@ -496,10 +498,10 @@ public virtual async Task<OperationResult<EnableAuthenticatorResultDto>> EnableA
 
 Step by step:
 
-1. **Re-verify the password** *again* (yes, again — see the box below).
-2. **`VerifyTwoFactorTokenAsync`** checks the 6-digit code the user typed. This proves the phone was set up correctly — they couldn't produce a valid code otherwise.
-3. **`SetTwoFactorEnabledAsync(user, true)`** flips the `TwoFactorEnabled` flag on the user's row to `true`. From this moment, that admin's future logins will demand a code.
-4. **`GenerateNewTwoFactorRecoveryCodesAsync(user, 10)`** creates 10 recovery codes and returns them (covered in Section 5.4).
+1. **Re-verify the password** *again* (yes, again — see the callout below for why).
+2. **`VerifyTwoFactorTokenAsync`** checks the 6-digit code the user typed. This isn't the server blindly trusting whatever the user submits — it's the server independently recalculating what the correct code *should* be right now, using the secret it already has stored (the exact same TOTP math from Section 4), and checking whether that matches what was typed. If they match, it proves the phone really was set up with the right secret — a wrong or fabricated code simply won't compute to the same number.
+3. **`SetTwoFactorEnabledAsync(user, true)`** flips the `TwoFactorEnabled` column on the user's row in `AspNetUsers` from `false` to `true`. This single value is what changes everything about future logins — from this moment on, the MFA gate in `EnforceAdminMfaAsync` (Section 5.3) will demand a valid code from this admin every time they log in.
+4. **`GenerateNewTwoFactorRecoveryCodesAsync(user, 10)`** creates 10 one-time emergency backup codes — each one can stand in for a phone code exactly once, if the device is ever lost. They're returned here and shown to the user **only once**; once this screen is left, the same codes can never be retrieved again. (The full mechanics — why they're stored hashed, how the login fallback uses them — are covered in Section 5.4.)
 
 > [!IMPORTANT]
 > **Why re-check the password in *both* steps (and again at final login)?** Look at the helper's comment:
