@@ -345,11 +345,15 @@ public class EnableAuthenticatorResultDto
 
 ### 5.2 Enrollment: Getting Set Up (Two Steps)
 
-Enrollment is the first-time setup an admin goes through before MFA is active. It faces a subtle problem: **to set up MFA, the admin must prove who they are — but they can't log in yet**, because an admin without MFA can't get a token. It's a chicken-and-egg situation:
+**Enrollment** is the one-time process of registering an authenticator app (such as Google Authenticator or Microsoft Authenticator) with a user's account. Once enrollment is complete, both the server and the phone hold the same secret and can independently generate matching TOTP codes, exactly as described in Section 4.
+
+Enrollment faces a subtle problem:
 
 > "To log in, you need MFA. To set up MFA, you need to be logged in."
 
-LiliShop breaks this loop by having the enrollment endpoints **re-verify the password directly** each time, instead of requiring a token. Enrollment happens across two endpoints.
+This is a chicken-and-egg problem: admins must use MFA before they can receive a token, but they can't configure MFA without a token to prove who they are in the first place.
+
+LiliShop breaks this loop by having the enrollment endpoints **re-verify the password directly**, instead of requiring a token. Enrollment happens across two endpoints.
 
 #### Step 1 — `GetAuthenticatorSetupAsync` (get the QR)
 
@@ -387,11 +391,18 @@ Step by step:
 
 1. **Re-verify the password** (via the helper, explained below). No token required.
 2. **`GetAuthenticatorKeyAsync`** asks: does this user already have a secret? If not...
-3. **`ResetAuthenticatorKeyAsync`** generates a brand-new random secret and saves it to the database, then fetches it back. **This is the moment the secret is born.**
+3. **`ResetAuthenticatorKeyAsync`** generates a brand-new random secret and saves it to the database, then fetches it back. **This is the moment the secret is born — at this point it exists only on the server, not yet on the phone.**
 4. **`BuildAuthenticatorUri`** wraps the secret in the special `otpauth://` format the phone understands (see below).
-5. Return the secret (`SharedKey`, for manual entry) and the URI (`AuthenticatorUri`, for the QR).
+5. Return the secret (`SharedKey`) and the URI (`AuthenticatorUri`).
 
-**Where is the secret stored?** In a table ASP.NET Core Identity manages automatically, `AspNetUserTokens`. A row looks like:
+**Why does the response include both `SharedKey` and `AuthenticatorUri`?** They look different, but they hold **exactly the same secret** — just in two formats:
+
+| Field | Format | Purpose |
+|---|---|---|
+| `SharedKey` | Raw Base32 text | For manual typing, if the user can't scan a QR |
+| `AuthenticatorUri` | An `otpauth://` link wrapping the same secret | For rendering as a QR code |
+
+**Where is the secret stored?** In a table ASP.NET Core Identity manages automatically, `AspNetUserTokens` — deliberately *not* in the `AspNetUsers` table itself, since `AspNetUserTokens` is Identity's general-purpose place for storing different kinds of per-user tokens in a consistent way. A row looks like:
 
 | UserId | LoginProvider | Name | Value |
 |---|---|---|---|
@@ -426,7 +437,115 @@ Every part has a job:
 | `issuer=LiliShop` | Who issued it (for display) |
 | `digits=6` | The code should be 6 digits |
 
-When the phone scans the QR made from this string, it extracts `secret=` and stores it. **This is the one and only moment the secret travels to the phone.**
+> [!WARNING]
+> This URI contains the secret **in plain text**. It must never be written to application logs, error messages, or analytics — and it should only ever be sent to the one authenticated user completing enrollment, never displayed or transmitted anywhere else.
+
+When the phone scans the QR made from this string, it extracts `secret=` and stores it. **This is the one and only moment the secret travels to the phone.** After that, neither side ever sends the secret again — the phone keeps its copy, the server keeps its copy, and (as covered in Section 4) both independently generate matching 6-digit codes from that shared secret and the current time.
+
+Here's the secret's full journey, from birth to first use:
+
+```mermaid
+flowchart TD
+    A["Admin submits email and password"] --> B["Backend re-verifies credentials"]
+    B --> C["No existing secret found"]
+    C --> D["A new random secret is generated"]
+    D --> E["Secret saved in AspNetUserTokens"]
+    E --> F["Secret wrapped in an otpauth link"]
+    F --> G["SharedKey and AuthenticatorUri returned"]
+    G --> H["Frontend renders the QR code"]
+    H --> I["User scans the QR with their phone"]
+    I --> J["Authenticator app stores its own copy of the secret"]
+    J --> K["Both sides can now generate matching six-digit codes"]
+```
+
+#### Step 2 — `EnableAuthenticatorAsync` (confirm & turn on)
+
+```csharp
+public virtual async Task<OperationResult<EnableAuthenticatorResultDto>> EnableAuthenticatorAsync(EnableAuthenticatorDto dto)
+{
+    var user = await AuthenticateForMfaEnrolmentAsync(dto.Email, dto.Password);
+    if (user is null)
+    {
+        return OperationResult.Failure<EnableAuthenticatorResultDto>(ErrorCode.InvalidPassword, "Invalid email or password.");
+    }
+
+    var isValid = await _userManager.VerifyTwoFactorTokenAsync(
+        user, _userManager.Options.Tokens.AuthenticatorTokenProvider, NormalizeCode(dto.Code));
+
+    if (!isValid)
+    {
+        return OperationResult.Failure<EnableAuthenticatorResultDto>(ErrorCode.InvalidData, "Verification code is invalid. Please try again.");
+    }
+
+    var enableResult = await _userManager.SetTwoFactorEnabledAsync(user, true);
+    if (!enableResult.Succeeded)
+    {
+        return OperationResult.Failure<EnableAuthenticatorResultDto>(ErrorCode.UpdateOperationFailed, "Failed to enable two-factor authentication.");
+    }
+
+    _logger.LogInformation("Two-factor authentication enabled. UserId={UserId}", user.Id);
+
+    var recoveryCodes = await _userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
+
+    return OperationResult.Success<EnableAuthenticatorResultDto>(new EnableAuthenticatorResultDto
+    {
+        RecoveryCodes = recoveryCodes?.ToArray() ?? Array.Empty<string>()
+    });
+}
+```
+
+Step by step:
+
+1. **Re-verify the password** *again* (yes, again — see the box below).
+2. **`VerifyTwoFactorTokenAsync`** checks the 6-digit code the user typed. This proves the phone was set up correctly — they couldn't produce a valid code otherwise.
+3. **`SetTwoFactorEnabledAsync(user, true)`** flips the `TwoFactorEnabled` flag on the user's row to `true`. From this moment, that admin's future logins will demand a code.
+4. **`GenerateNewTwoFactorRecoveryCodesAsync(user, 10)`** creates 10 recovery codes and returns them (covered in Section 5.4).
+
+> [!IMPORTANT]
+> **Why re-check the password in *both* steps (and again at final login)?** Look at the helper's comment:
+> ```csharp
+> /// Re-authenticates a user by email + password for the MFA enrolment endpoints (which are reached
+> /// before a token exists). Honours account lockout. Returns null on any failure.
+> private async Task<ApplicationUser?> AuthenticateForMfaEnrolmentAsync(string email, string password)
+> {
+>     var user = await _userManager.FindByEmailAsync(email);
+>     if (user is null) return null;
+>     var passwordCheck = await _signInManager.CheckPasswordSignInAsync(user, password, lockoutOnFailure: true);
+>     return passwordCheck.Succeeded ? user : null;
+> }
+> ```
+> The key phrase is **"reached before a token exists."** Normally the server knows who you are from your login token — but enrollment happens *before* any token exists. So the only way the server can know who's calling is to re-verify the password on each request. This is the **secure, stateless** choice: the server never has to *remember* "this person passed step 1," which would mean storing exploitable pending state. Each step proves itself independently. Notice too that `lockoutOnFailure: true` means even these enrollment endpoints respect the account-lockout protection — an attacker can't hammer them with password guesses.
+
+Here's the full enrollment flow, showing how the two endpoints fit together as one HTTP conversation:
+
+```mermaid
+sequenceDiagram
+    participant U as 👤 Admin
+    participant FE as 🖥️ mfa-setup.component
+    participant BE as ⚙️ Backend
+    participant DB as 🗄️ Database
+
+    Note over U,DB: STEP 1, get the QR code
+    FE->>BE: POST account/mfa/setup with email and password
+    BE->>BE: Re-verify password
+    BE->>DB: Create and save secret, if none exists
+    BE-->>FE: sharedKey and authenticatorUri
+    FE->>FE: Render QR from authenticatorUri
+    U->>U: Scan QR, phone now shows a six-digit code
+
+    Note over U,DB: STEP 2, confirm and enable
+    U->>FE: Type the six-digit code
+    FE->>BE: POST account/mfa/enable with email, password, and code
+    BE->>BE: Re-verify password again
+    BE->>DB: Verify code against the secret
+    BE->>DB: Set TwoFactorEnabled to true
+    BE->>DB: Generate ten recovery codes
+    BE-->>FE: recoveryCodes
+    FE->>U: Show recovery codes and a saved confirmation gate
+```
+
+> [!NOTE]
+> **Enrollment ≠ login.** At the end of enrollment, the admin still has **no token** — enabling MFA and logging in are deliberately separate. After saving recovery codes, they're sent to the verify screen to log in with a *fresh* code. This ensures that even right after setup, they prove they can produce a live code.
 
 #### Step 2 — `EnableAuthenticatorAsync` (confirm & turn on)
 
