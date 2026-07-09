@@ -1425,21 +1425,23 @@ POST /account/mfa/enable
 |---|---|
 | **Authentication** | Proving *who you are* (logging in) |
 | **Authorization** | Checking *what you're allowed to do* (permissions) |
-| **Factor** | A category of identity evidence: something you know / have / are |
-| **MFA** | Multi-Factor Authentication — requiring two or more *different* factors |
-| **OTP** | One-Time Password — a code valid only once/briefly |
-| **TOTP** | Time-based OTP — a code derived from a shared secret + the current time, changing every 30s |
-| **Shared secret** | The random value both the server and phone hold; the basis for generating codes |
+| **Factor** | A category of identity evidence. The three common factors are: something you know (a password), something you have (a phone or authenticator app), and something you are (a fingerprint or face) |
+| **MFA** | Multi-Factor Authentication — requiring two or more *different* factors together. Password + a second password is not MFA (both are "something you know"); password + an authenticator code is |
+| **MFA Enrollment** | The first-time setup process where a user registers an authenticator app, confirms it with a valid code, enables MFA, and receives their recovery codes |
+| **OTP** | One-Time Password — a temporary code that's valid only once, or only for a short window |
+| **TOTP** | Time-based OTP — a specific kind of OTP generated from a shared secret and the current time, changing every 30 seconds. TOTP is one type of OTP |
+| **Shared secret** | The random value both the server and the phone hold, used to independently generate matching TOTP codes. Also sometimes called the "TOTP secret" |
 | **Authenticator app** | A phone app (Google Authenticator, Authy…) that stores secrets and shows current codes |
-| **QR code** | An image that transfers the secret to the phone by scanning |
-| **Recovery codes** | 10 one-time backup codes for logging in if the phone is lost |
+| **QR code** | A visual representation of an `otpauth://` setup URI. The authenticator app scans it and extracts the shared secret and account details from that URI — the QR image itself isn't the secret, it's just a container for it |
+| **Recovery codes** | One-time backup codes generated during MFA enrollment. Each one can be used only once and is permanently consumed after a successful login |
 | **DTO** | Data Transfer Object — a simple class defining the shape of data sent between client and server |
-| **JWT** | JSON Web Token — the signed token proving a user is authenticated after login |
-| **Access token** | The short-lived (~15 min) JWT sent with each request |
-| **Refresh token** | A longer-lived secret (in a cookie) used to silently get a new access token |
-| **Interceptor** | Angular code that inspects/modifies every HTTP request and response centrally |
-| **Stateless** | A design where the server keeps no memory between requests; each request carries everything it needs |
-| **`AspNetUserTokens`** | The ASP.NET Core Identity database table where the TOTP secret is stored |
+| **JWT** | JSON Web Token — a signed token issued after successful authentication. The client sends it with later requests so the backend can identify the user |
+| **Access token** | The short-lived (~15 min) JWT sent with each request, typically as a Bearer token in the `Authorization` header |
+| **Refresh token** | A longer-lived credential, stored securely (in this project, an HTTP-only cookie), exchanged for a new access token once the old one expires |
+| **Interceptor** | Angular code that inspects and modifies every HTTP request and response centrally |
+| **Stateless** | A design where the server keeps no memory of temporary login progress between requests — each request carries everything needed to continue on its own |
+| **HTTP 401 Unauthorized** | A status meaning authentication failed. In this application it can mean two different things depending on the endpoint: an expired or missing access token, or invalid login/MFA credentials (see Section 8.6) |
+| **`AspNetUserTokens`** | An ASP.NET Core Identity table for storing user tokens and provider-specific values — including the authenticator secret used for TOTP generation |
 
 ---
 
