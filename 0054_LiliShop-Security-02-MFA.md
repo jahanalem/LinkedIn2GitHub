@@ -1116,13 +1116,17 @@ declare module 'qrcode' {
 > [!NOTE]
 > That hand-written `.d.ts` file is a small but real engineering decision: the "official" `@types/qrcode` package would have dragged in Node.js type definitions that clash with the browser's DOM types, causing build errors. Writing a minimal declaration for just the one function actually used avoids the whole conflict.
 
-## 8. The JWT Interceptor: The Guard That Protects Everything
+---
 
-An **HTTP interceptor** is code that sits between the Angular app and the network, automatically inspecting/modifying **every** request and response — like a mailroom that stamps all outgoing mail and sorts all incoming mail centrally, so individual components don't each have to.
+## 8. The JWT Interceptor: Managing Tokens and Protecting the Login Flow
 
-`jwtInterceptor` does two jobs. The second one contains a guard that, if missing, would *silently break the entire MFA flow*.
+### 8.1 What Is an HTTP Interceptor?
 
-### Job 1 — attach the token (outgoing)
+An **HTTP interceptor** is code that sits between the Angular app and the network, automatically inspecting and modifying every request going out and every response coming back — like a mailroom that stamps all outgoing mail and sorts all incoming mail centrally, so individual components don't each have to handle it themselves.
+
+`jwtInterceptor` does two jobs: attaching tokens to outgoing requests, and deciding what to do when a response comes back `401`. Neither job involves the interceptor "deciding" anything in a human sense — it applies the same fixed rule to every request that passes through it. That distinction matters for what follows.
+
+### 8.2 Job 1 — Attaching the Token
 
 ```typescript
 const isApiRequest = request.url.startsWith(environment.apiUrl);
@@ -1137,9 +1141,9 @@ if (token && isApiRequest) {
 
 If we have a token *and* the request goes to our own API, stamp the token on it. The `isApiRequest` check is a quiet security detail: it stops your login token from leaking to any *third-party* host the app might call.
 
-### Job 2 — refresh expired tokens (incoming)
+### 8.3 Job 2 — Refreshing Expired Tokens
 
-Access tokens are short-lived (~15 min) so a stolen one is only briefly useful. But that would log users out mid-task. The fix: a **refresh token** (in a secure cookie) that silently obtains a new access token:
+Access tokens are deliberately short-lived (your notes mention ~15 minutes). This is a security trade-off: if one is ever stolen, the window in which it's useful to an attacker is small. But short-lived tokens create an obvious usability problem on their own — nobody wants to re-enter their password every 15 minutes. A **refresh token** (a longer-lived secret stored in a secure cookie) solves that trade-off: it lets the app quietly obtain a fresh access token in the background, so the short expiry buys security without costing the user constant re-logins.
 
 ```typescript
 return next(request).pipe(
@@ -1162,9 +1166,12 @@ return next(request).pipe(
 );
 ```
 
-Happy path: a `401` (token expired) → refresh → retry → user never notices. Only if the *refresh itself* fails does it log out.
+Concretely, here's what "retry the original request" means: say a `GET /api/orders` call goes out with an expired token and comes back `401`. The interceptor holds onto that original request, calls the refresh endpoint, gets a new access token back, and resends that *exact same* `GET /api/orders` request — this time with the new token in the header. The code that originally asked for the orders never sees the intermediate `401` at all; it just receives the eventual successful response, slightly later than usual.
 
-### The critical guard: `isAuthEndpoint`
+> [!NOTE]
+> **Guarding against a "refresh stampede."** If several requests all hit a `401` around the same moment, you wouldn't want each one triggering its own separate refresh call. An `isRefreshing()` flag ensures only the *first* 401 starts a refresh; any others that arrive while it's in progress wait for that same refresh to finish and then retry using its result, instead of firing off duplicate refresh requests of their own.
+
+### 8.4 The Critical Guard: `isAuthEndpoint`
 
 Look at the condition: `if (error.status === 401 && isApiRequest && !isAuthEndpoint)`. That `!isAuthEndpoint` is the guard, checked against this list:
 
@@ -1189,49 +1196,51 @@ Its comment explains exactly why:
 // redirect, breaking the MFA and Google flows). Let their 401 reach the caller.
 ```
 
-### Why this guard saves the MFA flow
+One entry on that list is worth calling out specifically: `account/refresh-token` is in there too. This isn't an oversight — if a refresh attempt itself came back `401` and the interceptor tried to "refresh the refresh," it would be trying to fix a broken session by calling the very endpoint that just failed, with nothing to recover with. Excluding it stops that recursive dead end before it can happen; a failed refresh just means the session is over, and the user needs to log in again.
 
-Recall that a **wrong MFA code** returns HTTP `401`. Now picture the disaster **without** this guard:
+### 8.5 Why This Guard Protects the MFA Flow
+
+Before walking through what goes wrong without this guard, it's worth being precise about what a `401` means here. Normally, `401` signals "your access token is missing or has expired." But ASP.NET Core also reuses the same status code for a completely different situation: a login or MFA attempt that was simply *wrong* — a bad password, a bad code. At this pre-authentication stage, there is no session and no access token yet to have expired at all — the user hasn't logged in yet. The interceptor has to tell these two situations apart, and the guard is exactly how it does that.
+
+Now picture what would happen **without** the guard, when an admin types a wrong MFA code:
 
 1. Admin types a wrong code into `mfa-verify.component`.
 2. The re-posted login comes back `401`.
-3. The interceptor thinks: *"Expired token! Let me refresh and retry."*
-4. It refreshes and retries the login... which fails again (still a wrong code)...
+3. Without the guard, the interceptor's normal rule fires anyway: *"401 from a non-auth endpoint means the token probably expired — refresh and retry."* It has no way to know this particular `401` actually came from a wrong code, not an expired session.
+4. It refreshes and retries the login... which fails again (still the same wrong code)...
 5. The real error ("Invalid authentication code") is **swallowed** by the refresh attempt.
-6. When refresh eventually fails, the interceptor calls `logout()` and redirects to login.
+6. When the refresh eventually fails too, the interceptor calls `logout()` and redirects to login.
 
-The result: **one wrong digit throws the admin out of the login flow entirely.** The same disaster would hit a wrong password and the Google admin-block. The guard prevents all of this by letting auth-endpoint 401s pass straight through to the components that display them inline.
+The result: **one wrong digit throws the admin out of the login flow entirely.** The same thing would happen with a wrong password, or with the Google admin-block from Section 9. The guard prevents all of this by letting these specific 401s pass straight through to the components that display them inline, instead of running the refresh logic on them at all.
 
 ```mermaid
 flowchart TD
-    Wrong["Admin types wrong MFA code"] --> Resp["Backend responds 401"]
-    Resp --> Check{"Is this an auth endpoint?"}
+    Wrong["Admin submits a wrong MFA code, wrong password, or blocked Google login"] --> Resp["Backend responds 401"]
+    Resp --> Check{"Is this an auth endpoint"}
 
-    Check -->|"❌ WITHOUT the guard"| Bad1["Interceptor thinks 'token expired'"]
-    Bad1 --> Bad2["Tries to refresh + retry"]
+    Check -->|"WITHOUT the guard"| Bad1["Interceptor assumes the token expired"]
+    Bad1 --> Bad2["Tries to refresh and retry"]
     Bad2 --> Bad3["Swallows the real error"]
-    Bad3 --> Bad4["Refresh fails → logout + redirect"]
-    Bad4 --> BadEnd["😱 User kicked out over a typo"]
+    Bad3 --> Bad4["Refresh fails, logout and redirect"]
+    Bad4 --> BadEnd["User kicked out over a typo"]
 
-    Check -->|"✅ WITH the guard"| Good1["Interceptor leaves the 401 alone"]
-    Good1 --> Good2["Error reaches mfa-verify.component"]
-    Good2 --> Good3["Shows 'Invalid authentication code' inline"]
-    Good3 --> GoodEnd["😊 User just retries"]
+    Check -->|"WITH the guard"| Good1["Interceptor leaves the 401 alone"]
+    Good1 --> Good2["Error reaches the component"]
+    Good2 --> Good3["Shows an inline invalid code message"]
+    Good3 --> GoodEnd["User just retries"]
 ```
 
-### The key insight: two meanings of "401"
+### 8.6 Two Meanings of HTTP 401
 
-The whole reason the guard is needed is that `401` means **two different things** depending on where it comes from:
-
-| A 401 from... | Actually means | Correct response |
-|---|---|---|
-| A **protected** endpoint (`/orders`, `/basket`) | "Your session expired" | Refresh & retry silently |
-| An **auth** endpoint (`/login`, `/mfa/*`) | "Your credentials/code were wrong" | Show inline; do NOT refresh or log out |
-
-The status code alone can't distinguish them — the *URL* is the only clue. The `isAuthEndpoint` list is the interceptor asking: *"Is this a 'wrong password' 401 or a 'session expired' 401?"* — and only applying refresh-and-retry to the second kind.
-
-> [!NOTE]
-> The interceptor also guards against a "refresh stampede" — if several requests hit `401` at once, only the *first* triggers a refresh (via an `isRefreshing()` flag); the others wait for that same refresh and then retry with its result, rather than each firing its own. A nice robustness detail, secondary to the MFA-protecting guard above.
+> [!IMPORTANT]
+> **A `401` status code alone is not enough to know what happened.** The same status is used for two completely different situations, and the interceptor has to tell them apart using something other than the status code itself:
+>
+> | A 401 from... | Actually means | Correct response |
+> |---|---|---|
+> | A **protected** endpoint (`/orders`, `/basket`) | "Your session's access token expired" | Refresh silently and retry |
+> | An **auth** endpoint (`/login`, `/mfa/*`, `/google-login`) | "Your credentials or code were wrong — you were never logged in this session to begin with" | Show the error inline; never refresh or log out |
+>
+> The *URL* is the only clue available. The `isAuthEndpoint` list is the interceptor asking, on every single 401, "which of these two situations is this?" — and only applying the refresh-and-retry logic to the first one.
 
 ---
 
