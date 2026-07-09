@@ -32,7 +32,7 @@ This document assumes **no prior knowledge of MFA**. Every concept is explained 
    - [7.2 The Setup Component](#72-the-setup-component)
    - [7.3 The Verify Component](#73-the-verify-component)
    - [7.4 Rendering the QR Code](#74-rendering-the-qr-code)
-8. [The JWT Interceptor: Managing Tokens and Protecting the Login Flow](#8-the-jwt-interceptor-the-guard-that-protects-everything)
+8. [The JWT Interceptor: Managing Tokens and Protecting the Login Flow](#8-the-jwt-interceptor-managing-tokens-and-protecting-the-login-flow)
 9. [Closing the Google Bypass](#9-closing-the-google-bypass)
 10. [The Complete End-to-End Flow](#10-the-complete-end-to-end-flow)
 11. [API Reference](#11-api-reference)
