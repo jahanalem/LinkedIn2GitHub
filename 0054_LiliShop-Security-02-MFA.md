@@ -923,7 +923,18 @@ Trace a brand-new admin's first login: enter credentials → backend says "setup
 
 ## 7. Frontend Implementation
 
-The Angular side has three components working together, all built with modern Angular **signals** (reactive state holders) and the `@if`/`@else` template syntax.
+The Angular side has three components working together, all built with modern Angular **signals** (reactive state holders) and the `@if`/`@else` template syntax. Before looking at each one individually, here's how they relate as a whole:
+
+```mermaid
+flowchart TD
+    A[LoginComponent] --> B[Credentials form, the default screen]
+    A --> C[mfa-setup component]
+    A --> D[mfa-verify component]
+    C --> E[Handles enrollment, the one time setup]
+    D --> F[Handles verification, every login after that]
+```
+
+`LoginComponent` never navigates to separate routes for these steps — instead it behaves like a small state machine of its own: changing its `stage` signal simply swaps which one of these three is currently rendered inside the same page.
 
 ### 7.1 The Login Component (the orchestrator)
 
@@ -949,11 +960,13 @@ The Angular side has three components working together, all built with modern An
 }
 ```
 
-So the login page is really *three screens sharing one component*, and `stage()` is the switch. When a login response comes back with `RequiresTwoFactorSetup = true`, the component sets `stage` to show `mfa-setup`; when `RequiresTwoFactorCode = true`, it shows `mfa-verify`. Notice it passes `email` and `password` down to the child components — they need these to re-post to the backend (because, as we established, the backend re-checks credentials on every call).
+So the login page is really *three screens sharing one component*, and `stage()` is the switch. When a login response comes back with `RequiresTwoFactorSetup = true`, the component sets `stage` to show `mfa-setup`; when `RequiresTwoFactorCode = true`, it shows `mfa-verify`.
+
+Notice it passes `email` and `password` down to the child components. This connects directly to the stateless design from Section 6: **the first login attempt never creates a session at all** — the backend only confirms the password is correct and replies with a "next step required" signal, with an empty token. Since the backend keeps no memory of that first attempt, the *second* request (the one carrying the MFA code) has to resubmit the original credentials from scratch, not the code alone. That's exactly why these two child components need `email` and `password` as inputs — they're not decorative, they're required for the re-post to work at all.
 
 ### 7.2 The Setup Component
 
-`mfa-setup.component` handles enrollment. It has two internal stages of its own, tracked by a `stage` signal (`'scan'` → `'recovery'`).
+`mfa-setup.component` handles **enrollment** — the one-time process, introduced in Section 5.2, of registering an authenticator app for the first time. This is different from *verification* (Section 7.3, next), which happens on every ordinary login once enrollment is already done. The component has two internal stages of its own, tracked by a `stage` signal (`'scan'` → `'recovery'`).
 
 On load, it fetches the setup data and renders the QR:
 
@@ -1033,6 +1046,8 @@ finish(): void {
 }
 ```
 
+After the user leaves this screen, the backend will never return these exact codes again — the value is only ever included in this one API response. If they're lost before being saved, the account would need a fresh set generated. That's technically possible through the same backend method described in Section 5.4, though there's currently no self-service "regenerate" screen in the UI for it.
+
 ### 7.3 The Verify Component
 
 `mfa-verify.component` handles entering the code during a normal login. Its job is simple: take the code, re-post the *whole* login, and check the result.
@@ -1064,7 +1079,11 @@ submit(): void {
 }
 ```
 
-This is the "stateless re-post" in action: it sends `email`, `password`, and `twoFactorCode` all together. The `isAuthenticatedUser(user)` check enforces the "empty token is never authenticated" rule. And the template even tells the user they can use a recovery code here: *"Enter the 6-digit code from your authenticator app. You can also enter a one-time recovery code."* — matching the backend's recovery-code fallback.
+It's worth being precise about what this component does and does not do. **It never verifies the code itself.** All it does is collect what the user typed and send it to the backend — the actual TOTP calculation and comparison (Section 5.3) happens entirely server-side. The backend stays the single source of truth for every authentication decision; the frontend's only job here is to display whatever the backend decides.
+
+This is exactly why the `isAuthenticatedUser(user)` check matters so much. Remember from Section 6: **every one of the three login outcomes returns HTTP 200** — even the "please set up MFA" and "please enter your code" responses. So a 200 status alone says nothing about whether the user is actually logged in. The only reliable signal is whether `token` is non-empty, and that's precisely what this check enforces before the component fires its `authenticated` event.
+
+This is the "stateless re-post" in action: it sends `email`, `password`, and `twoFactorCode` all together. And the template even tells the user they can use a recovery code here: *"Enter the 6-digit code from your authenticator app. You can also enter a one-time recovery code."* — matching the backend's recovery-code fallback.
 
 ### 7.4 Rendering the QR Code
 
@@ -1083,6 +1102,8 @@ this.qrDataUrl.set(await QRCode.toDataURL(setup.authenticatorUri, { margin: 1, w
 "allowedCommonJsDependencies": ["qrcode"]
 ```
 
+A quick note on why the next file exists at all: TypeScript normally expects type information for every package it imports, so the compiler knows what functions exist and what arguments they take. The official types for `qrcode` caused a conflict in this project, so this file is a small, hand-written substitute — just enough type information for the one function actually used:
+
 ```typescript
 // src/app/shared/types/qrcode.d.ts — a minimal hand-written type declaration
 // We deliberately avoid @types/qrcode because it pulls in @types/node, whose global
@@ -1094,9 +1115,6 @@ declare module 'qrcode' {
 
 > [!NOTE]
 > That hand-written `.d.ts` file is a small but real engineering decision: the "official" `@types/qrcode` package would have dragged in Node.js type definitions that clash with the browser's DOM types, causing build errors. Writing a minimal declaration for just the one function actually used avoids the whole conflict.
-
-
----
 
 ## 8. The JWT Interceptor: The Guard That Protects Everything
 
