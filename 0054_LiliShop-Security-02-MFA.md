@@ -716,14 +716,19 @@ var isTotpValid = await _userManager.VerifyTwoFactorTokenAsync(
     user, _userManager.Options.Tokens.AuthenticatorTokenProvider, normalizedCode);
 ```
 
-Internally, this does exactly the "twins" calculation from Section 4:
-1. Looks up the user's own secret from `AspNetUserTokens`.
-2. Reads the server's current time.
-3. Recalculates what the correct 6-digit code should be right now (checking the previous/next slice too, for clock drift).
-4. Compares its own answer to `normalizedCode`.
-5. Returns `true` if they match. **It never contacts the phone.** The phone and the server never communicate with each other at all — each independently runs the same calculation using the shared secret and the current time.
+Internally, `VerifyTwoFactorTokenAsync` performs the same TOTP calculation described in Section 4:
 
-If this check fails, the code falls back to `RedeemTwoFactorRecoveryCodeAsync` (the full mechanics are covered in Section 5.4). Worth knowing right here too: a successful redemption immediately consumes that recovery code, removing it from the account's valid list so it can never be used a second time.
+1. It retrieves the user's secret key from `AspNetUserTokens`. This is the same secret that was shared with the user's authenticator app during MFA setup.
+
+2. It reads the current server time. TOTP codes are not stored anywhere; they are calculated dynamically from the secret key and the current time.
+
+3. It calculates the expected 6-digit code. Because a user's phone clock and the server clock may differ slightly (for example, the phone clock may be a few seconds ahead or behind), Identity also accepts codes from the immediately previous or next time period. This small tolerance prevents valid users from being rejected because of minor clock differences.
+
+4. It compares the calculated code with the code entered by the user (`normalizedCode`).
+
+5. It returns `true` if the codes match. The server never contacts the user's phone and the phone never sends the code to the server. Both sides independently calculate the same code using the shared secret and the current time. If the calculations produce the same result, the code is considered valid.
+
+If this check fails, the code gives the user one last chance to authenticate by accepting a recovery code instead (using `RedeemTwoFactorRecoveryCodeAsync`; the full mechanics are covered in Section 5.4). A valid recovery code is treated as an alternative second factor, allowing login to continue. However, it is immediately consumed and permanently removed from the account, ensuring that each recovery code can be used only once.
 
 **A small thoughtful touch — `NormalizeCode`:**
 
