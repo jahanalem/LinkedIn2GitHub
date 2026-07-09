@@ -1288,9 +1288,10 @@ sequenceDiagram
     Note over U,Ph: FIRST LOGIN (not yet enrolled)
     U->>FE: Enter email and password
     FE->>BE: POST /account/login (email, password)
-    BE->>BE: Password OK, role is admin, MFA not enrolled
+    BE->>BE: Validate password and lockout rules
+    BE->>BE: Check admin role and MFA status
     BE-->>FE: 200, empty token, requiresTwoFactorSetup true
-    FE->>FE: Token empty, so show SETUP screen
+    FE->>FE: Empty token and setup flag true, so show SETUP screen
     Note over U,Ph: ENROLLMENT
     FE->>BE: POST /account/mfa/setup (email, password)
     BE->>DB: Create and save secret
@@ -1300,16 +1301,19 @@ sequenceDiagram
     Ph-->>U: Shows a 6-digit code
     U->>FE: Enter that code
     FE->>BE: POST /account/mfa/enable (email, password, code)
-    BE->>DB: Verify code, enable MFA, make 10 recovery codes
+    BE->>BE: Validate the first authenticator code
+    BE->>DB: Enable MFA and save 10 recovery codes
     BE-->>FE: recoveryCodes
     FE->>U: Show recovery codes plus a saved-confirmation gate
     U->>FE: Tick box and continue
-    Note over U,Ph: VERIFY (finish the login)
+    FE->>FE: No token exists yet, so a fresh MFA verification is still required
+    Note over U,Ph: SECOND FACTOR VERIFICATION (complete the login)
     FE->>FE: Show VERIFY screen
     Ph-->>U: Shows current 6-digit code
     U->>FE: Enter code
     FE->>BE: POST /account/login (email, password, twoFactorCode)
-    BE->>DB: Verify code against secret
+    BE->>DB: Read the stored TOTP secret
+    BE->>BE: Generate the expected code and compare
     BE->>BE: MFA satisfied, issue tokens
     BE-->>FE: 200, real token, role Administrator
     FE->>FE: Token present, so AUTHENTICATED
@@ -1319,8 +1323,24 @@ sequenceDiagram
     BE-->>FE: 200, orders returned
 ```
 
-And every **subsequent** login (already enrolled) is much shorter: enter email + password → backend says `requiresTwoFactorCode:true` → verify screen → enter phone code → re-post login with the code → authenticated. Three screens collapse to two.
+And every **subsequent** login (already enrolled) is much shorter — the enrollment stage disappears entirely:
 
+Credentials → Second factor verification → Authenticated
+
+This matches the "three screens sharing one component" idea from Section 7.1: a first-time admin sees all three screens (credentials, setup, verify) in sequence, but every login after that only ever shows two of them (credentials, verify). Three screens collapse to two.
+
+The diagram above is the happy path. Section 8 covers what happens when the code entered is wrong, and why that failure has to be handled carefully so it doesn't accidentally log the admin out. Here's that failure path in isolation:
+
+```mermaid
+sequenceDiagram
+    participant U as 👤 Admin
+    participant FE as 🖥️ Frontend
+    participant BE as ⚙️ Backend
+    U->>FE: Enter an incorrect MFA code
+    FE->>BE: POST /account/login (email, password, twoFactorCode)
+    BE-->>FE: 401, invalid authentication code
+    FE->>FE: Show the error inline, stay on the VERIFY screen
+```
 ---
 
 ## 11. API Reference
