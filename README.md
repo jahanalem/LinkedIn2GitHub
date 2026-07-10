@@ -52,6 +52,11 @@ Topics include **web development**, **clean code**, and **project updates**. Fee
 
 ---
 
+### 52.1 Resolving Compilation Warnings in a .NET Project
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0051_resolving-compilation-warnings.md)
+
+---
+
 ### 52. Migrating LiliShop to Angular 22: A Practical Report
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0050_lilishop-angular-22-migration.md)
 
