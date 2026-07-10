@@ -8,51 +8,71 @@ Topics include **web development**, **clean code**, and **project updates**. Fee
 ## 📚 Articles:
 
 ### 61. 🌍 LiliShop Security Series — Part 8: CORS Misconfiguration & Security Headers
+A small bug let a fake website trick browsers into treating it as trusted — meaning it could secretly read a logged-in user's data. This post covers the fix, plus four extra browser rules that block similar tricks.
+
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0060_LiliShop-Security-08-CORS-SecurityHeaders.md)
 
 ---
 
 ### 60. 🔍 LiliShop Security Series — Part 7: Information Disclosure — Logs, Error Messages, and User Enumeration
+Sometimes a system leaks small clues without anyone hacking it — through log files, error messages, or even a simple "does this email exist?" check. This post shows where LiliShop found these clues and closed them.
+
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0059_LiliShop-Security-07-InformationDisclosure.md)
 
 ---
 
 ### 59. 💳 LiliShop Security Series — Part 6: Payment & Business Logic Integrity — Defending Against Price and Quantity Tampering
+What if someone typed a negative number for how many items they're buying, or changed a price in the request? This post shows how LiliShop double-checks every number before charging a card — including a real rounding bug that quietly undercharged customers.
+
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0058_LiliShop-Security-06-PaymentIntegrity-Tampering.md)
 
 ---
 
 ### 58. 🔓 LiliShop Security Series — Part 5: Broken Access Control — IDOR and Function-Level Authorization
+Could one customer see another customer's private data just by changing a number in a request? This post shows three different ways LiliShop checks "does this really belong to you?" — plus a hidden admin page that used to have no real lock on it, and now does.
+
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0057_LiliShop-Security-05-BrokenAccessControl-IDOR.md)
 
 ---
 
 ### 57. 🌐 LiliShop Security Series — Part 4: Server-Side Request Forgery (SSRF) — The Printess Callback
+When a partner service (Printess) finishes rendering a customer's design, it sends LiliShop's server a message saying "it's ready, download it from this address." The problem: nothing stopped a stranger from sending that same kind of message but pointing at a different address instead — one reaching private things only the server should access, like its own secret cloud keys. This post covers the two separate checks — one confirming the message really came from Printess, the other confirming the address is actually safe — that now close that door.
+
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0056_LiliShop-Security-04-SSRF-PrintessCallback.md)
 
 ---
 
 ### 56. 🔑 LiliShop Security Series — Part 3: The JWT Forgery Vulnerability in Google Sign-In
+When you sign in with Google, it gives your browser a signed proof of who you are — like an ID card with a seal on it. LiliShop's code only read what that ID card said, but never actually checked whether the seal was real. That meant anyone could make their own fake ID card claiming to be any user, including an admin, and the app would simply believe it.
+
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0055_LiliShop-Security-03-GoogleSignIn-JWTForgery.md)
 
 ---
 
 ### 55. 🔐 LiliShop Security Series — Part 2: Multi-Factor Authentication (MFA) Implementation
+How LiliShop added a second security step for admin logins — a phone app code, backup codes in case you lose your phone, and a fix so mistyping the code doesn't force you to start the login over from scratch.
+
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0054_LiliShop-Security-02-MFA.md)
 
 ---
 
 ### 54. 🛡️ LiliShop Security Series — Part 1: Brute-Force Attack Protection
+How LiliShop stops attackers from guessing passwords over and over. Two protections work together — one slows down anyone hammering the login page, the other locks an account after too many wrong tries — and four real examples show why you need both.
+
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0053_LiliShop-Security-01-BruteForce-Protection.md)
 
 ---
 
 ### 53. How I Deployed LiliShop to Azure
+How I set up automatic deployment for LiliShop — combining a separate frontend and backend project into one live website, and keeping every password and API key out of the code itself.
+
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0052_Deploy-LiliShop-to-Azure.md)
 
 ---
 
 ### 52.1 Resolving Compilation Warnings in a .NET Project
+Why I cleaned up 468 warnings in my code down to zero. It's not about tidiness — when there are hundreds of warnings, nobody reads them, and a genuinely important one could easily get lost in the noise.
+
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0051_resolving-compilation-warnings.md)
 
 ---
