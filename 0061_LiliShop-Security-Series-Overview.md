@@ -6,6 +6,12 @@ I ran a full white-box security review of the whole application — meaning I we
 
 This post is the short version: what the problems were, why they mattered, and where to go if you want the full technical story behind any of them. Each linked article is written to actually teach the topic, not just document a code change — it explains why the vulnerability existed, how the attack would have worked, and why the fix was built the way it was, using real code and diagrams from the project throughout.
 
+## Where This Series Starts From
+
+This series assumes the underlying authentication system already exists and works. Refresh tokens, the login and registration flow, email confirmation, role-based and policy-based authorization (RBAC), password recovery, Google single sign-on, and logging out from every device — all of that was designed and built from scratch first, and documented separately in its own article.
+
+If you want that full picture before reading about what was found and fixed below, start there: [System Security & Authentication Architecture](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0040_system-security-and-authentication-architecture.md).
+
 ## A Quick Word on OWASP
 
 You'll see the word **OWASP** a few times below, so it's worth explaining before diving in.
