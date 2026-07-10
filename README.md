@@ -7,6 +7,13 @@ Topics include **web development**, **clean code**, and **project updates**. Fee
 
 ## 📚 Articles:
 
+### 62. How I Hardened LiliShop: An End-to-End Application Security Series
+The starting point for the whole LiliShop security project — one place tying everything together. Explains what OWASP actually is, in plain terms, since it's referenced throughout the series. Summarizes all eight vulnerabilities that were found and fixed, from login protection to payment integrity to browser-level defenses. Links out to each of the eight detailed write-ups, plus two related pieces on secure deployment and clean code.
+
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0061_LiliShop-Security-Series-Overview.md)
+
+---
+
 ### 61. 🌍 LiliShop Security Series — Part 8: CORS Misconfiguration & Security Headers
 A small bug let a fake website trick browsers into treating it as trusted — meaning it could secretly read a logged-in user's data. This post covers the fix, plus four extra browser rules that block similar tricks.
 
