@@ -2,6 +2,9 @@
 
 This section documents the enterprise-grade security, authentication, and authorization systems custom-built for Lilishop. It covers everything from silent token rotation and external SSO integration to fault-tolerant email verifications and anti-enumeration protections.
 
+> [!NOTE]
+> **Update:** This authentication system was later put through a full, independent white-box security review. That review found and fixed several real vulnerabilities across the wider LiliShop codebase — including a critical authentication bypass — and is documented in its own series: [How I Hardened LiliShop: An End-to-End Application Security Series](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0061_LiliShop-Security-Series-Overview.md).
+
 ---
 
 ### 1. Refresh Token and Login Process Documentation in Lilishop
@@ -99,4 +102,3 @@ Dieses Dokument bietet eine umfassende Liste technischer Fragen und detaillierte
 * **Schnellreferenz:** Dient als schnelle, leicht zugängliche Zusammenfassung aller wichtigen Authentifizierungs- und Autorisierungskonzepte, die in der API implementiert wurden.
 
 [Weiterlesen](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0042_sicherheitsarchitektur-fragen-und-antworten.md)
-
