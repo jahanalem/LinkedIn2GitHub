@@ -13,6 +13,30 @@ You can find all articles combined in one file here:
 
 ## 📚 Articles:
 
+### 61. 🌍 LiliShop Security Series — Part 8: CORS Misconfiguration & Security Headers
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0060_LiliShop-Security-08-CORS-SecurityHeaders.md)
+
+### 60. 🔍 LiliShop Security Series — Part 7: Information Disclosure — Logs, Error Messages, and User Enumeration
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0059_LiliShop-Security-07-InformationDisclosure.md)
+
+### 59. 💳 LiliShop Security Series — Part 6: Payment & Business Logic Integrity — Defending Against Price and Quantity Tampering
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0058_LiliShop-Security-06-PaymentIntegrity-Tampering.md)
+
+### 58. 🔓 LiliShop Security Series — Part 5: Broken Access Control — IDOR and Function-Level Authorization
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0057_LiliShop-Security-05-BrokenAccessControl-IDOR.md)
+
+### 57. 🌐 LiliShop Security Series — Part 4: Server-Side Request Forgery (SSRF) — The Printess Callback
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0056_LiliShop-Security-04-SSRF-PrintessCallback.md)
+
+### 56. 🔑 LiliShop Security Series — Part 3: The JWT Forgery Vulnerability in Google Sign-In
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0055_LiliShop-Security-03-GoogleSignIn-JWTForgery.md)
+
+### 55. 🔐 LiliShop Security Series — Part 2: Multi-Factor Authentication (MFA) Implementation
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0054_LiliShop-Security-02-MFA.md)
+
+### 54. 🛡️ LiliShop Security Series — Part 1: Brute-Force Attack Protection
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0053_LiliShop-Security-01-BruteForce-Protection.md)
+
 ### 53. How I Deployed LiliShop to Azure
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0052_Deploy-LiliShop-to-Azure.md)
 
