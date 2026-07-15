@@ -888,6 +888,122 @@ Files 02 through 07 have now covered the entire backend side of this feature: th
 
 ***
 
+# 08 — Angular Runtime Translation System
 
+Files 02 through 07 covered the backend: how translations are stored, looked up, cached, and managed. Starting with this file, the series shifts to the **frontend** — the Angular application shoppers and administrators actually see. This file explains how that application loads translated text and turns it into what appears on screen, without ever hardcoding a single translated phrase into its own build.
+
+## A quick primer on Angular "signals," since this whole system is built on them
+
+Before looking at any code, it helps to understand one specific piece of modern Angular, because you'll see it constantly in this file: **signals**.
+
+A signal is a container that holds a value — much like an ordinary variable — but with one important difference: anything that *reads* a signal's value inside a template or a reactive context is automatically registered as "interested" in that value. When the signal's value later changes, everything that read it gets automatically notified and re-evaluated — without you having to manually wire up "and now go update this specific piece of the page." You can think of it as a variable that keeps track of who's watching it, and taps them on the shoulder whenever it changes.
+
+This matters specifically for a translation system, because translations don't arrive instantly — they're fetched from the backend after the page has already started rendering (as you'll see below). Signals are what let the page correctly go from "showing raw translation keys because nothing has loaded yet" to "showing real translated text" the moment the data arrives, with no extra plumbing needed.
+
+## `TranslationService` — the frontend's mirror of the backend's version system
+
+The class responsible for loading and holding translated text is `TranslationService` (`core/i18n/translation.service.ts`). Its design deliberately mirrors the version-check-then-fetch pattern file 05 described from the backend's side — this file shows the same story from the other end of the wire.
+
+### What happens the moment the app starts
+
+`TranslationService` has an `initialize()` method, called exactly once, right when the application starts up (we'll see exactly where in a moment). It does two things, one synchronous and one asynchronous:
+
+1. **Synchronously**, it checks the browser's `localStorage` — a small amount of storage every browser gives a website to keep data between visits — for a previously-cached dictionary of translations, saved under a key like `ls-i18n:de`. If one exists, it's applied to the in-memory signal **immediately**, before anything is fetched from the network. This is a deliberate choice to avoid what's sometimes called a "flash of untranslated content" — without this step, a returning visitor would briefly see raw translation keys or blank text while the network request was still in flight, even though their browser already has a perfectly good cached copy from their last visit.
+2. **Asynchronously, in the background**, it calls `refresh()`, which repeats the exact version-check pattern from file 05: first it calls `GET /api/localization/version` — the tiny, always-fresh endpoint — and compares the number it gets back to whatever version number was saved alongside the cached dictionary. If the numbers match, nothing more happens; the cached copy was already correct, and no further network request is needed. If the numbers differ (or there was no cached copy at all), it fetches the full dictionary from `GET /api/localization/{culture}?v={version}`, then updates both the in-memory signal and the `localStorage` cache with the fresh copy.
+
+Because the dictionary itself is stored in a signal, any part of the UI reading from it automatically updates the moment step 2 finishes — with no manual "now refresh the page" logic needed anywhere else in the application.
+
+### Looking up a single translated phrase
+
+The actual lookup method, `translate(key, params)`, is a straightforward dictionary read: given a key like `Auth.SignIn`, it looks the key up in the current dictionary signal and returns whatever text is stored there. If the key genuinely isn't found (this can legitimately happen briefly before the dictionary has finished loading, or, more rarely, if a truly missing key slipped through), it returns the raw key itself — the same "show the key rather than a blank field" philosophy file 03 described for the backend's own fallback chain — and logs a warning to the browser console, but only once per missing key, so a page that repeatedly references the same missing key doesn't flood the console.
+
+The `params` argument supports filling in placeholders inside a translated phrase — for example, a phrase like `"Showing {0} of {1} results"` can have `{0}` and `{1}` replaced with actual numbers at the moment it's displayed. This works with two different placeholder styles: numbered placeholders like `{0}`, `{1}` (matching the convention the backend's seeded translations use, as introduced conceptually in file 03), and named placeholders like `{count}`, useful when a translated phrase has enough variables that numbered ones would become hard to read.
+
+## `TranslatePipe` — using translations directly in a template
+
+Rather than every component manually calling `translationService.translate(...)`, LiliShop provides a small **pipe** — Angular's built-in mechanism for transforming a value directly inside a template — so a developer can write:
+
+```html
+{{ TranslationKeys.Nav.Shop | translate }}
+```
+
+and have it display the translated text for that key, wherever it appears. The `| translate` syntax means "take the value on the left, and run it through the pipe named `translate`."
+
+### Why this pipe is marked "impure," and what would break otherwise
+
+Here's a detail that looks like a small technical footnote but is actually solving a real, specific bug — worth understanding rather than skipping past.
+
+Angular pipes can be marked **pure** or **impure**. A pure pipe (the default, and usually the right choice) is an optimization: Angular remembers the last input it was given and the output it produced, and only re-runs the pipe's logic if the *input itself* changes. This is normally a good thing — it avoids needless recomputation.
+
+But think about what the input to `{{ TranslationKeys.Nav.Shop | translate }}` actually is: it's the string `'Nav.Shop'` — a plain key, which **never changes**, regardless of whether the translation dictionary has finished loading yet or not. If `TranslatePipe` were pure, Angular would run it once, very early — likely before `TranslationService`'s dictionary has finished loading — get back the raw key (because nothing was found yet), remember that as "the answer for this input," and then **never re-run it again**, even after the real translated dictionary arrives moments later. The page would be permanently stuck showing raw keys like `Nav.Shop` instead of "Shop," because from the pipe's (mistaken) point of view, nothing about its input ever changed.
+
+Marking the pipe **impure** disables that optimization — Angular re-runs it on every check rather than trusting a remembered answer. Combined with the fact that the pipe's `transform()` method reads the dictionary **signal** directly (rather than some snapshot), this means: every time the signal notifies its watchers (i.e., every time the dictionary changes — most importantly, the moment it first finishes loading), the pipe re-runs, correctly picking up the real translated text. The cost is a small one — re-running a dictionary lookup on every check is cheap — paid deliberately in exchange for correctness.
+
+This detail also connects to a broader change in how LiliShop's Angular application checks whether anything needs re-rendering at all, called **zoneless change detection** — worth a brief explanation since it's directly why this pipe needed the fix described above. Traditional Angular applications use a library called Zone.js to automatically detect "something might have happened, better re-check the whole page" after almost any browser event. Newer Angular applications (LiliShop included) can turn this off for better performance, relying instead on **signals specifically** to say "something changed, re-check exactly what depends on this" — a more precise, less wasteful mechanism, but one that only works correctly if the code reading a value actually reads it *as a signal*, inside a reactive context, the way `TranslatePipe` does.
+
+## `TranslationKeys` — catching typos before they ship
+
+If every component referenced translation keys as plain strings — `translate('Auth.SingIn')` instead of `translate('Auth.SignIn')` — a typo like that wouldn't cause an error. It would just silently show the raw, misspelled key on screen (or, worse, always fall back to showing nothing meaningful), and nobody would notice until a human spotted it.
+
+LiliShop avoids this with a generated file, `core/i18n/translation-keys.ts`, which defines a large, nested constant object — `TranslationKeys.Nav.Shop`, `TranslationKeys.Auth.SignIn`, and so on — where every valid path exists as a real TypeScript property. Referencing `TranslationKeys.Auth.SingIn` (misspelled) is no longer just a silently-wrong string — it's a **compile error**, because that property doesn't exist on the generated object. TypeScript, the language Angular applications are written in, checks this automatically the moment the code is built, long before it ever reaches a real user.
+
+### Keeping it in sync automatically: `generate-i18n-keys.mjs`
+
+This file is never hand-edited — a small script, `scripts/generate-i18n-keys.mjs`, generates it automatically, and its own header comment says so directly: "GENERATED FILE — do not edit by hand." What makes this genuinely useful, rather than just a formality, is *where* it gets its list of valid keys from: **the backend's own translation catalog**, not some separately hand-maintained list. It tries, in order: an explicitly configured source (an environment variable naming either a file or a live API URL), then the sibling backend repository's seed file on disk (`localization-entries.json`, introduced in file 02 and file 06 — this works even without a running backend, handy for a frontend-only development setup), and finally a live call to a locally running backend's `/api/localization/en` endpoint as a last resort.
+
+The practical effect: whenever a developer adds new translation keys on the backend and wants to reference them from Angular, running this one script regenerates `translation-keys.ts` to match — keeping the two repositories' key spaces in sync through a repeatable, automatic step, rather than through developer discipline and hoping nobody forgets to update a hand-maintained list.
+
+## `LanguageInterceptor` — telling the backend what language to use
+
+File 04 explained that the backend figures out a request's culture from, among other signals, an HTTP header. LiliShop's frontend makes sure that header is always present and correct, using an **HTTP interceptor** — a small piece of code that Angular runs on every outgoing HTTP request (and every incoming response) before it's actually sent, letting you inspect or modify it uniformly, without touching every individual place in the codebase that makes an API call.
+
+`languageInterceptor` (`core/interceptors/language.interceptor.ts`) is about as small as an interceptor gets: for every request going to LiliShop's own API (checked by comparing the request URL against the configured API address, so this doesn't accidentally attach the header to unrelated third-party requests), it adds an `Accept-Language` header carrying the currently active language code. This works alongside — not instead of — the culture cookie file 04 described as the *first* provider in the backend's priority chain; the header is effectively a backup signal, useful in situations (like certain cross-origin development setups) where the cookie might not reliably travel with the request.
+
+## `LocaleRegistry` — preparing for correct number and date formatting
+
+A separate concept from *translated text* is **locale-aware formatting** — how dates, numbers, and currency amounts are displayed, which follows regional conventions independent of translated words. For example, the way a large number's thousands are grouped, or where a decimal point sits, differs by locale, even in languages that otherwise share an alphabet.
+
+Angular gets this formatting knowledge from something called **CLDR data** (the Unicode Common Locale Data Repository — a large, standardized dataset describing exactly these regional formatting conventions for essentially every locale in the world). Angular ships with English's CLDR data built in, but every *other* locale's data has to be explicitly registered before Angular can use it.
+
+`core/i18n/locale-registry.ts` registers the CLDR data for all ten of LiliShop's non-English languages **up front**, at application startup (`registerAppLocales()`, called once, before the application even bootstraps) — rather than, say, only loading a given language's data the first time that language is actually selected. This is a deliberate trade-off: it costs a small amount of extra data bundled into the application (a few kilobytes per locale) that some users will never actually use, in exchange for a real benefit described back in file 06 — a new language added purely through the admin screens still gets fully correct number and date formatting immediately, with no separate frontend deployment needed, *as long as* its locale data happens to already be part of this pre-registered set. (A language outside that set still functions correctly — file 06 covered this — it simply falls back to English-style formatting for numbers and dates until a developer adds its data here.)
+
+## `LOCALE_ID`, and why switching languages reloads the whole page
+
+Angular has its own built-in concept called `LOCALE_ID` — effectively "which locale's CLDR formatting rules should every date/number/currency pipe in this application currently use." LiliShop binds this to the active language, via a small piece of configuration in `app.config.ts` that computes it from `LanguageService` (the class responsible for tracking the currently selected language — its full detection logic is the subject of file 09; for this file, all you need to know is that it exposes the current language as a signal, the same pattern `TranslationService` uses for the dictionary).
+
+Here's the detail worth calling out: **`LOCALE_ID` is resolved once, at the moment the application starts up, and is not itself reactive** — unlike the translation dictionary, it isn't a signal the rest of the application watches for changes. This is a genuine constraint of how Angular's own locale system works, not a design LiliShop chose freely. Given that constraint, LiliShop's `LanguageService.setLanguage()` method — called when a user picks a new language from the switcher — deliberately performs a **full page reload** rather than trying to update the language in place. A full reload is what guarantees `LOCALE_ID`, the translation dictionary, the text direction (file 09), and every other locale-sensitive piece of the page all become consistent with the newly chosen language together, in one clean step, rather than risking some parts of the page updating and others silently staying in the old language.
+
+## How currency, date, and number formatting actually work
+
+With `LOCALE_ID` and the registered CLDR data in place, most of LiliShop's date and number formatting can use Angular's own built-in formatting tools directly, and they'll automatically follow the active locale's conventions. `FormatValuePipe` (`shared/pipes/format-value.pipe.ts`) is where this comes together for LiliShop's admin tables — for example, formatting a date column using Angular's `formatDate` function together with the current `LOCALE_ID`.
+
+One deliberate exception: **the currency symbol always stays `$`, regardless of the selected language.** This might look like an oversight at first, but it's intentional — LiliShop sells in a single currency, so there's no need (and it would arguably be *confusing*) to show, say, a Euro symbol just because the page happens to be displaying German text, when the actual price is still denominated in dollars. What *does* still change by locale is the surrounding number formatting — how digit grouping and decimal points are written — just not the currency symbol itself. This same reasoning, and the identical fixed `$` symbol, is applied on the backend side too, in the email-composition code covered in file 10 — a small but deliberate piece of consistency between the two systems.
+
+## Following the whole startup sequence
+
+Here's the complete story of what happens, end to end, in the frontend, when a shopper opens LiliShop for the very first time in a browser session:
+
+1. Before the Angular application itself even starts running, a small inline script in `index.html` reads whatever language was saved in `localStorage` from a previous visit (if any) and immediately sets the page's language and text-direction attributes — this exists purely to avoid a jarring flash of the wrong layout direction before Angular has even loaded, and is covered more fully in file 09.
+2. Angular's bootstrap process runs `provideAppInitializer(...)`, configured in `app.config.ts`, which calls `LanguageService.initialize()` and `TranslationService.initialize()` — both, deliberately, without waiting for either to fully finish before the rest of the application starts rendering.
+3. `LanguageService.initialize()` fetches the list of active languages from `GET /api/languages` (file 06 covered the admin side of what populates this list) and begins its own first-visit detection logic — the full subject of file 09.
+4. `TranslationService.initialize()`, as described above, applies any cached dictionary from `localStorage` immediately, then checks in the background whether a fresher one needs to be fetched.
+5. `LOCALE_ID` is resolved once, from whatever language was determined synchronously at this point (from `localStorage`, or a sensible default).
+6. The page renders. Any `{{ ... | translate }}` usage shows either real translated text (if a cached dictionary was already available) or the raw key momentarily (if nothing was cached yet) — and because `TranslatePipe` is impure and reads the dictionary signal directly, it automatically re-renders with the correct translated text the instant `TranslationService`'s background fetch resolves, with no further action needed anywhere else in the application.
+
+## A second example of the same pattern: paginator labels
+
+`TranslatePipe` isn't the only place LiliShop had to bridge "a signal that updates asynchronously" with "a piece of Angular UI that expects plain, static text." Angular Material's table pagination controls (the "Items per page," "Next page" labels you'd see under an admin data table) get their text from a class called `MatPaginatorIntl`, which normally expects you to just set plain string properties once.
+
+LiliShop's `LocalizedMatPaginatorIntl` (`core/i18n/localized-paginator-intl.ts`) solves this with a **signal effect** — a block of code that Angular automatically re-runs whenever any signal it reads inside changes. Its effect reads the translation dictionary signal, reassigns each label property (`itemsPerPageLabel`, `nextPageLabel`, and so on) to the freshly translated text, and then calls `this.changes.next()` — a signal Angular Material's own paginator component listens to internally, telling it "re-render your labels now." This is a different mechanical approach than `TranslatePipe`'s impure-pipe trick, but it's solving the exact same underlying problem: making sure a piece of UI whose text was set before the dictionary finished loading doesn't get stuck showing stale (or missing) text once the real translations arrive.
+
+## Testing this behavior
+
+`translation.service.spec.ts` verifies the cache-then-refresh sequencing described above — including that a matching version number correctly avoids a redundant download — and the interpolation logic for both placeholder styles. `language.interceptor.spec.ts` verifies that the `Accept-Language` header is only added to requests actually going to LiliShop's own API, not to unrelated third-party requests.
+
+## What's still missing
+
+This file covered how translated *text* and locale-aware *formatting* reach the page. It deliberately deferred two closely related frontend topics: how LiliShop guesses a brand-new visitor's language in the first place, and how the page layout itself flips direction for right-to-left languages like Persian and Arabic. Both are the subject of file 09.
+
+***
 
 
