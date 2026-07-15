@@ -1006,4 +1006,318 @@ This file covered how translated *text* and locale-aware *formatting* reach the 
 
 ***
 
+# 09 — Language Detection and RTL Support
+
+File 08 covered how the Angular app loads and displays translated text, once it knows what language to show. This file covers two closely related frontend problems that file 08 deliberately set aside: **what language does a brand-new visitor see before they've ever told the site anything?** and **how does the entire page layout flip for right-to-left languages like Persian and Arabic?**
+
+## What happens when a brand-new visitor opens LiliShop
+
+Let's follow this concretely, because the actual logic is a genuine priority chain — several signals checked in a specific order, each one only consulted if the ones before it didn't produce an answer.
+
+### Step 1 (before any of this even runs): a fast synchronous guess
+
+Before `LanguageService` even talks to the backend, it needs *some* language to render the very first frame of the page with — you can't wait for a network request before showing anything at all. So its very first move, `resolveInitialCode()`, is synchronous and local: check `localStorage` for a previously saved language; if there is none (a genuinely first-time visitor), fall back to the browser's own `navigator.language` setting (whatever language the browser itself is configured in), taking just the language part of it (e.g., turning `de-DE` into `de`); and if even that's unavailable, fall back to a hardcoded default of `en`. This is a reasonable first guess, but — as the next sections show — it's not necessarily LiliShop's *final* answer, because the browser's configured language doesn't always reflect the language a visitor would actually prefer to shop in.
+
+### Step 2: the real priority chain, once the language list has loaded
+
+Once `LanguageService.initialize()` has fetched the actual list of active languages from the backend (file 06 covered how that list gets populated), a method called `runFirstVisitDetection()` runs, following this priority order:
+
+1. **An explicit choice already saved on this device wins, always.** If `localStorage` already holds a language that was set because the visitor *actively chose it* — clicked it in the switcher, for instance — detection stops immediately. This is a hard rule: nothing in this chapter's detection logic is ever allowed to override a decision a visitor already made themselves.
+2. **Timezone-based detection**, described in detail below — the main "smart guess" for a genuinely new visitor.
+3. **The browser's language setting** — already applied as the initial guess in step 1, and reused here if timezone detection didn't produce anything more specific.
+4. **The backend's default language** — the absolute last resort, used only if nothing else above produced a usable answer.
+
+There's actually a fifth, separate signal, layered on top of all of this: if a visitor **logs into an existing account** on a device that has no prior explicit local choice, `applyProfileLanguage()` (called right after login) applies whatever language that account previously saved as its preference — covered more in file 10, where that same stored preference is also used to pick the language for emails. Importantly, this still respects rule 1 above: if this specific device already has an explicit local choice, logging in does **not** override it — the reasoning being that "what I clicked on *this* device" is a more immediate, current signal than "what my account remembered from wherever I last set it."
+
+## How timezone detection actually works
+
+This is the most interesting piece of engineering in this file, so it's worth walking through mechanically, step by step.
+
+Every device has a **timezone** setting — usually configured automatically by the operating system, sometimes manually. Modern browsers expose this to any website through a standard JavaScript call: `Intl.DateTimeFormat().resolvedOptions().timeZone`. This doesn't return a simple number like "UTC+2" — it returns an **IANA timezone name**, a standardized identifier like `Europe/Berlin` or `Asia/Tehran`. This naming style is worth understanding on its own: rather than just an offset from UTC (which many different places around the world share, and which also shifts with daylight saving time), an IANA name identifies a specific *region*, tied to a real place, which is precisely what makes it useful here — `Europe/Berlin` tells you something concrete about where a device probably is, in a way a raw number like `+2` doesn't.
+
+LiliShop maintains a static lookup table, `timezone-country-map.ts`, mapping IANA timezone names to two-letter country codes — for example, `Europe/Berlin` maps to `DE`. Once a visitor's timezone has been mapped to a country code this way, that code is matched against the exact same `CountryCodes` column on the `Language` table introduced in file 02, and used again by the backend's own (optional) geo provider in file 04. If a language claims that country (and if two languages happen to both claim it, whichever comes first by `DisplayOrder` wins — the identical tie-breaking rule used everywhere else this column is read), that language becomes the detected choice.
+
+It's worth being precise about *why* this table lives in frontend code while the language each country prefers lives in the database. Which country a given timezone belongs to is a fixed fact about world geography — `Europe/Berlin` will always mean Germany; that doesn't change based on business decisions. Which *language* a country's visitors should default to, on the other hand, is a judgment call an administrator might reasonably want to adjust — which is exactly the kind of thing file 06 established belongs in the database, not in code.
+
+### Why timezone detection instead of just using IP address / GeoIP?
+
+A very common way other applications solve "guess a visitor's location" is to look up their IP address against a geolocation database (often called "GeoIP"). LiliShop deliberately didn't do this, for reasons worth spelling out:
+
+- **It solves a real problem browser language alone misses.** A visitor's browser language setting is frequently *not* a reliable signal — someone using a shared or older device, or an operating system installed with English as the interface language regardless of where they actually live (genuinely common in parts of the world, including several of the specific regions LiliShop added language support for, like Iran or Turkey), would show up as "English" by browser language even though they'd clearly prefer to shop in Persian or Turkish. Timezone is a signal that's much less tied to how someone's device happens to be configured, and more tied to where they actually are.
+- **No network call, no third party, no added latency.** Reading the device's timezone is a synchronous, local JavaScript call — it doesn't involve looking anything up over the network, doesn't depend on a third-party GeoIP service being available or paid for, and can't fail due to a network problem.
+- **No IP address is ever read, sent, or stored, by this mechanism specifically.** This is a genuinely different category of data than an IP-based lookup. An IP address is often treated as personal data requiring careful handling under privacy regulation; a device's configured timezone is a much coarser, more commonly-shared signal (millions of people share the same timezone) that this system never even transmits to a server for the purpose of detection — the entire calculation (timezone → country → language) happens **inside the browser**.
+
+### The privacy story, precisely
+
+Because this is a genuinely privacy-sensitive area to write about carelessly, it's worth being exact about what actually happens, rather than making a broad claim:
+
+- The detection logic runs **entirely client-side** — the timezone string and the resulting country lookup never leave the browser as part of this specific mechanism.
+- The **only** thing that's ever persisted is the *outcome* — a language code — saved in `localStorage` on the visitor's own device, tagged internally as `source: 'detected'` (as opposed to `source: 'user'` for an explicit click). This tag is what allows the system to know, later, that this particular choice was a guess rather than a deliberate decision, and can be silently re-evaluated or upgraded, but never treated as an unchangeable commitment the way an explicit click is.
+- Once the visitor's language is decided, it's naturally reflected in the standard `Accept-Language` header sent on ordinary requests (file 08) — but that's simply normal HTTP behavior every website already relies on, not something specific to this detection feature.
+- Nothing about this detection process is recorded server-side, in a database, or in a log tied to a specific visitor — there's no table anywhere holding "we guessed this visitor is probably in Iran."
+
+### What this approach doesn't solve — stated honestly
+
+No detection heuristic is perfect, and it's worth naming the real limitations rather than glossing over them:
+
+- **A timezone maps to exactly one country in this table**, but the real world is messier: a country can have many languages, and a shared timezone can span countries with different dominant languages. The table is built at a reasonably fine-grained, city-level resolution specifically to reduce this ambiguity, but it can't eliminate it entirely.
+- **Travelers and VPN users** will have their system timezone reflect wherever their device is currently configured for, which doesn't necessarily match their nationality or actual language preference. This is precisely why detection is only ever a *default suggestion*, always visibly overridable through the language switcher, and — per the priority chain above — never runs again once a visitor has made an explicit choice.
+- **An unmapped timezone silently does nothing.** The table doesn't cover every one of the hundreds of valid IANA timezone identifiers that exist — only common, population-relevant ones. If a visitor's timezone isn't in the table, `countryFromTimezone()` simply returns nothing, and the chain moves on to the browser-language step, exactly as if this feature didn't run at all.
+- **A country genuinely split between several languages** (a country where, say, three languages are all in wide daily use) still collapses to a single detected language — whichever one an administrator happened to list that country under first. This is a real, acknowledged simplification, not a solved problem.
+
+### Recovering when a saved language gets deactivated
+
+File 06 explained that deactivating a language doesn't delete its data, but it does remove it from the *active* list. This creates a real scenario worth walking through: a visitor previously chose (or was detected into) a language that an administrator has since deactivated. `LanguageService.ensureCurrentIsActive()` handles exactly this: on load, if the currently remembered language isn't in the fresh, active list from the backend, the visitor isn't simply dumped onto the default language — instead, the system runs through the **same** detection chain a first-time visitor would go through (timezone, then browser language, then the backend's default), and reloads the page once with the result. The practical effect is that a visitor in this situation gets treated, gracefully, almost exactly like a fresh first visit, rather than the application breaking or silently switching them to an unrelated language with no logic behind it.
+
+## How right-to-left layout actually works
+
+Persian and Arabic (file 00) are the two right-to-left (RTL) languages LiliShop supports. Supporting RTL means far more than translating the words — the entire visual layout has to mirror: text starts from the right edge of the screen, navigation and menus flip sides, and anything implying a direction (like a "next" arrow) needs to point the other way.
+
+### `LanguageDirection` — direction as data, not a hardcoded list
+
+File 02 introduced the `LanguageDirection` enum on the `Language` table — each language is explicitly marked `Ltr` or `Rtl`. This single piece of data, read from the database, is what drives every direction-related decision in the whole system — there's no separate hardcoded list anywhere saying "these specific languages are RTL." `LanguageService` exposes this as a computed value, `currentDirection`, derived from whichever language is currently active.
+
+### CSS logical properties — letting the browser do the mirroring
+
+Here's the actual mechanism LiliShop uses to make the layout flip, and it's a genuinely elegant piece of modern CSS worth explaining if you haven't encountered it before.
+
+Traditionally, CSS styling uses **physical** properties — `margin-left`, `padding-right`, and so on — which describe a fixed physical direction on screen, regardless of the text's reading direction. If you style something with `margin-left: 16px` and then need it mirrored for an RTL language, you'd traditionally need a *separate* rule specifically targeting RTL pages (something like `[dir="rtl"] { margin-left: 0; margin-right: 16px; }`), doubling the amount of direction-related CSS you have to write and maintain.
+
+**CSS logical properties** solve this differently: instead of `margin-left`, you write `margin-inline-start`. This doesn't mean "left" — it means "the start edge, in whatever direction text is currently flowing." In a left-to-right language, "start" is the left edge, so `margin-inline-start` behaves exactly like `margin-left` always did. But in a right-to-left language, "start" is the *right* edge — and the browser handles this translation automatically, based on the page's `dir` attribute, with **no extra CSS rule needed at all**. LiliShop's stylesheets use exactly this style throughout — for example, the site's navigation bar uses properties like `margin-inline-end`, `inset-inline-start`, and `border-inline-end` rather than their physical equivalents. Because of this, most of the layout mirrors correctly for Persian and Arabic automatically, without a large parallel set of `[dir="rtl"]` override rules to keep in sync with the normal styling.
+
+### Applying the `dir` attribute, and avoiding a flash of the wrong layout
+
+All of this hinges on one HTML attribute: `<html dir="rtl">` (or `"ltr"`). `LanguageService` keeps this attribute in sync reactively — using a signal-driven **effect** (the same underlying Angular mechanism file 08 described for `LocalizedMatPaginatorIntl`'s labels) that automatically re-applies the correct `lang` and `dir` attributes to the page's root element whenever the active language or its direction changes.
+
+There's one more subtlety worth knowing about, because it's a real, deliberately-solved problem rather than an accident. By the time Angular itself has loaded, parsed, and run enough code to know what language and direction to apply, the browser may have already started rendering the page in the *default* (left-to-right) direction — producing a brief, visually jarring flash where the layout is shown correctly-mirrored only after a noticeable flicker. LiliShop avoids this with a small inline `<script>` placed directly in `index.html`, run before Angular has loaded at all: it reads whatever language was last saved in `localStorage` and immediately sets the `lang`/`dir` attributes on the page, before the very first pixel is painted. This is the same technique the application uses to avoid a similar flash for its light/dark color theme, applied here to layout direction instead.
+
+## Testing this behavior
+
+`language.service.spec.ts` verifies core pieces of this file's logic directly: that a valid, active list of languages loads correctly, that RTL and LTR directions are reported correctly per language, that the service gracefully keeps the current language rather than breaking if the backend call for the language list fails, and that a persisted-but-now-invalid language code correctly falls back to the default rather than leaving the application in a broken state.
+
+## What's still missing
+
+Files 02 through 09 have now covered translated UI text, business data, and how the frontend presents everything correctly per language and direction. One area remains where none of this machinery directly applies, because it runs completely outside any web request: **emails**, sent sometimes by background processes with no browser and no HTTP request involved at all. That's the subject of file 10.
+
+***
+
+# 10 — Localized Email Architecture
+
+Every file so far has assumed a web browser is involved somewhere — a shopper viewing a page, an admin using a management screen. This file covers a case where that assumption completely breaks down: **emails**, some of which are sent by code that never runs as part of any web request at all. Understanding why that matters, and how LiliShop solved it, is the subject of this file — and it ties together nearly everything explained in files 03 and 04.
+
+## Where LiliShop's emails come from
+
+LiliShop sends several kinds of emails: an email confirmation link when someone registers, a password reset link, and price-drop notifications to shoppers who've subscribed to be told when a product they're watching goes on sale. The first two happen as a direct, immediate response to something a user just did in their browser — a normal web request. The third is different in an important way: a price-drop notification isn't triggered by the recipient doing anything at all. It's triggered by an administrator changing a product's price, and it needs to go out to potentially many subscribers, each of whom might be expecting it in a different language, without making the administrator's own request wait around for every single email to be composed and sent.
+
+## Background jobs, and why they don't have a "current request"
+
+LiliShop uses a tool called **Hangfire** to handle work like this — a **background job** system. The idea is simple: instead of doing slow or bulk work directly inside the request that triggered it (which would make an admin's "update this product" click hang until hundreds of emails finished sending), that work is handed off to a separate job, which a different worker process picks up and runs on its own schedule, completely independently of the original request.
+
+Here's the problem this creates for everything files 03 and 04 described. File 04 explained that ASP.NET Core's request-localization **middleware** is what sets "the current culture" for a request — and middleware, by definition, only runs as part of processing an actual incoming HTTP request. A Hangfire background job is not an HTTP request. There's no browser, no incoming request, and therefore **no middleware pipeline ever runs for it at all** — meaning nothing ever sets a "current culture" for that code to use. Any code inside a background job that tried to rely on "whatever culture the framework happened to set" (the way ordinary request-handling code implicitly can) would find... nothing was ever set, or worse, would pick up whatever culture happened to be left over from an unrelated, completely different piece of work that ran on the same worker thread earlier.
+
+The same underlying issue affects link generation. ASP.NET Core provides tools (`IUrlHelper`, and similar) for building a URL back to a specific page or action, and — like the culture — they're normally built on top of information taken from the *current request* (like which host and port the request came in on). A background job has no current request to take that information from either. The codebase's own history shows this was a real, previously-broken feature, not a hypothetical concern: a class called `IUrlHelperService`, along with its implementation, was **deleted entirely** as part of building the current email system, specifically because it depended on this kind of request-derived information that simply isn't available from a background job.
+
+## `EmailLinkBuilder` — links built from configuration, not from a request
+
+The fix for link generation is `EmailLinkBuilder` (`Infrastructure/Services/Email/EmailLinkBuilder.cs`), and its design is refreshingly simple once you understand the problem it solves: it builds every URL purely from **application configuration** — settings like the API's base address and the frontend's base address, read once at startup — never from anything about "the current request." A method like `UnsubscribeUrl(token)` just concatenates a configured base address with a fixed path and the token, with no dependency on `HttpContext` anywhere in the class at all. Because of this, the exact same code produces byte-identical, correct URLs whether it's called from a real web request or from a Hangfire worker with no request in sight — there's no special-casing needed for either situation, because neither situation is treated as special.
+
+## `EmailComposer` — reusing the same translation catalog, on purpose
+
+The class responsible for actually assembling an email's subject and body is `EmailComposer` (`Infrastructure/Services/Email/EmailComposer.cs`), and the single most important fact about it is one this series has been building toward since file 01: **it uses the exact same `IStringLocalizer<SharedResource>` described in file 03** — the same catalog, the same fallback chain, the same admin-editable translations — rather than having its own separate set of translated email copy per language.
+
+This has a direct, practical payoff worth stating plainly: if an administrator fixes a typo in a system string through the Translations admin screen (file 06), and that string happens to be reused inside an email template, **the email is corrected too, immediately** — because there was never a second, separate copy of that text to go out of sync in the first place.
+
+### How a single email gets composed
+
+`EmailComposer` builds each email from two ingredients: a **culture-neutral HTML template** (a file like `PasswordReset.html`, containing the visual structure and placeholder markers like `{{Title}}` or `{{ButtonText}}`, with no actual English or German or Persian text baked into it directly) and the translation catalog, used to fill in each of those placeholders with the correct text for the target language.
+
+This is where `CultureScope`, introduced in file 04, does its real work. Composing an email starts by resolving which language to use (explained next), and then wraps the entire composition process in a `using (new CultureScope(languageCode))` block — exactly the pattern file 04 previewed. Every translation lookup that happens *inside* that block — including calls that ultimately reach `DatabaseStringLocalizer` from file 03 — sees the correct culture, purely because `CultureScope` forced it, with no dependency on any request-localization middleware ever having run.
+
+### Picking the right language for a given email
+
+`EmailComposer` has a method, `ResolveLanguageAsync`, that takes a requested culture code and maps it onto an actual, currently-**active** language — falling back, in order, to the default language, then to whatever language happens to be available at all, and finally to a hardcoded English fallback as an absolute last resort if the `Language` table were somehow completely empty. This mirrors the same "always produce something reasonable rather than fail outright" philosophy file 03's fallback chain used for individual translation keys, applied here at the level of "which language should this whole email be in."
+
+But where does the *requested* culture code actually come from, if there's no request to read it from? This is where `ApplicationUser.PreferredLanguageCode` — a column on the user account itself, briefly mentioned in file 09 — becomes essential. It's set automatically the moment someone registers (captured from whatever culture was active during their registration request — the one case in this chapter where a real request *was* involved) and can be updated any time a signed-in user changes their language (file 08's switcher writes it, as file 09 described). Every email-sending code path in LiliShop passes this stored value explicitly as a plain string parameter — falling back to the current request's culture only in the rare case a user's preference hasn't been recorded yet. Passing the culture as an explicit parameter, rather than relying on some ambient, implicitly-set value, is exactly the design choice that makes this code equally correct whether it's called from a live request or a Hangfire job — there's no hidden assumption anywhere about *how* the calling code happened to be triggered.
+
+## Sending one email efficiently to many subscribers in different languages
+
+Price-drop notifications are the most complex email flow, because they can go out to many subscribers at once, potentially in several different languages, and this is a good place to see LiliShop's habit (already seen in file 07, for a completely different reason) of specifically avoiding repeated, wasteful work.
+
+`NotificationService.DispatchPriceDropEmailsAsync` (`Infrastructure/Services/NotificationService.cs`) doesn't compose one email individually per subscriber. Instead, it first groups all the subscribers by their stored preferred language, and composes **exactly one** finished email per *distinct language actually present* among that batch of subscribers — so if 200 subscribers are watching a product and all but three of them prefer English, the composer runs a total of two or three times (once for English, once each for whatever other languages are represented), not 200 times. The translated **product name** used in each version comes from the product-translation system covered in file 07, so a German subscriber correctly sees the German product name in their email, not a raw English one. Only the very last step — substituting each individual recipient's personalized unsubscribe link (file 11 covers exactly how that link is made safe) — happens per-subscriber, since that part is, by definition, unique to each person.
+
+## RTL emails: a different mechanism from the frontend's
+
+File 09 explained that the frontend achieves right-to-left layout mostly through CSS logical properties, letting the browser handle the mirroring automatically. **Emails cannot reliably use that same technique.** Email is rendered by a wide variety of different email clients — Gmail, Outlook (which, notably, uses Microsoft Word's rendering engine for HTML email, a genuinely unusual and limited renderer), Apple Mail, and others — many of which have inconsistent or simply absent support for modern CSS features like logical properties. Relying on them the way the frontend does would produce broken layouts in a meaningful number of real inboxes.
+
+Instead, LiliShop's shared email shell, `EmailLayout.html`, sets the direction **explicitly and directly**: the template includes tokens like `{{Dir}}` and `{{Align}}`, filled in from the same `Language.Direction` data described in file 02 and file 09, producing literal `dir="rtl"` HTML attributes and explicit `right`/`left` alignment values baked directly into the generated markup — a more manual, less elegant approach than the frontend's, but a deliberately more *compatible* one, chosen specifically because the email-client environment doesn't support the frontend's cleverer technique reliably.
+
+## What's still missing
+
+This file covered how emails get composed correctly, in the right language, from any execution context. It set aside one specific, security-sensitive detail on purpose: the price-drop unsubscribe link mentioned briefly above has to work for a recipient who **isn't logged in at all** — and making that safe from abuse required a real piece of cryptographic design. That's the entire subject of file 11.
+
+***
+
+# 11 — Security Considerations
+
+Files 01 through 10 covered how LiliShop's multilingual system works. This file covers one specific, narrow, genuinely security-sensitive corner of it: the link inside a price-drop email that lets a subscriber unsubscribe. It looks like a small feature, but building it safely required real thought, and it's a good, self-contained example of a security technique worth understanding in isolation.
+
+This file is deliberately narrow in scope. The same branch of work that built this feature also included broader security hardening — things like restricting which websites are allowed to make credentialed cross-origin requests to the API, and rate-limiting login attempts to slow down password-guessing attacks. Those are real and worth knowing about, but they aren't specific to *localization* or *email*, which is what this tutorial series is about — so this file only touches on them briefly, at the very end, rather than covering them in depth.
+
+## Why the unsubscribe link can't require a login
+
+Think about the actual situation: a subscriber gets a price-drop email, decides they don't want any more of these, and clicks "unsubscribe." For this to work well, clicking that link has to *just work* — it can't reasonably demand that the person first go log into their account. Many recipients won't remember their password, won't want to bother, or may be checking email on a device where they've never even logged into the site. This means the endpoint handling this click has to be **anonymous** — usable by anyone, without proving who they are through a login first.
+
+## The problem anonymous access creates
+
+Here's the catch: if *anyone* can call this endpoint without logging in, then the endpoint itself needs some other way to know exactly *whose* subscription to remove. The obvious approach is to put the subscriber's user ID and the product ID directly in the link — something like `unsubscribe?userId=12&productId=345`. But think about what that means: **anyone** who can guess or construct a similar-looking link — not just the actual recipient — could use it to unsubscribe a completely different person from a completely different product, with no login and no proof they were ever the intended recipient at all. User IDs and product IDs in a shop are typically small, sequential numbers — genuinely easy to guess or simply enumerate one after another. This is exactly the kind of vulnerability the codebase's own tests point back to directly: `UnsubscribeTokenTests.cs` includes a test explicitly named around rejecting "the pre-fix format" — a plain, unsigned `userId:productId` value — confirming this was a real weakness that existed and was deliberately fixed, not just a hypothetical concern.
+
+## The fix: a token that proves it wasn't tampered with
+
+The solution is to make the **token itself** — the string embedded in the link — the actual credential, cryptographically resistant to forgery, so that knowing (or guessing) a valid-looking `userId`/`productId` pair isn't enough on its own to produce a link the server will accept.
+
+### HMAC, explained from first principles
+
+This relies on a technique called **HMAC** (Hash-based Message Authentication Code). Here's the idea in plain terms, without assuming any prior cryptography background: imagine you have a secret password that only the server knows. You can combine that secret with a piece of data (say, `"12:345"`, meaning user 12, product 345) and run it through a special mathematical function that produces a short, fixed-length string — a **signature**. This function has two properties that make it useful here: first, it's effectively impossible to work backward from the signature to guess the secret; and second, changing *even a single character* of the original data (say, from `"12:345"` to `"13:345"`) produces a **completely different** signature — not a similar one, a completely unrelated-looking one. So, if the server later receives both a piece of data *and* a signature, it can independently recompute what the signature *should* be (since only the server knows the secret), compare that to the signature it was given, and know for certain: either this data came from the server itself and hasn't been altered, or it didn't and it has been.
+
+### How LiliShop applies this, step by step
+
+The relevant code lives in `NotificationSubscriptionService` (`Infrastructure/Services/NotificationSubscriptionService.cs`), specifically three methods:
+
+**Generating a token** (`GenerateUnsubscribeToken`): the payload `"{userId}:{productId}"` is built, then signed (details on the signing step below) to produce a signature. The final token is the payload and its signature, joined together and encoded using a URL-safe variant of Base64 (a standard way of turning arbitrary bytes into plain text that's safe to embed directly in a URL, without needing any further escaping for characters a normal URL wouldn't allow).
+
+**Embedding it in the email**: this encoded token is placed into the unsubscribe link built by `EmailLinkBuilder` (file 10), sent out as part of the price-drop email.
+
+**Validating a token** (`ValidateUnsubscribeToken`): when a click comes in, the server decodes the token back into its payload and signature, **independently recomputes** what the signature for that exact payload *should* be, using the same secret and the same process, and then checks whether the recomputed signature matches the one embedded in the token. If they match, the `userId`/`productId` pair is trusted as genuine, and the unsubscribe proceeds. If they don't match — because the payload was altered, or the signature was simply made up — the request is rejected outright.
+
+### Why the signing key isn't reused from elsewhere
+
+The secret used to sign these tokens isn't the application's raw authentication signing key (the same key used elsewhere for session/login tokens) — it's a *derived* key, calculated by combining that main key with a fixed string identifying this specific purpose (`"unsubscribe:"` plus the main key) and hashing the result. This is a standard, worthwhile precaution called **key derivation**, or purpose-specific key separation. The reasoning: if the exact same secret were reused for multiple different purposes throughout the application, a weakness discovered in how *any one* of those purposes uses the key could potentially be leveraged to compromise all the others. Deriving a separate, purpose-specific key means the unsubscribe-token mechanism is cryptographically isolated from everything else the main signing key protects, even though both ultimately trace back to the same original secret.
+
+### Comparing signatures safely — the timing-attack problem
+
+There's one more subtle detail worth understanding, because it's an easy mistake to make even once you understand everything above. When the server compares the *recomputed* signature to the one embedded in the token, it might seem natural to just write ordinary code like `if (signatureA == signatureB)`. LiliShop deliberately does **not** do this — it uses a special comparison function instead, `CryptographicOperations.FixedTimeEquals`, and the reason is worth understanding.
+
+A typical string/byte comparison usually stops checking the moment it finds the *first* character that doesn't match — which is a sensible optimization for ordinary code, but a real problem for comparing secret-derived values. It means a well-placed attacker who can measure exactly *how long* each attempt takes to be rejected could, in principle, learn *how many leading characters* of their guess were correct — because a guess with more correct leading characters takes a tiny fraction longer to be rejected, since the comparison has to check further before finding a mismatch. Repeating this, character by character, could in theory let an attacker gradually reconstruct a valid signature without ever needing to guess the whole thing at once. This category of vulnerability is called a **timing attack**. `FixedTimeEquals` avoids it by always taking the same amount of time to compare two values, regardless of where — or whether — they differ, so no useful timing information ever leaks out through how long the comparison took.
+
+### What this actually prevents, concretely
+
+`UnsubscribeTokenTests.cs` verifies this design directly, and each test case corresponds to a specific attack scenario worth naming: that a genuine token round-trips correctly (generated, then successfully validated); that a **forged plain payload** — the old, pre-fix, unsigned format — is correctly rejected; that a token signed with a **different** key than the server's own is rejected (guarding against a scenario where a signing key might be swapped or a stale key reused); and that assorted garbage, malformed, or empty input is rejected safely rather than causing an error.
+
+## Keeping the rest of the email pipeline safe
+
+Two smaller, related points from file 10 are worth restating here specifically as security measures, since that's really what they are. First, every piece of dynamic text inserted into an email template — a product name, a translated phrase, anything not part of the fixed template itself — is explicitly **HTML-encoded** before being placed into the email's markup (the `Text()`/`Attr()` helpers inside `EmailComposer`, mentioned in file 10). This matters because without it, a value containing characters with special meaning in HTML could alter the structure of the email itself rather than just being displayed as plain text — a general category of problem called **HTML injection**. Second, because `EmailLinkBuilder` (also file 10) builds every link purely from fixed server-side configuration rather than from anything about the incoming request, there's no opportunity for a manipulated request to influence what host or domain a generated link points to — a class of problem that can arise when link-building code trusts request-supplied information like the `Host` header.
+
+## What's still missing
+
+This file covered the one genuinely security-critical piece of new surface area this feature introduced. File 12 shifts to a different kind of validation: not "is this safe," but "how do we know all of this actually works, and keeps working, as the codebase changes over time" — the automated test suite behind everything this series has described.
+
+***
+
+# 12 — Testing Strategy
+
+Every previous file described a piece of behavior — a fallback chain, a caching rule, a token scheme — largely by explaining the code itself. This file looks at the other side of the coin: how each of those behaviors is **automatically verified**, so that a future change to the codebase that accidentally breaks one of them gets caught immediately, rather than being discovered later by a real user seeing broken or stale translations.
+
+## Two quick concepts, if you're new to automated testing
+
+Before the table below, two terms worth defining, since they appear throughout this file's source material.
+
+A **mock** (sometimes called a **fake**) is a stand-in object used in a test, built to behave like a real dependency (say, a database or an external service) without actually being one. Using a mock lets a test check "did my code call this dependency correctly, with the right values?" or "how does my code behave if this dependency returns an error?" — without needing a real database, a real cache server, or a real network connection just to run the test. You'll see this pattern in nearly every backend test file listed below.
+
+**Testing a failure mode** means deliberately writing a test where something goes wrong on purpose — a database that's unreachable, a malformed input, a missing configuration value — and checking that the code responds sensibly (falls back gracefully, rejects the bad input, logs a warning) rather than crashing or behaving unpredictably. Several of the most important tests in this codebase are exactly this kind of test, not "happy path" tests where everything goes right.
+
+## What's tested, and what specific risk each test guards against
+
+| Test file | What it verifies | The specific risk it guards against |
+|---|---|---|
+| `DatabaseStringLocalizerTests.cs` | The fallback chain from file 03 (requested culture → parent culture → default language → raw key) | A bug here would silently mistranslate or blank out text across the *entire* application — every UI label and every error message ultimately depends on this logic being correct |
+| `LanguageServiceTests.cs` | `GetActiveCultureCodesAsync`'s behavior, including its fallback to a hardcoded `"en"` if the database is unreachable, and the single-default-language rule from file 06 | That culture resolution keeps working even if the database is temporarily unavailable, and that saving a language can never leave two languages both marked default |
+| `LocalizationEntryServiceTests.cs` | The dictionary-merging and fallback logic behind `GetDictionaryAsync` (file 05), version bumping on every edit, and that cache invalidation actually fires on mutation | That an edit is genuinely reflected everywhere it should be, not just written to the database while stale cached copies keep being served |
+| `LocalizationAdminTests.cs` | The admin CRUD operations from file 06 — paging, search, the completion-percentage calculation, and the missing-keys lookup | That the tools an administrator actually relies on to keep the catalog complete behave correctly |
+| `RequestCultureRefresherTests.cs` | The zero-redeploy activation guarantee from file 04 — that a newly activated language becomes usable, and that one invalid culture code doesn't break resolution for every other language | Arguably the single most important test file in this series to get right: a regression here would silently break the entire "activate a language with no redeploy" promise this whole system is built around |
+| `CountryHeaderRequestCultureProviderTests.cs` | That the optional geo-header provider from file 04 only reacts to short, plausible-looking country codes | That a malformed or oversized header value can't be misused as a culture string |
+| `ProductToReturnDtoMapperLocalizationTests.cs` | The batched, N+1-avoiding mapping logic from file 07, and the fallback to base columns when no translation exists | That product listings stay both fast and correct as translation coverage varies from product to product |
+| `BusinessTranslationServiceTests.cs` | The "must never break the product read path" guarantee from file 07 | That a failure fetching translations degrades to an empty result — and therefore a normal, default-language page — rather than crashing the request |
+| `OperationResultHandlerLocalizationTests.cs` | The `MessageKey` → `Error.{ErrorCode}` → raw-message fallback logic from file 03 | That *every* API error across the whole application is correctly localized through the shared catalog, not just UI labels |
+| `EmailComposerTests.cs` | Correct template and translation wiring per email type (file 10), and that `CultureScope` correctly isolates the culture used for each individual composition | That composing one email in one language never leaks its culture setting into a different email being composed around the same time |
+| `EmailLinkBuilderTests.cs` | Purely configuration-driven link generation (file 10), and correct URL encoding | That no dependency on `HttpContext` quietly creeps back into link generation, and that the specific double-encoding behavior described in file 10 round-trips correctly |
+| `NotificationServiceDispatchTests.cs` | The per-language batching logic in `DispatchPriceDropEmailsAsync` (file 10) | That subscribers are grouped by their stored language correctly, and that each group receives the content actually composed for its language |
+| `UnsubscribeTokenTests.cs` | The HMAC token scheme from file 11 | The specific forgery and tampering scenarios described in file 11 — a forged plain payload, a token signed with the wrong key, and malformed input |
+| `FakeHybridCache.cs` | Not a test itself, but test *infrastructure* — an in-memory stand-in for the real `HybridCache` (file 05) | Lets the services described above be unit-tested without needing a real Redis server running just to execute a test |
+| `language.service.spec.ts` (frontend) | The API-load and detection behaviors from files 08–09 — direction resolution per language, graceful handling when the languages API call fails, and recovery when a persisted language isn't in the active list | That the frontend never gets stuck in a broken state due to a network failure or a deactivated language |
+| `language.interceptor.spec.ts` (frontend) | That the `Accept-Language` header is added only to requests going to LiliShop's own API | That the interceptor doesn't leak the user's language preference to unrelated third-party requests |
+| `translation.service.spec.ts` (frontend) | The cache-then-refresh sequencing and version-check short-circuiting from file 08, plus placeholder interpolation | That the frontend doesn't perform redundant downloads, and that both positional (`{0}`) and named (`{count}`) placeholder styles are filled in correctly |
+
+## The overall shape of the test suite
+
+Looking at the table as a whole, a clear pattern emerges: the heaviest testing effort goes toward **fallback logic** and **cache correctness** — the kinds of bugs that don't crash anything, and therefore wouldn't necessarily be caught by simply running the application and clicking around, but would instead show up as subtly wrong behavior (a stale translation, a silently blank field, a language that mysteriously won't activate) that could go unnoticed for a while. The **unsubscribe token** is the other clear area of concentrated testing, for the opposite reason: it's the one place in this whole feature where a bug wouldn't just be an inconvenience, but a genuine security exposure.
+
+By contrast, the admin UI components themselves (the Angular components behind the Languages and Translations screens from file 06) have lighter or no dedicated automated test coverage in this codebase. This is a reasonably common, deliberate trade-off in real projects: CRUD-style screens whose logic is largely "call the right endpoint with the right values" are lower-risk if something's subtly wrong (a bug is usually obvious the moment someone uses the screen) and relatively cheap to verify manually, compared to the fallback and security logic above, where a bug can be invisible until it's already caused a real problem.
+
+## What's still missing
+
+Every file up to this point has focused on describing what LiliShop actually built, and how it works. The last file in this series changes register: it looks back across everything covered so far, names the recurring design principles, and gives an honest assessment of what's genuinely solid versus what would need more investment before scaling further — closing with practical lessons for building something similar yourself. That's file 13.
+
+***
+
+# 13 — Lessons Learned and Future Improvements
+
+This is the closing file in the series. Files 00 through 12 walked through LiliShop's multilingual system piece by piece — schema, backend mechanics, caching, admin tooling, business data, frontend, detection, RTL, email, security, and testing. This file zooms back out. The goal here isn't to explain any more code — it's to help you take what you've read and apply the *judgment* behind it to your own project, which might look nothing like LiliShop.
+
+## The principles that kept showing up
+
+Looking back across the whole series, a small number of ideas repeat again and again, in very different parts of the codebase. Naming them explicitly is more useful than it might seem — these are the kinds of decisions that transfer to other projects even when the specific technology doesn't.
+
+**Data-driven, not hardcoded.** File 06 was explicit about this: there is no hardcoded list of supported languages anywhere in LiliShop's code. Every place that needs to know "what languages exist" reads the same `Language` table, at runtime. This single idea is *why* eight languages could be added in one change with zero schema changes (file 02), why a language can be activated with no redeploy (file 04), and why the admin tooling in file 06 is even possible in the first place. Whenever you find yourself writing a `switch` statement or an `enum` for something that a non-developer might reasonably want to change, that's usually a sign it belongs in a database table instead.
+
+**Explicit parameters over ambient state.** File 04 and file 10 both turned on this idea, in different contexts. `CultureScope` and `EmailLinkBuilder` both work correctly inside a Hangfire background job specifically because they never assume "the current culture" or "the current request" is quietly available somewhere — culture is passed in as an explicit string, links are built from configuration, not from context that might not exist. Code that depends on ambient, implicitly-available state tends to work fine until it's run in a context (like a background job) where that state was never set — and the bug that results can be genuinely confusing to track down, because nothing about the code *looks* wrong.
+
+**Graceful degradation over hard failure.** This shows up constantly: a missing system-string translation shows the raw key rather than blank text or a crash (file 03). A missing product translation falls back to the default-language columns (file 07). A translation-lookup failure returns an empty result rather than propagating an exception (file 07). A deactivated language triggers re-detection rather than breaking the page (file 09). None of these are accidents — they reflect a consistent choice that a localization problem should never be allowed to become an *availability* problem. The application should always be able to show *something* correct, even if it's not yet translated into the ideal language.
+
+**One canonical source, consumed the same way everywhere.** File 01's central argument, and it holds up across the whole series: system strings, API error messages, and email copy all read from the same catalog through the same `IStringLocalizer` mechanism (file 03), rather than three separate, driftable systems. This is the kind of decision that pays off slowly — it doesn't make the first feature easier to build, but it prevents a specific, easy-to-miss class of bug (the same phrase translated two different ways in two different places) from ever having the chance to happen.
+
+## Revisiting the biggest calls — and whether they'd be right for you
+
+File 01 already laid out LiliShop's core decision (database-backed translations instead of `.resx` files or JSON bundles) in detail, including its real costs. It's worth being honest here about when that decision would, and wouldn't, make sense for a different project:
+
+- If your application supports **one language, or a small, genuinely fixed set that almost never changes**, most of this series' machinery is more than you need. `.resx` files, or even hardcoded strings, are a perfectly reasonable choice when translation changes are rare and always accompanied by a developer anyway.
+- If your team **has a dedicated localization/translation department already using a professional platform** (the kind mentioned in file 01), integrating with that platform's own workflow may serve your team better than building bespoke admin screens like file 06's — LiliShop built its own admin tooling because, at its scale, that was simpler than integrating a third-party platform, not because third-party platforms are inherently worse.
+- If your application **never sends emails or generates server-side error messages that need translation** — say, a strictly single-page frontend talking to a backend that only ever returns error codes, translated entirely client-side — then file 01's central argument (one catalog serving three surfaces) doesn't apply to you as strongly, and a simpler frontend-only translation approach may be entirely sufficient.
+- LiliShop's decision made the most sense specifically **because** it needed the same text correct in three different execution contexts (UI, API errors, background-job emails) at a real, growing scale (11 languages and counting). If your situation matches that shape, the same reasoning likely applies; if it doesn't, some of this architecture may be solving a problem you don't actually have yet.
+
+## What's genuinely production-ready today
+
+Based on everything covered in this series, several pieces of this system are well-built and thoroughly verified, per file 12's testing coverage specifically:
+
+- The **system-string localization core** (file 03) — the fallback chain is directly, thoroughly tested, and it cleanly solves the redeploy problem it set out to solve.
+- The **zero-redeploy language activation mechanism** (file 04) — tested against exactly the failure modes that would matter in practice (an invalid code, no valid codes at all), which is a genuinely strong signal of care in the implementation.
+- The **unsubscribe-token security model** (file 11) — a sound, well-tested cryptographic design, specifically verified against the exact vulnerability it replaced.
+- The **HttpContext-free email pipeline** (file 10) — correctly solves the specific background-job problem it targets, with tests confirming the fix.
+
+## What would need more investment at larger scale
+
+This series has tried to be honest throughout about limitations, rather than presenting LiliShop's system as flawless. Gathered together, here's what isn't yet built, based only on what's actually verified as present (or absent) in the codebase:
+
+- **No translation memory or machine-translation assistance.** The Translations admin screen (file 06) is pure manual entry — an admin types a key, a culture, and a value. At LiliShop's current scale (11 languages, hundreds of keys), this is manageable, but it would become a real burden at a larger catalog size. Nothing in the current design would prevent adding this later — the `UpsertEntryAsync` interface (file 06) doesn't care where a translation's text came from.
+- **No bulk import/export.** There's no CSV or XLIFF (a standard translation-exchange file format) import/export for the translation catalog, which most professional translation workflows — handing a batch of text to an external translator or agency — typically expect. The existing paged listing and single-entry save/delete endpoints (file 06) are a natural place to extend this from.
+- **No aggregated missing-key monitoring.** File 03 explained that a missing key is logged as a warning, and file 06 covered the admin tool that lists missing keys on demand — but nothing currently aggregates those warning logs into a dashboard or alert (for example, "these 12 keys were requested-and-missing 500 times this week"). The two pieces already exist; they just aren't wired together into a proactive monitoring signal yet.
+- **No plural-form awareness.** The interpolation scheme covered in file 08 (`{0}`, `{count}`) is simple substitution — it works for filling values into a sentence, but doesn't understand that different languages need entirely different sentence structures depending on a quantity (English distinguishes only "1 item" vs. "2 items"; some of LiliShop's other 10 languages, like Arabic and Russian, have considerably more grammatical plural forms than that). This is a real, unaddressed gap for any UI text that needs to count something and read naturally in every supported language.
+- **Inconsistent concurrency protection across the business-translation tables.** File 02 noted that only `ProductTranslation` has the `RowVersion` column protecting against two admins overwriting each other's simultaneous edits (file 02's "lost update" explanation) — `ProductBrandTranslation` and `ProductTypeTranslation` don't have the same protection. This is a modest, currently low-probability risk given it requires two admins editing the exact same brand or category translation at the exact same moment, but it's a real inconsistency worth resolving for completeness.
+- **Detection precision for genuinely multilingual countries.** File 09 was explicit about this limitation: both the frontend's timezone-based detection and the backend's optional country-header provider (file 04) resolve a country to a single language by `DisplayOrder` precedence. A country with several widely-used languages doesn't get a nuanced answer from either mechanism — this is an acknowledged simplification, not a bug, but it's a real gap for global commerce use cases beyond LiliShop's current needs.
+- **A potentially slow query as the catalog grows.** File 06's "missing keys" lookup, as implemented, checks each default-language key against the target culture's existing keys in a way that could become slower as the total catalog size grows into the thousands of keys. This isn't a problem yet at LiliShop's current scale, but it's a specific, nameable spot worth revisiting if the admin panel's missing-keys view is ever reported as slow.
+
+## If you're building this for a new project, starting from scratch
+
+If everything in this series has convinced you that a similar architecture is right for your own project, here's a practical, minimum-first ordering — deliberately structured so each step is independently useful even if you stop there:
+
+1. **Start with the schema** (file 02's pattern): a `Language` table (code, name, direction, active flag, default flag), and a flat key/culture/value table for system strings. Don't build the business-data translation tables yet if your project doesn't have translatable business data — add that pattern only when you actually need it (file 07).
+2. **Wire up the standard localization interface your framework provides** (file 03's `IStringLocalizer` pattern, or your framework's equivalent) against that table, with a simple fallback chain: requested culture → default culture → raw key. Resist the urge to add caching before you've confirmed you need it.
+3. **Add caching only once you can measure it mattering** (file 05) — a two-tier cache with tag-based invalidation is real engineering effort, and it's much easier to add correctly once you already have a working, correct, uncached version to compare against.
+4. **Build minimal admin editing** (file 06) as soon as a non-developer needs to touch translations — even a bare-bones table with inline editing delivers most of the value long before you need pagination, search, or completion percentages.
+5. **Only then, if you actually need it,** tackle the harder problems this series covered later: business-data translation tables (file 07), zero-redeploy culture-list refreshing (file 04), background-job-safe composition (file 10), first-visit detection (file 09), and RTL support (file 09) — each of these solves a real problem, but each is also real, avoidable complexity if your project doesn't need it yet.
+
+The single biggest transferable lesson from this whole series might be this: LiliShop's system isn't impressive because it's complicated — several of its cleanest ideas (data-driven language lists, one shared translation catalog, graceful fallback at every layer) are genuinely simple once you see them. It's a good example of engineering effort spent specifically where a real, concrete problem existed (a redeploy-per-translation-fix bottleneck, a background job with no request context, an anonymous link that needed to be unforgeable) — and not spent on solving problems the project didn't actually have yet.
+
+---
+
+This concludes the 14-file LiliShop multilingual system tutorial series.
 
