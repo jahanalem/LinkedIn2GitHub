@@ -21,6 +21,23 @@
 
 ---
 
+<img width="3072" height="1576" alt="Languages" src="https://github.com/user-attachments/assets/e9fb8d49-b6d4-4ca9-b625-0f2f1e4e9486" />
+
+<img width="3060" height="1572" alt="Translations-01" src="https://github.com/user-attachments/assets/f29a0905-0029-455f-90ca-ac4be32691c2" />
+
+<img width="3072" height="1584" alt="Translations-02" src="https://github.com/user-attachments/assets/69f34f76-db4d-42b9-b5eb-2c54dfa346c0" />
+
+<img width="4412" height="1920" alt="Dashboards" src="https://github.com/user-attachments/assets/97d49860-d224-468c-a888-f5a75e906cba" />
+
+<img width="3048" height="1574" alt="Create-Product-Translations-01" src="https://github.com/user-attachments/assets/ccc73f21-baec-4672-9a8c-2a2c432eecb5" />
+
+<img width="3066" height="1584" alt="Create-Product-Translations-02" src="https://github.com/user-attachments/assets/09015727-2875-4cdc-b1a3-a4fd923721c8" />
+
+
+
+
+
+
 <a id="part-00"></a>
 
 ## Part 00 — Introduction and Architecture Overview
