@@ -7,6 +7,20 @@ Topics include **web development**, **clean code**, and **project updates**. Fee
 
 ## 📚 Articles:
 
+### 63. LiliShop Localization Architecture — Deep Dive
+A comprehensive technical deep dive into the localization architecture of the **LiliShop** e-commerce platform, built with .NET and Angular. The article documents the complete design, implementation, and trade-offs of a database-driven localization system that enables runtime language management without application redeployment.
+
+**Key Topics Covered:**
+* **Architecture & Design Decisions** – Why a database-backed approach was chosen over `.resx` files, JSON bundles, and third-party localization platforms.
+* **Backend Localization** – Custom `IStringLocalizer`, culture resolution, fallback strategy, caching, and runtime language activation.
+* **Business Data Translation** – Localizing products, brands, and categories with EF Core while preserving performance and maintainability.
+* **Angular Runtime Localization** – Dynamic translation loading, language switching, localized UI components, RTL support, and browser integration.
+* **Administration, Security & Testing** – Translation management, localized emails, cache versioning, automated tests, and architectural lessons learned.
+
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0062_LiliShop-Localization-Architecture-Deep-Dive.md)
+
+---
+
 ### 62. How I Hardened LiliShop: An End-to-End Application Security Series
 The starting point for the whole LiliShop security project — one place tying everything together. Explains what OWASP actually is, in plain terms, since it's referenced throughout the series. Summarizes all eight vulnerabilities that were found and fixed, from login protection to payment integrity to browser-level defenses. Links out to each of the eight detailed write-ups, plus two related pieces on secure deployment and clean code.
 
