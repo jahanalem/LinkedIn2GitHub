@@ -117,7 +117,7 @@ This list comes directly from the application's seed data (`languages.json` in t
 
 </details>
 
-Every field you'll learn about in Part 02 is already visible here in plain JSON: a `Code`, a human-readable name in two forms, a `Direction`, an `IsActive`/`IsDefault` flag pair, a `DisplayOrder`, and a `CountryCodes` list. This JSON file is only ever read once, to *seed* a fresh database — after that, everything about a language lives in the database table, editable through the admin screens covered in Part 06.
+Every field you'll learn about in [Part 02](#part-02) is already visible here in plain JSON: a `Code`, a human-readable name in two forms, a `Direction`, an `IsActive`/`IsDefault` flag pair, a `DisplayOrder`, and a `CountryCodes` list. This JSON file is only ever read once, to *seed* a fresh database — after that, everything about a language lives in the database table, editable through the admin screens covered in [Part 06](#part-06).
 
 A quick vocabulary note before we go further, since these two words will appear constantly:
 
