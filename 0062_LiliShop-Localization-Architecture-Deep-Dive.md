@@ -357,7 +357,7 @@ LiliShop's bet is that these costs are worth paying because the alternative — 
 | CMS-based content | Yes | Yes | Not by itself — a second system to keep in sync |
 | **LiliShop's database-backed `IStringLocalizer`** | **Yes** | **Yes** | **Yes — one catalog, three surfaces** |
 
-With the *why* established, Part 02 moves on to the *what*: the actual database tables — `Language`, `LocalizationEntry`, and the separate tables that hold translated product, brand, and category names — and exactly how they're structured and why.
+With the *why* established, [Part 02](#part-02) moves on to the *what*: the actual database tables — `Language`, `LocalizationEntry`, and the separate tables that hold translated product, brand, and category names — and exactly how they're structured and why.
 
 ***
 <a id="part-02"></a>
