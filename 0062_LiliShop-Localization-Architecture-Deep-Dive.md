@@ -54,7 +54,7 @@ By the end of this series, you should understand:
 - How to keep that system fast, even though it reads from a database instead of files.
 - How to make languages "sound right" in emails sent from background jobs that have no user request to work with.
 - How to detect a visitor's likely language without asking them or tracking their location.
-- How the same translation catalog stays involved even in security-sensitive account flows — like recovering a lost multi-factor authentication (MFA) device — without turning into a second, drift-prone translation system.
+- How the same translation catalog covers authentication messages too — like the confirmation shown after a password-reset request — without turning into a second, drift-prone translation system.
 - What trade-offs were made along the way, and why.
 
 ### What "multilingual" means in LiliShop, concretely
@@ -215,10 +215,6 @@ A few things worth noticing already, even before we explore each box:
 - The **frontend never hardcodes a list of languages or a list of translated phrases**. It asks the backend, at startup, "what languages exist?" and "what does each phrase translate to in my chosen language?" We'll see exactly how in [Part 08](#part-08).
 - The **email system reuses the exact same localization system** as the rest of the API — it doesn't have its own separate set of translated email templates per language. [Part 10](#part-10) explains why that reuse was possible and what problem it solved.
 
-### The catalog also shows up in security-sensitive account flows
-
-One more thing worth flagging before we go deeper: the same `LocalizationEntry` catalog this whole series is about doesn't stop at product pages and error banners. When an administrator loses their authenticator device and needs to recover access — a genuinely security-sensitive operation — the confirmation message, the "please re-enter your password" prompt, and every rejection message along the way are all translated through this exact same system, the same way "Add to Cart" is. [Part 11](#part-11) covers that recovery workflow (and a related fix to how role changes end a user's sessions) in full, but it's worth knowing up front that account security and localization aren't two separate concerns in this codebase — they share the same plumbing.
-
 ### What "verified" means in this series
 
 Before we go further, one commitment: **everything in this tutorial series is based on directly reading LiliShop's actual source code** — real class names, real file paths, real database columns, and now, real code snippets pulled straight from the repositories. Where something is unclear from the code, or where a feature described here has a known limitation, this series will say so explicitly rather than guessing. You'll see this most clearly in [Part 09](#part-09) (language detection has real, acknowledged limitations) and [Part 13](#part-13) (a closing, honest assessment of what's production-ready versus what would need more work).
@@ -240,7 +236,7 @@ This is Part [0](#part-00) of [14](#part-14). Each Part builds on the ones befor
 | 08 | Angular Runtime Translation System | How the frontend loads and displays translated text |
 | 09 | Language Detection and RTL Support | How LiliShop guesses a new visitor's language, and how right-to-left layout works |
 | 10 | Localized Email Architecture | How emails — including ones sent by background jobs — get sent in the right language |
-| 11 | Security Considerations | How LiliShop protects a specific, security-sensitive email link (unsubscribing), plus how administrator accounts recover from lost MFA credentials and how role changes safely end every session |
+| 11 | Security Considerations | How LiliShop protects a specific, security-sensitive email link (unsubscribing) |
 | 12 | Testing Strategy | What's automatically tested, and what specific mistakes each test prevents |
 | 13 | Lessons Learned and Future Improvements | What to take away for your own projects, and what LiliShop's system still doesn't do |
 
@@ -2115,7 +2111,7 @@ The `foreach` loop's logic is the whole story: `if (!existing.TryGetValue(seed.C
 
 The translation-entries version follows the identical shape — only inserting a (`Key`, `Culture`) pair if it doesn't already exist — and, when it does insert new rows, it also bumps the global version counter from Part 05 so clients pick up the newly-added keys the same way they'd pick up any other translation change. This **idempotent** merge pattern (running it again has no extra effect beyond the first run) is what lets a new backend release introduce new translation keys and have them reach an existing, already-customized production database automatically on the next startup.
 
-A concrete, real example of this: the seed file started this series at 404 keys × 11 cultures (4,444 rows, per Part 00). A later round of work — adding the MFA-recovery screens and closing a handful of hardcoded frontend strings covered in Parts [08](#part-08) and [11](#part-11) — added 64 more keys, all for the 11 existing cultures, growing the file to 5,148 rows. Not one line of schema changed to support it; it was purely new rows landing through the exact merge logic above, on the very next application startup.
+A concrete, real example of this: the seed file started this series at 404 keys × 11 cultures (4,444 rows, per Part 00). A later round of work — closing a handful of hardcoded frontend strings and adding a couple of new authentication and profile-related screens, covered in [Part 08](#part-08) — added 64 more keys, all for the 11 existing cultures, growing the file to 5,148 rows. Not one line of schema changed to support it; it was purely new rows landing through the exact merge logic above, on the very next application startup.
 
 ### What the admin screens themselves look like in code
 
@@ -3372,9 +3368,9 @@ This Part covered how emails get composed correctly, in the right language, from
 
 ## Part 11 — Security Considerations
 
-Parts 01 through 10 covered how LiliShop's multilingual system works. This Part covers two places where that system and account security meet: the link inside a price-drop email that lets a subscriber unsubscribe, and — added in a later round of work — how an administrator recovers from a lost authenticator device without ever weakening multi-factor authentication (MFA), and how changing someone's role safely ends every one of their existing sessions.
+Parts 01 through 10 covered how LiliShop's multilingual system works. This Part covers one specific, narrow, genuinely security-sensitive corner of it: the link inside a price-drop email that lets a subscriber unsubscribe.
 
-Both topics are kept as narrow as the rest of this series tries to stay: this Part explains the specific mechanisms that touch localized, user-facing messages or the account model directly. Broader, unrelated security hardening from the same branches of work — CORS restrictions, login rate-limiting — is only mentioned briefly rather than covered in depth.
+This Part is deliberately narrow in scope. The same branch of work that built this feature also included broader security hardening — CORS restrictions, login rate-limiting — that isn't specific to localization or email, so it's only mentioned briefly at the end rather than covered in depth. LiliShop's account model has since grown its own security features (multi-factor authentication recovery, session invalidation on role changes), but those are authentication and account-security architecture rather than localization, so they're intentionally left for a separate article — the one exception worth calling out is that every message those flows produce is localized through the exact same mechanism described in [Part 03](#part-03).
 
 ### Why the unsubscribe link can't require a login
 
@@ -3520,391 +3516,9 @@ Each test method here maps directly onto a specific attack: `Token_round_trip_re
 
 Two smaller points from Part 10 worth restating here as security measures: every piece of dynamic text inserted into an email template goes through `WebUtility.HtmlEncode(...)` (the `Text()`/`Attr()` helpers shown in Part 10) before insertion, preventing HTML injection from a translated phrase or product name. And because `EmailLinkBuilder` (also Part 10) builds every link purely from fixed server-side configuration rather than anything about the incoming request, there's no opportunity for a manipulated request to influence what host a generated link points to.
 
-### Account security: MFA recovery and role-based session invalidation
-
-LiliShop requires administrators (the `Administrator` and `SuperAdmin` roles) to sign in with multi-factor authentication — a password plus a time-based one-time code from an authenticator app. That's good for security, but it creates a real operational problem: what happens when an administrator loses their phone — *and* their one-time recovery codes? Before the work covered in this section, the only way back in was to manually edit the database, which is slow, error-prone, and uncomfortable to do under change control. This section covers the recovery workflow built to replace that, a related vulnerability closed along the way, and a second, related problem: making sure a role change actually ends a user's existing sessions immediately, not just eventually.
-
-#### Background: how LiliShop actually ends a session
-
-Both problems in this section trace back to the same underlying mechanism, which nothing earlier in this series has needed — so it's worth explaining before using it.
-
-LiliShop issues two related credentials at login: a short-lived **access token** (a JWT — JSON Web Token — valid for 15 minutes, per `TokenService.CreateAccessTokenAsync`), which proves "this request comes from a signed-in user" on every API call, and a longer-lived **refresh token**, stored in the database (one row per device, in the `AspNetUserTokens` table), which lets a client silently obtain a new access token once the old one expires, without asking for a password again.
-
-A JWT's defining property is that it doesn't need a database lookup to be *valid* — it's self-contained, cryptographically signed data, checked against nothing but its own signature and expiry. That's normally great for performance, but it creates a real problem: how do you make an already-issued, not-yet-expired JWT stop working, the moment you decide it should? LiliShop closes that gap with one extra claim baked into every access token at issuance: a `SecurityStamp`, copied from the user's own database row. Every incoming request is checked against the *current* value of that same column:
-
-<details>
-<summary>API/Extensions/IdentityServiceExtensions.cs (the SecurityStamp check)</summary>
-
-```csharp
-options.Events = new JwtBearerEvents
-{
-    OnTokenValidated = async context =>
-    {
-        var userManager = context.HttpContext.RequestServices.GetRequiredService<UserManager<ApplicationUser>>();
-        var claimsPrincipal = context.Principal;
-        // ...
-
-        var userId = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        var tokenSecurityStamp = claimsPrincipal.FindFirst("SecurityStamp")?.Value;
-        // ...
-
-        var user = await userManager.FindByIdAsync(userId);
-        // ...
-
-        var currentSecurityStamp = await userManager.GetSecurityStampAsync(user);
-        if (tokenSecurityStamp != currentSecurityStamp)
-        {
-            context.Fail("Token is no longer valid due to logout or password change.");
-        }
-    }
-};
-```
-
-</details>
-
-`tokenSecurityStamp != currentSecurityStamp` is the whole mechanism. The moment the stamp on the user's row is replaced with a fresh random value (`existingUser.SecurityStamp = Guid.NewGuid().ToString();`), every access token minted before that change carries the *old* stamp, fails this comparison on its very next request, and is rejected outright — even though the token hasn't actually expired and nobody deleted anything. This is how "sign this user out everywhere, right now" works without keeping a list ("a blocklist") of every token ever handed out.
-
-That covers tokens already in a browser's memory. It says nothing about the refresh token sitting in the database, which a client could still use to mint a *new* access token — one signed with the *new* stamp, which would sail straight through the check above. Genuinely ending a session means doing both things together: rotate the stamp, *and* delete the stored refresh token(s). LiliShop already had a shared helper for the second half, reused by every flow in this section:
-
-```csharp
-private async Task RevokeAllRefreshTokensAsync(ApplicationUser user)
-{
-    var loginProvider = await _userManager.GetLoginProviderAsync(user);
-
-    var refreshTokens = await _userManager.Users
-        .Where(u => u.Id == user.Id)
-        .SelectMany(u => u.Tokens.Where(t => t.Name.StartsWith(TokenConstants.RefreshToken)))
-        .ToListAsync();
-
-    foreach (var token in refreshTokens)
-    {
-        await _userManager.RemoveAuthenticationTokenAsync(user, loginProvider, token.Name);
-    }
-}
-```
-
-Nothing complicated: fetch every stored refresh token belonging to this user (across every device, since each device gets its own row), and remove them one by one. Keep both halves of this mechanism in mind — SecurityStamp rotation plus refresh-token revocation — because every flow described below ends with exactly this pair.
-
-#### The self-service MFA reset: recovering without weakening MFA
-
-The most common case is also the least dramatic: an administrator still has a valid, signed-in session and still remembers their password, but their authenticator app (and its recovery codes) are gone. For this case, LiliShop added a self-service reset, reachable only by someone who is already authenticated *and* who re-confirms their password:
-
-<details>
-<summary>API/Controllers/AccountController.cs (the self-service endpoint)</summary>
-
-```csharp
-[Authorize(Policy = PolicyType.RequireAtLeastAdministratorRole)]
-[EnableRateLimiting("auth")]
-[HttpPost("mfa/reset")]
-public async Task<IActionResult> ResetAuthenticator([FromBody] ResetAuthenticatorDto dto)
-{
-    var result = await _applicationUserService.ResetAuthenticatorAsync(User, dto);
-    return HandleOperationResult(result);
-}
-```
-
-</details>
-
-`[Authorize(Policy = PolicyType.RequireAtLeastAdministratorRole)]` is the first gate — an unauthenticated caller never reaches the service method at all, which directly answers one of this feature's hard requirements: nobody can simply request a new QR code without already being signed in. `[EnableRateLimiting("auth")]` applies the same rate limit already used on login and password-reset endpoints, so this isn't a fresh brute-force surface either.
-
-The service method adds the second gate — the password:
-
-<details>
-<summary>Infrastructure/Services/ApplicationUserService.cs (ResetAuthenticatorAsync, trimmed)</summary>
-
-```csharp
-public virtual async Task<OperationResult<object>> ResetAuthenticatorAsync(ClaimsPrincipal principal, ResetAuthenticatorDto dto)
-{
-    var user = principal is null ? null : await _userManager.GetUserAsync(principal);
-    if (user is null)
-    {
-        return OperationResult.Failure<object>(ErrorCode.AuthorizationRequired);
-    }
-
-    if (string.IsNullOrEmpty(dto?.Password))
-    {
-        return OperationResult.Failure<object>(ErrorCode.InvalidArgument, "The current password is required.")
-            .WithMessageKey("Auth.PasswordRequired");
-    }
-
-    var passwordCheck = await _signInManager.CheckPasswordSignInAsync(user, dto.Password, lockoutOnFailure: true);
-
-    if (passwordCheck.IsLockedOut)
-    {
-        return OperationResult.Failure<object>(ErrorCode.AuthorizationRequired, "...")
-            .WithMessageKey("Auth.AccountLocked");
-    }
-
-    if (!passwordCheck.Succeeded)
-    {
-        return OperationResult.Failure<object>(ErrorCode.InvalidPassword);
-    }
-
-    var resetResult = await ResetMfaStateAsync(user);
-    if (resetResult.IsFailure)
-    {
-        return OperationResult.Failure<object>(resetResult);
-    }
-
-    await RevokeAllRefreshTokensAsync(user);
-
-    return OperationResult.Success<object>(new
-    {
-        Message = Localize("Auth.MfaResetDone",
-            "Two-factor authentication has been reset. You have been signed out everywhere and will set up a new authenticator app at your next sign-in.")
-    });
-}
-```
-
-</details>
-
-Two design choices here are worth being deliberate about. First, `CheckPasswordSignInAsync(user, dto.Password, lockoutOnFailure: true)` — the same lockout-protected password check the login flow itself uses — means a stolen, unlocked browser tab alone is *not* enough to trigger a reset; the caller has to prove they still know the password, on top of already holding a valid session. Second, look at what `ResetMfaStateAsync` (shown next) actually does versus what this method does with its result: it's called, its success is checked, and then the method moves straight on to revoking every session — the newly-generated recovery codes are never read out of it or returned to the caller here. That matters, because it means this endpoint *cannot* be used to peek at fresh MFA credentials; it can only ever destroy the old ones and force a completely fresh enrollment.
-
-That shared teardown logic is a small, three-step helper, reused by every flow in this section:
-
-```csharp
-private async Task<OperationResult> ResetMfaStateAsync(ApplicationUser user)
-{
-    var resetKeyResult = await _userManager.ResetAuthenticatorKeyAsync(user);
-    // ...
-
-    await _userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, RecoveryCodeCount);
-
-    var disableResult = await _userManager.SetTwoFactorEnabledAsync(user, false);
-    // ...
-
-    return OperationResult.Success();
-}
-```
-
-Each line invalidates one specific thing an attacker (or a confused future login) might still be holding: `ResetAuthenticatorKeyAsync` replaces the stored TOTP secret, so the old QR code — even if someone photographed it — produces the wrong codes from this instant on. `GenerateNewTwoFactorRecoveryCodesAsync` overwrites the stored recovery codes with a fresh batch, burning the lost ones, without this method ever reading or returning what the new codes actually are. `SetTwoFactorEnabledAsync(user, false)` switches MFA off entirely, so the account can't limp along half-configured — the very next administrator login for this account will see `RequiresTwoFactorSetup = true` and walk through full enrollment again, producing a brand-new QR code and a brand-new set of recovery codes the normal way.
-
-On the frontend, the admin's own profile page adds one more layer that the backend doesn't strictly require but a good UI should: an explicit confirmation step, on top of the password field, spelling out the consequence before it happens.
-
-```typescript
-resetMfa(): void {
-  if (!this.password().trim()) {
-    this.serverError.set(this.translationService.translate(TranslationKeys.Admin.Profile.PasswordRequired));
-    return;
-  }
-
-  const dialogData: IDialogData = {
-    title: this.translationService.translate(TranslationKeys.Admin.Profile.ResetMfaConfirmTitle),
-    content: this.translationService.translate(TranslationKeys.Admin.Profile.ResetMfaConfirmContent),
-    showConfirmationButtons: true,
-  };
-
-  this.dialog.open<DialogComponent, IDialogData>(DialogComponent, { data: dialogData })
-    .afterClosed()
-    .subscribe(confirmed => { if (confirmed) { this.performReset(); } });
-}
-```
-
-Worth being precise about what this dialog actually is and isn't: it's a courtesy that helps an admin avoid an accidental click, not a security boundary — nothing stops a direct API call from skipping it entirely. The real boundary is the backend's password re-check above; the frontend confirmation is UX polish layered on top of it, not a substitute for it.
-
-#### A vulnerability closed while building this: enrollment must not stay open forever
-
-While building the reset flow, a related gap in the *existing* enrollment endpoints became visible. `mfa/setup` and `mfa/enable` authenticate their caller with just an email and password — deliberately, since they're the very first enrollment step, reached before any JWT exists yet for an administrator who has never configured MFA. Before this fix, neither endpoint checked whether MFA was *already* configured — so anyone who obtained an administrator's password (through a leak, a guess, reuse from another breach) could call `mfa/setup` and read the account's existing shared secret straight back out, or call `mfa/enable` and overwrite it with a secret of their own choosing. Either way, the "something you have" half of two-factor authentication was completely bypassable using only "something you know" — quietly defeating the whole point of requiring MFA for administrators.
-
-The fix is a guard added to the top of both endpoints:
-
-```csharp
-if (await _userManager.GetTwoFactorEnabledAsync(user))
-{
-    _logger.LogWarning("MFA setup blocked: two-factor authentication is already enabled. UserId={UserId}", user.Id);
-
-    return OperationResult.Failure<AuthenticatorSetupDto>(
-        ErrorCode.AuthorizationRequired,
-        "Two-factor authentication is already configured for this account.")
-        .WithMessageKey("Auth.MfaAlreadyConfigured");
-}
-```
-
-Once `GetTwoFactorEnabledAsync` reports `true`, both enrollment endpoints refuse to run — no secret is returned, nothing is overwritten. From that point on, the *only* way to reconfigure MFA is the password-confirmed reset flow above, which — unlike enrollment — requires an existing, authenticated session, not just a password. This is a useful general lesson: an endpoint that's completely reasonable to leave open *before* a security feature is turned on can quietly become a bypass *for* that same feature once it's on, if nothing re-checks the feature's current state.
-
-#### Break-glass recovery: when a SuperAdmin has to step in
-
-Self-service reset still needs two things: an existing session, and a remembered password. If an administrator's account is locked out entirely — password forgotten too, or every device signed out — self-service can't help. For that case, a `SuperAdmin` (the single most privileged role) can reset MFA on someone else's behalf:
-
-<details>
-<summary>Infrastructure/Services/ApplicationUserService.cs (ResetAuthenticatorForUserAsync)</summary>
-
-```csharp
-public virtual async Task<OperationResult> ResetAuthenticatorForUserAsync(int targetUserId, ClaimsPrincipal actingPrincipal)
-{
-    var actingUser = actingPrincipal is null ? null : await _userManager.GetUserAsync(actingPrincipal);
-    if (actingUser is null)
-    {
-        return OperationResult.Failure(ErrorCode.AuthorizationRequired);
-    }
-
-    if (actingUser.Id == targetUserId)
-    {
-        return OperationResult.Failure(
-            ErrorCode.InvalidArgument,
-            "Use the password-confirmed self-service reset for your own account.")
-            .WithMessageKey("Auth.MfaResetOwnAccount");
-    }
-
-    var targetUser = await _userManager.FindByIdAsync(targetUserId.ToString());
-    if (targetUser is null)
-    {
-        return OperationResult.Failure(ErrorCode.UserNotFound, "User not found.");
-    }
-
-    var resetResult = await ResetMfaStateAsync(targetUser);
-    if (resetResult.IsFailure)
-    {
-        return resetResult;
-    }
-
-    await RevokeAllRefreshTokensAsync(targetUser);
-
-    // Deliberately logged at warning level: this is a sensitive, audit-relevant action.
-    _logger.LogWarning(
-        "MFA was reset by a SuperAdmin. TargetUserId={TargetUserId}, ActingUserId={ActingUserId}",
-        targetUserId, actingUser.Id);
-
-    return OperationResult.Success("Two-factor authentication has been reset for the user.");
-}
-```
-
-</details>
-
-The check worth pausing on is `if (actingUser.Id == targetUserId)`. Without it, a SuperAdmin's own, already-authenticated session — no password re-entry required on *this* endpoint — could be used to strip its own MFA in one request. Rejecting the own-account case forces the only path that can touch a SuperAdmin's own MFA state back through the password-gated self-service flow, exactly like every other user. `[Authorize(Policy = PolicyType.RequireSuperAdminRole)]` on the controller action restricts this to the single most privileged role, not any Administrator, following the same least-privilege thinking as everywhere else in the authorization model. And `_logger.LogWarning(...)` — not the routine `LogInformation` used elsewhere — is a deliberate choice: "this account's second factor was just disabled by someone else" is exactly the kind of event worth standing out in the logs, not blending into ordinary activity.
-
-The admin-facing "edit user" screen mirrors the same own-account restriction directly in its UI, so a SuperAdmin never even sees the button on their own profile:
-
-```typescript
-readonly canResetMfa = computed(() =>
-  this.isSuperAdmin() && !!this.adminUser() && this.adminUser()!.id !== this.currentUserId());
-```
-
-#### Keeping MFA and roles honest: teardown on demotion, fresh enrollment on promotion
-
-There's a third piece this work had to get right: whether an account needs MFA at all is derived from its *current* role (`Administrator` and `SuperAdmin` require it; nothing else does), checked fresh at every login — so demoting an admin already stops the login flow from demanding a code. But leaving it at that would have two problems: a demoted account would keep a fully working authenticator secret and valid recovery codes sitting unused, and if that person were promoted back to an MFA-required role later, those same old, potentially long-exposed credentials would silently become valid again — with no fresh enrollment forced at all.
-
-The fix ties MFA state to the role transition itself, inside the same method that changes a user's role:
-
-<details>
-<summary>Infrastructure/Services/ApplicationUserService.cs (UpdateUserAsync, the role-change branch)</summary>
-
-```csharp
-if (!string.IsNullOrEmpty(user.RoleName) && existingRole != user.RoleName)
-{
-    // ...remove the old role, add the new one (existing code)...
-
-    requiresSecurityStampUpdate = true;
-
-    // MFA is a role-based obligation: an account leaving the administrator roles must not
-    // keep privileged MFA state behind. Tear it down completely (secret, recovery codes,
-    // TwoFactorEnabled) so the account behaves like any standard user — and so a later
-    // promotion starts a fresh enrollment instead of trusting stale credentials.
-    if (IsMfaRequiredForRole(existingRole ?? string.Empty) && !IsMfaRequiredForRole(user.RoleName))
-    {
-        var mfaCleanupResult = await ResetMfaStateAsync(existingUser);
-        if (mfaCleanupResult.IsFailure)
-        {
-            return OperationResult.Failure<IUser>(mfaCleanupResult);
-        }
-    }
-
-    // The permission set changed, so every active session must end now: the security stamp
-    // rotation below kills live access tokens (validated per request), and revoking the
-    // refresh tokens prevents any device from silently renewing the old session. The user
-    // signs in again and receives a token with the new role claims.
-    await RevokeAllRefreshTokensAsync(existingUser);
-}
-if (requiresSecurityStampUpdate)
-{
-    existingUser.SecurityStamp = Guid.NewGuid().ToString();
-}
-```
-
-</details>
-
-with a small, private rule defining exactly which roles carry the MFA obligation:
-
-```csharp
-private static bool IsMfaRequiredForRole(string role) => role == Role.Administrator || role == Role.SuperAdmin;
-```
-
-`IsMfaRequiredForRole(existingRole) && !IsMfaRequiredForRole(user.RoleName)` is only true for a genuine *downgrade* — an Administrator or SuperAdmin moving to `Standard`, `DiscountManager`, or `AdminPanelViewer`. Exactly then, the same `ResetMfaStateAsync` helper the self-service and break-glass flows use runs again here: new secret, burned recovery codes, MFA switched off. Notice what this condition deliberately leaves alone: moving between `Administrator` and `SuperAdmin` — both MFA-required — never touches MFA state, since there's nothing inconsistent about it. And promoting a standard user *into* an MFA-required role doesn't call `ResetMfaStateAsync` either, because there's nothing to tear down — `TwoFactorEnabled` is already `false` for that account, so their very next login into the new role falls straight into the ordinary "not enrolled yet" branch and starts enrollment fresh, with no extra code needed for that direction at all.
-
-The final line of the excerpt, `await RevokeAllRefreshTokensAsync(existingUser);`, runs for *every* role change, not just MFA-relevant ones — paired with the `SecurityStamp` rotation a few lines later, this is the direct implementation of "role changes must force a fresh login." A user with a changed role keeps working with their current (soon-to-fail) access token for at most a few requests; their refresh token is already gone, so the moment that access token is rejected by the `SecurityStamp` check from earlier in this Part, the only way back in is a brand-new sign-in — which is also the only moment a fresh JWT gets minted carrying the new role's claims.
-
-Here's the whole picture, both recovery paths and the role-linkage, in one diagram:
-
-```mermaid
-flowchart TD
-    A["Administrator loses phone<br/>and/or recovery codes"] --> B{"Still has a valid<br/>session and password?"}
-    B -- "Yes" --> C["POST /account/mfa/reset<br/>(re-enter password)"]
-    B -- "No — locked out entirely" --> D["A SuperAdmin calls<br/>POST /account/user/id/mfa/reset<br/>(never their own account)"]
-    C --> E["ResetMfaStateAsync:<br/>new secret, recovery codes burned,<br/>TwoFactorEnabled = false"]
-    D --> E
-    E --> F["RevokeAllRefreshTokensAsync<br/>+ SecurityStamp rotated"]
-    F --> G["Every session ends;<br/>next sign-in re-enrolls<br/>with a new QR code"]
-
-    H["Admin role removed<br/>(UpdateUserAsync)"] --> I["Same ResetMfaStateAsync<br/>runs as part of the role change"]
-    I --> F
-```
-
-#### How this is proven to work: the tests
-
-<details>
-<summary>Applications/Lili.Shop.Tests/Services/Users (excerpts)</summary>
-
-```csharp
-[Fact]
-public async Task RoleChange_RevokesEveryRefreshToken_AndRotatesSecurityStamp()
-{
-    var existingUser = SetupExistingUser(Role.Standard, "phone", "laptop", "tablet");
-    var originalStamp = existingUser.SecurityStamp;
-
-    var result = await _sut.UpdateUserAsync(5, BuildUpdatePayload(existingUser, Role.AdminPanelViewer));
-
-    result.IsSuccess.Should().BeTrue();
-    existingUser.SecurityStamp.Should().NotBe(originalStamp,
-        "a rotated stamp invalidates every outstanding access token on its next request");
-    VerifyAllRefreshTokensRevoked(existingUser);
-}
-
-[Fact]
-public async Task ResetAuthenticatorForUser_OwnAccount_IsRejected()
-{
-    var superAdmin = BuildUser(id: 1, role: Role.SuperAdmin);
-    var principal = SetupCurrentUser(superAdmin);
-
-    var result = await _sut.ResetAuthenticatorForUserAsync(superAdmin.Id, principal);
-
-    result.IsFailure.Should().BeTrue();
-    result.MessageKey.Should().Be("Auth.MfaResetOwnAccount");
-    _userManagerMock.Verify(m => m.ResetAuthenticatorKeyAsync(It.IsAny<ApplicationUser>()), Times.Never);
-}
-
-[Fact]
-public async Task GetAuthenticatorSetup_IsBlocked_WhenMfaAlreadyEnabled()
-{
-    // ...arrange an admin whose GetTwoFactorEnabledAsync already returns true...
-
-    var result = await _sut.GetAuthenticatorSetupAsync(new LoginDto { Email = admin.Email!, Password = "pw" });
-
-    result.IsFailure.Should().BeTrue();
-    result.MessageKey.Should().Be("Auth.MfaAlreadyConfigured");
-    // The shared secret must never be read for an already-enrolled account.
-    _userManagerMock.Verify(m => m.GetAuthenticatorKeyAsync(It.IsAny<ApplicationUser>()), Times.Never);
-}
-```
-
-</details>
-
-Each test name maps onto a specific guarantee from this section: `RoleChange_RevokesEveryRefreshToken_AndRotatesSecurityStamp` is the direct proof that a role change ends every session, not just the ones that happen to expire naturally. `ResetAuthenticatorForUser_OwnAccount_IsRejected` is the regression test for the "SuperAdmin can't reset their own MFA through the break-glass path" rule. `GetAuthenticatorSetup_IsBlocked_WhenMfaAlreadyEnabled` is the regression test for the vulnerability described above — and its last assertion is the sharpest part: it doesn't just check that the call fails, it checks that the shared secret was *never even read* out of the user store, closing off the exact information leak the original bug allowed. [Part 12](#part-12) covers the full test suite, including these files, in more detail.
-
-Every message produced across this whole section — the password-required prompt, the lockout notice, the "already configured" rejection, the "use your own account's flow" rejection, the final success message — carries a `MessageKey` (`Auth.PasswordRequired`, `Auth.AccountLocked`, `Auth.MfaAlreadyConfigured`, `Auth.MfaResetOwnAccount`, `Auth.MfaResetDone`) resolved through the exact `OperationResultHandler` path Part 03 described, or — for the one message embedded in a successful result — the `Localize(...)` helper from Part 03's newly-added section. None of this account-security work needed its own translation mechanism. It's further, concrete proof of Part 01's central claim: one catalog, reused everywhere a human-readable message needs to reach a user, security-sensitive flows included.
-
 ### What's still missing
 
-This Part covered the security-critical pieces of new surface area introduced across both rounds of work: the unsubscribe-token scheme, and the MFA-recovery/role-change session model. Part 12 shifts to a different kind of validation: the automated test suite behind everything this series has described.
+This Part covered the one genuinely security-critical piece of new surface area this feature introduced. Part 12 shifts to a different kind of validation: the automated test suite behind everything this series has described.
 
 ***
 <a id="part-12"></a>
@@ -3967,19 +3581,14 @@ The key line is inside `GetOrCreateAsync`: instead of actually caching anything,
 | `NotificationServiceDispatchTests.cs` | The per-language batching logic in `DispatchPriceDropEmailsAsync` (Part 10) | Subscribers are grouped correctly, and each group receives the right composed content |
 | `UnsubscribeTokenTests.cs` | The HMAC token scheme from Part 11 | The specific forgery/tampering scenarios shown in Part 11 |
 | `FakeHybridCache.cs` | Not a test itself — test infrastructure | Lets the services above be unit-tested without a real Redis server running |
-| `ApplicationUserServiceMfaAndLocalizationTests.cs` | `ForgotPasswordAsync`'s localized message and fallback (Part 03), the admin MFA login gate, the enrollment lock-out once MFA is enabled, self-service and SuperAdmin MFA reset (Part 11) | A password-only attacker could otherwise read or replace an already-configured MFA secret, or a reset could leave stale credentials still valid |
-| `ApplicationUserServiceRoleChangeTests.cs` | Refresh-token revocation and `SecurityStamp` rotation on every role change; MFA teardown on demotion; MFA state left untouched on promotion or a lateral admin-role move (Part 11) | A demoted admin's old session — or old MFA credentials — could otherwise stay valid after their permissions changed |
-| `ApplicationUserServiceTestBase.cs` | Not a test itself — shared test harness (mocks `UserManager`/`SignInManager`, builds users with roles and refresh tokens) | Lets the two files above be unit-tested without a real ASP.NET Core Identity database |
 | `language.service.spec.ts` | The API-load and detection behaviors from Parts 08–09 | The frontend never gets stuck broken due to a network failure or deactivated language |
 | `language.interceptor.spec.ts` | The `Accept-Language` header only reaches LiliShop's own API | The interceptor doesn't leak the user's language preference to third-party requests |
 | `translation.service.spec.ts` | Cache-then-refresh sequencing, placeholder interpolation | No redundant downloads; both placeholder styles filled in correctly |
 | `language-switcher.component.spec.ts` | The current-language display (Part 08) and its fallback to an uppercased code | The switcher never silently shows nothing, even before the language list has loaded |
-| `admin-profile.component.spec.ts` | The self-service MFA reset flow's password-required check, confirmation dialog, and error handling (Part 11) | An admin can't trigger a destructive MFA reset without confirming twice (password, then dialog) |
-| `login.component.spec.ts` (updated) | The multi-stage login flow — credentials, then MFA setup or verify — now modeled explicitly | Keeps the spec matching the real, MFA-aware login contract instead of a pre-MFA one |
 
 ### The overall shape of the test suite
 
-The heaviest testing effort goes toward **fallback logic** and **cache correctness** — bugs that don't crash anything, and so wouldn't necessarily be caught just by clicking around the app. The **unsubscribe token** is another clear area of concentrated testing, for the opposite reason: it's a place a bug wouldn't just be an inconvenience, but a genuine security exposure. Account-security logic — MFA reset and role-based session termination, both covered in Part 11 — joined that same category of concentrated coverage for the same reason: a role downgrade that silently forgot to revoke refresh tokens would be just as invisible during manual testing as a caching bug, and just as consequential as a forged unsubscribe token. That's why `ApplicationUserServiceRoleChangeTests.cs` and `ApplicationUserServiceMfaAndLocalizationTests.cs` exist as their own dedicated files rather than a handful of extra cases bolted onto an existing one.
+The heaviest testing effort goes toward **fallback logic** and **cache correctness** — bugs that don't crash anything, and so wouldn't necessarily be caught just by clicking around the app. The **unsubscribe token** is the other clear area of concentrated testing, for the opposite reason: it's the one place a bug wouldn't just be an inconvenience, but a genuine security exposure.
 
 By contrast, the admin UI components themselves have lighter or no dedicated automated test coverage. This is a common, deliberate trade-off: CRUD-style screens whose logic is largely "call the right endpoint with the right values" are lower-risk if something's subtly wrong, compared to the fallback and security logic above, where a bug can be invisible until it's already caused a real problem.
 
@@ -4003,9 +3612,7 @@ This is the closing file in the series. The goal here isn't to explain any more 
 
 **Graceful degradation over hard failure.** A missing system-string translation shows the raw key rather than blank text or a crash. A missing product translation falls back to the default-language columns. A translation-lookup failure returns an empty result rather than propagating an exception. A deactivated language triggers re-detection rather than breaking the page.
 
-**One canonical source, consumed the same way everywhere.** System strings, API error messages, and email copy all read from the same catalog through the same `IStringLocalizer` mechanism, rather than three separate, driftable systems — and, as Part 11 showed, that stayed true even once account-security messages joined the catalog: no separate system was built for them either.
-
-**Ending every session is the default for a security-relevant change, not an afterthought.** A role change or an MFA reset doesn't just update a database row and hope a stale JWT eventually expires on its own — it rotates the `SecurityStamp` and revokes every stored refresh token in the same operation that made the change, so the effect is immediate and universal, not "eventually consistent."
+**One canonical source, consumed the same way everywhere.** System strings, API error messages, and email copy all read from the same catalog through the same `IStringLocalizer` mechanism, rather than three separate, driftable systems.
 
 ### Revisiting the biggest calls — and whether they'd be right for you
 
@@ -4020,7 +3627,6 @@ This is the closing file in the series. The goal here isn't to explain any more 
 - The **zero-redeploy language activation mechanism** (Part 04) — tested against exactly the failure modes that would matter in practice.
 - The **unsubscribe-token security model** (Part 11) — a sound, well-tested cryptographic design.
 - The **HttpContext-free email pipeline** (Part 10) — correctly solves the specific background-job problem it targets.
-- The **account-security session model** (Part 11) — `SecurityStamp` rotation plus refresh-token revocation is a small, well-understood mechanism, reused identically for logout-everywhere, MFA reset, and role changes, instead of three separate implementations.
 
 ### What would need more investment at larger scale
 
@@ -4031,7 +3637,6 @@ This is the closing file in the series. The goal here isn't to explain any more 
 - **Inconsistent concurrency protection.** Only `ProductTranslation` has `RowVersion` — `ProductBrandTranslation`/`ProductTypeTranslation` don't.
 - **Detection precision for genuinely multilingual countries.** Both detection mechanisms resolve a country to a single language by `DisplayOrder` precedence.
 - **A potentially slow query as the catalog grows.** The "missing keys" lookup could become slower as the total catalog size grows into the thousands of keys.
-- **A single locked-out SuperAdmin is still a genuine edge case.** If the only `SuperAdmin` account loses its authenticator, its recovery codes, and every active session at the same time, no in-app flow can recover it — by design, since any such flow would itself be a way to bypass MFA. This is left as an intentional, auditable break-glass scenario (direct database access under change control) rather than something silently papered over.
 
 ### If you're building this for a new project, starting from scratch
 
@@ -4045,4 +3650,4 @@ The single biggest transferable lesson from this whole series might be this: Lil
 
 ---
 
-This concludes the 14-part LiliShop multilingual system tutorial series, now enriched throughout with real, verified code from both repositories — including a later round of account-security work (MFA recovery and role-based session invalidation, covered in [Part 11](#part-11)) built on top of the same localization catalog.
+This concludes the 14-part LiliShop multilingual system tutorial series, now enriched throughout with real, verified code from both repositories.
