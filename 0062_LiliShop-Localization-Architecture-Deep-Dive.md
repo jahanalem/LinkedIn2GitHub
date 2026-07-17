@@ -220,9 +220,9 @@ Before we go further, one commitment: **everything in this tutorial series is ba
 
 ### How this series is organized
 
-This is Part 0 of 14. Each Part builds on the ones before it — you can read them in order, or, once you understand this introduction, jump to whichever topic you need. Here's the full map:
+This is Part [0](#part-00) of [14](#part-14). Each Part builds on the ones before it — you can read them in order, or, once you understand this introduction, jump to whichever topic you need. Here's the full map:
 
-| # | File | What it covers |
+| # | Part | What it covers |
 |---|---|---|
 | 00 | Introduction and Architecture Overview | *You are here.* |
 | 01 | The Localization Problem and Architecture Decisions | Why database-driven translations were chosen over files, JSON bundles, or third-party services |
@@ -239,7 +239,7 @@ This is Part 0 of 14. Each Part builds on the ones before it — you can read th
 | 12 | Testing Strategy | What's automatically tested, and what specific mistakes each test prevents |
 | 13 | Lessons Learned and Future Improvements | What to take away for your own projects, and what LiliShop's system still doesn't do |
 
-Let's start with **why** this system was built the way it was — Part 01.
+Let's start with **why** this system was built the way it was — [Part 01](#part-01).
 
 ***
 
@@ -247,7 +247,7 @@ Let's start with **why** this system was built the way it was — Part 01.
 
 ## Part 01 — The Localization Problem and Architecture Decisions
 
-Part 00 told you *what* LiliShop built: a system where translated text lives in a database instead of in files, and can be edited by an administrator without a deployment. Before we look at *how* it's built, this Part explains *why* that specific choice was made. Understanding the reasoning here will make every later Part easier to follow, because almost every technical decision in this series traces back to the problem explained on this page.
+Part [00](#part-00] told you *what* LiliShop built: a system where translated text lives in a database instead of in files, and can be edited by an administrator without a deployment. Before we look at *how* it's built, this Part explains *why* that specific choice was made. Understanding the reasoning here will make every later Part easier to follow, because almost every technical decision in this series traces back to the problem explained on this page.
 
 ### Start with the obvious approach, and why it doesn't hold up
 
@@ -274,7 +274,7 @@ For a single sentence of copy. On a shop that is actively taking orders in 11 la
 
 #### Problem 2: it doesn't fit the people who need to edit it
 
-Related to the above: `.resx` files live in source control, in a format most translators, administrators, or shop-content people are not equipped to edit safely. Someone without developer tools would need a developer's help just to change a sentence. LiliShop's requirement (visible directly in the codebase, which we'll examine in Part 06) is a web-based admin screen where an authorized non-developer can search for a phrase, edit it, and save — and see the change reflected on the live site within moments, not after the next release.
+Related to the above: `.resx` files live in source control, in a format most translators, administrators, or shop-content people are not equipped to edit safely. Someone without developer tools would need a developer's help just to change a sentence. LiliShop's requirement (visible directly in the codebase, which we'll examine in [Part 06](#part-06)) is a web-based admin screen where an authorized non-developer can search for a phrase, edit it, and save — and see the change reflected on the live site within moments, not after the next release.
 
 #### The same two problems apply to JSON translation bundles
 
@@ -284,7 +284,7 @@ It also introduces a *third* problem, specific to LiliShop: a JSON bundle only s
 
 #### Problem 3: third-party translation platforms solve a different problem
 
-There are commercial platforms built specifically for managing translations (services like Lokalise, Crowdin, or POEditor are the general category — the Codebase Analysis Summary that this series is based on notes these as the kind of alternative considered, not as specific vendors LiliShop evaluated in detail). These tools are genuinely good at what they do: giving professional translators a proper workflow, tracking translation memory (reusing previous translations for similar phrases), and sometimes integrating machine translation.
+There are commercial platforms built specifically for managing translations (services like [Lokalise](https://lokalise.com/), [Crowdin](https://crowdin.com/), or [POEditor](https://poeditor.com/) are the general category — the Codebase Analysis Summary that this series is based on notes these as the kind of alternative considered, not as specific vendors LiliShop evaluated in detail). These tools are genuinely good at what they do: giving professional translators a proper workflow, tracking translation memory (reusing previous translations for similar phrases), and sometimes integrating machine translation.
 
 But they come with real costs that mattered for this decision: they are an **external dependency** — your application now depends on a third-party service being available and affordable; they typically require a **network call at build time or runtime** to fetch translations; and for a project at LiliShop's current scale, the operational overhead of integrating and paying for such a platform is disproportionate to the actual problem being solved. This isn't a claim that such platforms are bad — only that they solve a *workflow and scale* problem LiliShop didn't yet have, while leaving the *redeploy* problem (the actual blocker) partly unsolved unless the platform also pushes translations into the running application without a rebuild.
 
