@@ -216,7 +216,7 @@ A few things worth noticing already, even before we explore each box:
 
 ### What "verified" means in this series
 
-Before we go further, one commitment: **everything in this tutorial series is based on directly reading LiliShop's actual source code** — real class names, real file paths, real database columns, and now, real code snippets pulled straight from the repositories. Where something is unclear from the code, or where a feature described here has a known limitation, this series will say so explicitly rather than guessing. You'll see this most clearly in Part 09 (language detection has real, acknowledged limitations) and Part 13 (a closing, honest assessment of what's production-ready versus what would need more work).
+Before we go further, one commitment: **everything in this tutorial series is based on directly reading LiliShop's actual source code** — real class names, real file paths, real database columns, and now, real code snippets pulled straight from the repositories. Where something is unclear from the code, or where a feature described here has a known limitation, this series will say so explicitly rather than guessing. You'll see this most clearly in [Part 09](#part-09) (language detection has real, acknowledged limitations) and [Part 13](#part-13) (a closing, honest assessment of what's production-ready versus what would need more work).
 
 ### How this series is organized
 
