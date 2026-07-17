@@ -124,7 +124,7 @@ A quick vocabulary note before we go further, since these two words will appear 
 - **Culture code**: a short string that identifies a language (and sometimes a region), like `en`, `de`, or `fa`. Some systems use more specific codes like `de-DE` (German, as spoken in Germany) versus `de-AT` (German, as spoken in Austria). LiliShop mostly works with the simpler two-letter form.
 - **Locale**: closely related to "culture," but usually refers to everything that changes based on a user's region and language together — not just the words on screen, but also how dates, numbers, and currency are displayed (for example, whether a decimal point or a decimal comma is used).
 
-Two of LiliShop's 11 languages — Persian and Arabic — are **right-to-left (RTL)** languages. That means the entire page layout has to mirror itself: text starts on the right edge of the screen instead of the left, navigation menus flip, and even icons that imply direction (like an arrow "back" button) need to point the other way. The other nine languages are **left-to-right (LTR)**, the direction most Western languages and most English-speaking developers are used to by default. Supporting RTL is not just a translation problem — it's a layout problem, and we'll dedicate a full chapter (Part 09) to how LiliShop solves it.
+Two of LiliShop's 11 languages — Persian and Arabic — are **right-to-left (RTL)** languages. That means the entire page layout has to mirror itself: text starts on the right edge of the screen instead of the left, navigation menus flip, and even icons that imply direction (like an arrow "back" button) need to point the other way. The other nine languages are **left-to-right (LTR)**, the direction most Western languages and most English-speaking developers are used to by default. Supporting RTL is not just a translation problem — it's a layout problem, and we'll dedicate a full chapter ([Part 09](#part-09)) to how LiliShop solves it.
 
 ### The two codebases
 
@@ -133,7 +133,7 @@ LiliShop is built as two separate applications that talk to each other over HTTP
 - **`LiliShop-backend-dotnet`** — a .NET (C#) API server, built using a style called **Clean Architecture**. In short, this means the codebase is organized into layers, where each layer has one job and doesn't need to know the details of the layers around it. We'll explain each layer as we encounter it, but at a glance:
   - **Domain** — the core data shapes (e.g., "a Product has a Name and a Price"), with no dependency on databases, web frameworks, or anything external.
   - **Application** — the business rules and the *interfaces* (contracts) that describe what operations are available, without saying how they're implemented.
-  - **Infrastructure** — the actual implementations: talking to the SQL database, talking to Redis (a caching system we'll explain in Part 05), sending emails, and so on.
+  - **Infrastructure** — the actual implementations: talking to the SQL database, talking to Redis (a caching system we'll explain in [Part 05](#part-05)), sending emails, and so on.
   - **API** — the outermost layer: the controllers that turn incoming HTTP requests into calls against the Application layer, and turn the results back into HTTP responses.
 
 - **`LiliShop-frontend-angular`** — the shopper- and admin-facing website, built with Angular, a JavaScript/TypeScript framework for building web user interfaces.
@@ -148,17 +148,17 @@ Here is the single most important architectural fact to understand before readin
 
 Things like "Add to Cart," "Your email or password is incorrect," or "Your order has shipped" are **system strings**: short pieces of text that are part of the *application itself*, not part of the shop's product catalog. There's a fixed, known set of these (currently a few hundred), and the same text ("Add to Cart") needs to be translated once per language and then reused everywhere it appears.
 
-These are stored in a database table called `LocalizationEntry`. Each row is one translated phrase for one language, addressed by a short identifier called a **key** — for example, the key `Auth.InvalidCredentials` might map to "Your email or password is incorrect" in English and "Ihre E-Mail-Adresse oder Ihr Passwort ist falsch" in German. We'll dig into this table's exact structure in Part 02, and into exactly how a key gets turned into displayed text in Part 03.
+These are stored in a database table called `LocalizationEntry`. Each row is one translated phrase for one language, addressed by a short identifier called a **key** — for example, the key `Auth.InvalidCredentials` might map to "Your email or password is incorrect" in English and "Ihre E-Mail-Adresse oder Ihr Passwort ist falsch" in German. We'll dig into this table's exact structure in [Part 02](#part-02), and into exactly how a key gets turned into displayed text in [Part 03](#part-03).
 
 #### System 2 — Business data (product names, brand names, category names)
 
 A product name like "Wireless Bluetooth Headphones" is completely different from a system string. There isn't a small, fixed catalog of product names — there could be thousands of products, each needing its own translation into each of the 11 languages, and new products are added constantly by shop administrators, not developers.
 
-These translations live in their own tables — one for products, one for product brands, one for product types (categories) — separate from the `LocalizationEntry` table entirely. We'll cover exactly how this works, including what happens when a product *hasn't* been translated into a given language yet, in Part 07.
+These translations live in their own tables — one for products, one for product brands, one for product types (categories) — separate from the `LocalizationEntry` table entirely. We'll cover exactly how this works, including what happens when a product *hasn't* been translated into a given language yet, in [Part 07](#part-07).
 
 #### Why not just use one system for both?
 
-It might seem simpler to store everything — UI text and product names alike — in one big table. LiliShop's design deliberately doesn't do that, and the reasoning is a preview of a theme that runs through this whole series: **the two kinds of content have different shapes, different volumes, and different owners**, so combining them would make both harder to work with. System strings are a small, mostly-fixed set edited occasionally by an administrator through a translation-management screen. Product translations are potentially huge in number, tied directly to a specific product record, and edited by whoever manages that product. Part 01 goes into this trade-off — and the other major architecture decisions — in much more depth.
+It might seem simpler to store everything — UI text and product names alike — in one big table. LiliShop's design deliberately doesn't do that, and the reasoning is a preview of a theme that runs through this whole series: **the two kinds of content have different shapes, different volumes, and different owners**, so combining them would make both harder to work with. System strings are a small, mostly-fixed set edited occasionally by an administrator through a translation-management screen. Product translations are potentially huge in number, tied directly to a specific product record, and edited by whoever manages that product. [Part 01](#part-01) goes into this trade-off — and the other major architecture decisions — in much more depth.
 
 ### The core idea: translations live in the database, not in files
 
@@ -168,12 +168,12 @@ LiliShop takes a different approach: **almost all translated text lives in the d
 
 This single decision is what makes almost everything else in this tutorial series necessary:
 
-- Because translations live in a database instead of files, reading them on every request would normally be slow — so LiliShop needed a **caching strategy** (Part 05) to keep things fast.
-- Because a database can be updated by an admin at any moment, the running application needs a way to find out "did anything change?" without constantly re-reading the whole database — that's the **versioning** part of Part 05.
-- Because languages themselves (not just their translated text) are rows in a database table, a brand-new language can be **activated without a deployment** — that's the subject of Parts 04 and 06.
-- Because emails are sometimes sent by background processes with no active web request, and those processes still need to read from the same database-backed translation system, a specific piece of engineering was needed to make that work reliably — that's Part 10.
+- Because translations live in a database instead of files, reading them on every request would normally be slow — so LiliShop needed a **caching strategy** ([Part 05](#part-05)) to keep things fast.
+- Because a database can be updated by an admin at any moment, the running application needs a way to find out "did anything change?" without constantly re-reading the whole database — that's the **versioning** part of [Part 05](#part-05).
+- Because languages themselves (not just their translated text) are rows in a database table, a brand-new language can be **activated without a deployment** — that's the subject of Parts [04](#part-04) and [06](#part-06).
+- Because emails are sometimes sent by background processes with no active web request, and those processes still need to read from the same database-backed translation system, a specific piece of engineering was needed to make that work reliably — that's [Part 10](#part-10).
 
-Part 01 explains this decision in full detail, including exactly what problems a file-based approach would have caused for LiliShop specifically, and what alternatives (JSON bundles, third-party translation services) were considered and rejected.
+[Part 01](#part-01) explains this decision in full detail, including exactly what problems a file-based approach would have caused for LiliShop specifically, and what alternatives (JSON bundles, third-party translation services) were considered and rejected.
 
 ### A first look at the moving parts
 
@@ -211,8 +211,8 @@ flowchart LR
 A few things worth noticing already, even before we explore each box:
 
 - The **Language table** is read by nearly everything — it's the single source of truth for "which languages exist right now, and what are their properties (name, direction, is it currently active)?"
-- The **frontend never hardcodes a list of languages or a list of translated phrases**. It asks the backend, at startup, "what languages exist?" and "what does each phrase translate to in my chosen language?" We'll see exactly how in Part 08.
-- The **email system reuses the exact same localization system** as the rest of the API — it doesn't have its own separate set of translated email templates per language. Part 10 explains why that reuse was possible and what problem it solved.
+- The **frontend never hardcodes a list of languages or a list of translated phrases**. It asks the backend, at startup, "what languages exist?" and "what does each phrase translate to in my chosen language?" We'll see exactly how in [Part 08](#part-08).
+- The **email system reuses the exact same localization system** as the rest of the API — it doesn't have its own separate set of translated email templates per language. [Part 10](#part-10) explains why that reuse was possible and what problem it solved.
 
 ### What "verified" means in this series
 
