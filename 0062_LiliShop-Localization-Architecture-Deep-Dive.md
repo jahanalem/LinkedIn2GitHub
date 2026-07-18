@@ -365,13 +365,13 @@ With the *why* established, [Part 02](#part-02) moves on to the *what*: the actu
 
 ## Part 02 — Database Design and Translation Models
 
-Part 01 explained *why* LiliShop stores translations in a database. This Part shows exactly *what* that database looks like: the actual tables, the columns on each one, and the rules (constraints) that keep the data correct. Every backend Part after this one assumes you understand this schema, so it's worth reading slowly.
+[Part 01](#part-01) explained *why* LiliShop stores translations in a database. This Part shows exactly *what* that database looks like: the actual tables, the columns on each one, and the rules (constraints) that keep the data correct. Every backend Part after this one assumes you understand this schema, so it's worth reading slowly.
 
 A quick note on how LiliShop's backend talks to its database, for readers new to .NET: LiliShop uses **Entity Framework Core** (usually just called "EF Core"), a tool that lets you describe database tables as ordinary C# classes instead of writing raw SQL. Each class like `Language` or `Product` becomes a table, and each property on the class (like `Name` or `Code`) becomes a column. We'll see this pattern throughout this Part.
 
 ### The two systems, now as real tables
 
-Part 00 introduced the idea that LiliShop has two separate localization systems: one for short, fixed **system strings**, and one for **business data** like product names. Here's what that looks like as an actual database diagram.
+[Part 00](#part-00) introduced the idea that LiliShop has two separate localization systems: one for short, fixed **system strings**, and one for **business data** like product names. Here's what that looks like as an actual database diagram.
 
 ```mermaid
 erDiagram
@@ -494,8 +494,8 @@ A few things worth pointing out line by line, since this small class carries a l
 
 - `Language : BaseEntity` — `BaseEntity` is a shared base class (not shown here) that every entity in the system inherits from, giving it an `Id` and audit timestamps for free. You'll see this same inheritance on every other entity in this Part.
 - `public string Code` — this is the column marked unique in the database (shown in the configuration class below). It's what every other part of the system — the request-culture pipeline, the frontend switcher, the translation tables — uses to refer to a specific language.
-- `public LanguageDirection Direction` — notice this is *not* a `string`. It's the enum type mentioned in Part 00, shown in full below. Using a real type here instead of a raw string is what makes an invalid value like `"letf-to-right"` structurally impossible.
-- `public string? CountryCodes` — the `?` marks this as **nullable**: a language is allowed to have no country associations at all. This is the one column in the whole class that exists purely to support a single feature (first-visit detection, covered in Part 09) rather than being core to "what is a language."
+- `public LanguageDirection Direction` — notice this is *not* a `string`. It's the enum type mentioned in [Part 00](#part-00), shown in full below. Using a real type here instead of a raw string is what makes an invalid value like `"letf-to-right"` structurally impossible.
+- `public string? CountryCodes` — the `?` marks this as **nullable**: a language is allowed to have no country associations at all. This is the one column in the whole class that exists purely to support a single feature (first-visit detection, covered in [Part 09](#part-09)) rather than being core to "what is a language."
 
 Here's the `LanguageDirection` enum itself, referenced above — genuinely this short in the real code:
 
@@ -521,7 +521,7 @@ namespace LiliShop.Domain.Enums
 
 #### Why "exactly one default language" needed a special kind of index
 
-Here's a detail worth understanding, because it's a good example of a general database technique. The rule "exactly one language can be the default" is important — if two languages were both marked default, the whole fallback system (Part 03) wouldn't know which one to use.
+Here's a detail worth understanding, because it's a good example of a general database technique. The rule "exactly one language can be the default" is important — if two languages were both marked default, the whole fallback system ([Part 03](#part-03)) wouldn't know which one to use.
 
 The obvious way to enforce "this column can only be true once across the whole table" would be a normal **unique index** — a database rule that says "no two rows may have the same value in this column." But a plain unique index on `IsDefault` wouldn't work here, because `IsDefault` is a true/false column, and *every other* language row has `IsDefault = false`. A normal unique index would immediately complain that there are many rows with the same value (`false`) — which is not the rule we actually want.
 
@@ -570,7 +570,7 @@ Two lines matter most here:
 
 ### The `LocalizationEntry` table — the system-string catalog
 
-This is the `LocalizationEntry` class, and it's the table behind everything covered conceptually in Part 00's "System 1." Its shape is intentionally simple:
+This is the `LocalizationEntry` class, and it's the table behind everything covered conceptually in [Part 00](#part-00)'s "System 1." Its shape is intentionally simple:
 
 <details>
 <summary>Domain/Entities/LocalizationEntry.cs</summary>
