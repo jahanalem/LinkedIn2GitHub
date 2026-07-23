@@ -7,6 +7,14 @@ Topics include **web development**, **clean code**, and **project updates**. Fee
 
 ## 📚 Articles:
 
+### 64. Building a Modern Product Variant & Invoice Architecture in LiliShop
+
+A deep dive into the design and implementation of a modern e-commerce architecture built with **ASP.NET Core (.NET 10)** and **Angular 22**. This article explains how LiliShop evolved from a simple product model to a scalable **Product Variant**, **Inventory Ledger**, and **Invoice** system using real production code, diagrams, and step-by-step explanations. Designed as an educational guide for developers who want to understand not only *how* these features work, but also *why* they were designed this way.
+
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0063_Building-a-Modern-Product-Variant-and-Invoice-Architecture-in-LiliShop.md)
+
+---
+
 ### 63. LiliShop Localization Architecture — Deep Dive
 A comprehensive technical deep dive into the localization architecture of the **LiliShop** e-commerce platform, built with .NET and Angular. The article documents the complete design, implementation, and trade-offs of a database-driven localization system that enables runtime language management without application redeployment.
 
