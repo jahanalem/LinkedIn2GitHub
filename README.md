@@ -7,6 +7,13 @@ Topics include **web development**, **clean code**, and **project updates**. Fee
 
 ## 📚 Articles:
 
+### 65. Product Photo Attribute Tagging and Filter-Aware Images in LiliShop
+A practical deep dive into how LiliShop connects product photos to structured attribute values such as Color and Pattern. This article explains how tagged photos improve both the product gallery and shop filtering: selecting a variant automatically activates the most relevant image, while filtered product cards display a photo that visually matches the customer’s selected attributes. It covers the complete implementation across ASP.NET Core (.NET 10), Entity Framework Core, SQL Server, and Angular 22, including database design, matching algorithms, admin photo management, filter-state synchronization, caching, testing, and real project code.
+
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0064_Product-Photo-Attribute-Tagging-and-Filter-Aware-Images.md)
+
+---
+
 ### 64. Building a Modern Product Variant & Invoice Architecture in LiliShop
 
 A deep dive into the design and implementation of a modern e-commerce architecture built with **ASP.NET Core (.NET 10)** and **Angular 22**. This article explains how LiliShop evolved from a simple product model to a scalable **Product Variant**, **Inventory Ledger**, and **Invoice** system using real production code, diagrams, and step-by-step explanations. Designed as an educational guide for developers who want to understand not only *how* these features work, but also *why* they were designed this way.
