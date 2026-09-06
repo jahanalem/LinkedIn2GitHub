@@ -18,6 +18,12 @@ The main commits discussed here are:
 - [`e8c4b3f` — fix(api): address defects uncovered by Postman integration tests](https://github.com/jahanalem/LiliShop-backend-dotnet/commit/e8c4b3f0a177fe958f52c23737e7a7bb8686b3db)
 - [`4d5e34d` — update Postman tests](https://github.com/jahanalem/LiliShop-backend-dotnet/commit/4d5e34d175687398088dcc318d9db60bd2104ac3)
 
+
+<img width="3072" height="1828" alt="run-results" src="https://github.com/user-attachments/assets/408e4f08-a9b4-40d2-b171-ee0a06a031ff" />
+
+<img width="3072" height="1826" alt="environments" src="https://github.com/user-attachments/assets/61dccb5f-0c1e-4d0a-8654-f1900e0f9ed9" />
+
+
 ## Why API testing with Postman matters
 
 Unit tests are excellent for testing a class or method in isolation. They can verify business logic quickly and precisely. However, a unit test usually does not send a real HTTP request through the full ASP.NET Core pipeline.
