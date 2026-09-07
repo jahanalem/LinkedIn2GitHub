@@ -7,6 +7,12 @@ Topics include **web development**, **clean code**, and **project updates**. Fee
 
 ## 📚 Articles:
 
+### 66. From Postman Tests to a Stronger Backend: The LiliShop API Testing Story
+
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0065_Postman_API_testing_and_backend_improvement.md)
+
+---
+
 ### 65. Product Photo Attribute Tagging and Filter-Aware Images in LiliShop
 A practical deep dive into how LiliShop connects product photos to structured attribute values such as Color and Pattern. This article explains how tagged photos improve both the product gallery and shop filtering: selecting a variant automatically activates the most relevant image, while filtered product cards display a photo that visually matches the customer’s selected attributes. It covers the complete implementation across ASP.NET Core (.NET 10), Entity Framework Core, SQL Server, and Angular 22, including database design, matching algorithms, admin photo management, filter-state synchronization, caching, testing, and real project code.
 
