@@ -62,3 +62,20 @@ Solche Aktivitäten zeigen mir, dass persönliche Entwicklung nicht nur durch Ar
 **Veranstaltung:** Sternwallfahrt der Malteser
 
 > *Dieser Beitrag beschreibt meine persönlichen Eindrücke und ist keine offizielle Veröffentlichung des Malteser Hilfsdienstes.*
+
+<img width="1280" height="960" alt="001" src="https://github.com/user-attachments/assets/88d36737-4994-455b-b67c-4c80e4590a7b" />
+<img width="1280" height="720" alt="002" src="https://github.com/user-attachments/assets/ff6cd37a-6eff-4ea2-b157-206d97004e99" />
+<img width="720" height="1280" alt="003" src="https://github.com/user-attachments/assets/c563060b-cb28-49bf-92f3-8b861a2efd83" />
+<img width="1280" height="720" alt="004" src="https://github.com/user-attachments/assets/9b6a8b9b-65fb-4084-b4a9-e6aed4fd9082" />
+<img width="1280" height="720" alt="005" src="https://github.com/user-attachments/assets/b359b9b8-9f9d-4184-8f5c-242786e85ef2" />
+<img width="720" height="1280" alt="006" src="https://github.com/user-attachments/assets/2bffae20-ee01-4667-aa46-53f2a7413d40" />
+<img width="720" height="1280" alt="007" src="https://github.com/user-attachments/assets/48eaacd8-6dd7-44fc-aae5-0056d25d356c" />
+<img width="721" height="1280" alt="008" src="https://github.com/user-attachments/assets/402cecd4-53ed-49a6-8453-f223fbc240c9" />
+
+
+
+
+
+
+
+
