@@ -17,6 +17,16 @@ Ein wichtiger Teil dieses Weges waren lange Spaziergänge von 4 bis 10 Kilometer
 >
 > (Ein gesunder Geist in einem gesunden Körper)
 
+<img width="3000" height="5333" alt="code-und-fitness-im-studio" src="https://github.com/user-attachments/assets/31390be9-a9d6-4ebe-b0d5-b62185274646" />
+
+<img width="2448" height="3264" alt="krafttraining-mit-kurzhanteln" src="https://github.com/user-attachments/assets/207fc5eb-17da-4570-9792-183e49dcbb49" />
+
+<img width="4618" height="3464" alt="laufband-training-101-minuten" src="https://github.com/user-attachments/assets/a6569883-93a2-4be8-b3d2-f62902e68b27" />
+
+<img width="3000" height="5333" alt="fitness-training-am-kabelzug" src="https://github.com/user-attachments/assets/91770599-93b7-4786-9c8b-88e8406213cf" />
+
+
+
 ## Teil 2: Engagement für die Gemeinschaft – Meine Aufgaben bei den Maltesern
 
 Neben meiner Entwicklertätigkeit engagiere ich mich ehrenamtlich bei den Maltesern in Frankfurt. Meine Aufgaben sind vielfältig: Im monatlichen „Café Digital“ in der Stadtbibliothek helfe ich älteren Menschen bei Fragen zu ihren digitalen Geräten. Es ist immer wieder bereichernd zu sehen, wie ein kleiner technischer Tipp ein großes Alltagsproblem für jemanden lösen kann. Diese Gespräche sind eine wunderbare Erinnerung daran, dass hinter jedem Gerät ein Mensch steht.
