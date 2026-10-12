@@ -3,8 +3,9 @@
 **LinkedIn2GitHub** is a repository to share [my LinkedIn](https://www.linkedin.com/in/said-roohullah-allem/) articles and posts.  
 Topics include **web development**, **clean code**, and **project updates**. Feedback is always welcome! 😊
 
----
+🌱 Explore some of my activities beyond software development in the [beyond-code](https://github.com/jahanalem/LinkedIn2GitHub/tree/main/beyond-code) folder.
 
+---
 ## 📚 Articles:
 
 ### 66. From Postman Tests to a Stronger Backend: The LiliShop API Testing Story 🔬🧪🔎🕵️
