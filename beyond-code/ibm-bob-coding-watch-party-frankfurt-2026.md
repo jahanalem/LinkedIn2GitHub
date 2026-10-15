@@ -58,6 +58,10 @@ An **orchestrator** coordinates the process. Each agent has its own role and per
 
 In a demonstration using a to-do application, the agents worked on a feature requested through a GitHub issue. The workflow covered planning, architecture, implementation, and review. The session also showed how **Git worktrees** and Bob Shell could support work on separate features in parallel.
 
+**Workshop code and practical guide:** The presenters also shared [Building an Agentic SDLC Workflow with Bob](https://github.com/tschechlovdev/watch-party-building-ai-agents), the public GitHub repository behind this hands-on example. It includes a Todo application (Flask backend and React frontend), sample feature requests, and step-by-step instructions for setting up the **Product Manager, Architect, Engineer, Reviewer, and Orchestrator** agents. Instead of using a complex external framework, the agents pass their results through a shared Markdown workflow document. The repository also explains optional GitHub Issues integration and how to work on different features in parallel using Git worktrees.
+
+I especially appreciated having a practical resource to explore after the event. It helps turn the ideas from the presentation into something developers can try and learn from themselves.
+
 The message I took from this session was that developers may spend more time **guiding, reviewing, and making decisions**, while agents handle selected implementation steps. However, human review remains important, especially before changes reach production.
 
 ## 6. Enterprise Deployment and Data Control
