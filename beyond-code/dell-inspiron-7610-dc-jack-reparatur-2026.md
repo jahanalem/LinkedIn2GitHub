@@ -6,6 +6,13 @@ Manchmal beginnt ein technisches Problem ganz klein: Ein Ladekabel funktioniert 
 
 Hier erzähle ich, wie ich den Fehler eingegrenzt habe, was bei der Reparatur schwierig war und was ich dabei gelernt habe.
 
+<p align="center">
+  <img src="images/dell-inspiron-7610-repair/01-laptop-geoeffnet.jpg" alt="Dell Inspiron 16 Plus 7610 mit geöffneter Bodenabdeckung" width="600">
+</p>
+
+<p align="center"><em>Mein Dell Inspiron 16 Plus 7610 während der Reparatur.</em></p>
+
+
 ## 1. Das Problem: Erst Wackelkontakt, dann keine Ladung mehr
 
 Am Anfang lud mein Laptop nur, wenn ich den Ladestecker in einem bestimmten Winkel hielt. Ich vermutete zunächst einen Kabelbruch am Netzteil und kaufte deshalb ein neues originales Dell-Netzteil mit **130 Watt**.
@@ -38,6 +45,13 @@ Für meine Konfiguration fand ich:
 
 Ich bestellte einen kompatiblen **JINTAI-DC-Jack** mit diesen Kennzeichnungen. Als Grundlage für die Arbeit verwendete ich das [offizielle Dell-Servicehandbuch für die Drei-Lüfter-Version](https://www.dell.com/support/manuals/en-us/inspiron-16-7610-laptop/inspiron-7610-service-manual-three-fans/removing-the-power-adapter-port).
 
+
+<p align="center">
+  <img src="images/dell-inspiron-7610-repair/02-ersatzteil-dc-jack.jpg" alt="Neue Ladebuchse mit Kabel und weißem Anschlussstecker" width="430">
+</p>
+
+<p align="center"><em>Der passende DC-Jack als separates Ersatzteil mit Kabel und Stecker.</em></p>
+
 ## 4. Werkzeug und Kosten
 
 | Teil | Preis |
@@ -64,6 +78,28 @@ Die eigentliche Arbeit war deutlich aufwendiger, als der kleine DC-Jack vermuten
 5. **Wärmeleitpaste erneuern:** Ich reinigte die Kontaktflächen von CPU, GPU und Kühlkörper. Danach trug ich neue **ARCTIC MX-7**-Wärmeleitpaste auf.
 6. **Alles wieder zusammenbauen:** Schließlich montierte ich Kühlkörper, Lüftereinheit, Scharnier und Bodenabdeckung wieder.
 
+### Einblicke in den Ausbau und die Wartung
+
+<p align="center">
+  <img src="images/dell-inspiron-7610-repair/03-display-scharnier-geoeffnet.jpg" alt="Angehobenes Displayscharnier mit Blick auf die Ladebuchse" width="450">
+</p>
+
+<p align="center"><em>Für den Zugang zur Ladebuchse musste ich das rechte Displayscharnier anheben.</em></p>
+
+
+<p align="center">
+  <img src="images/dell-inspiron-7610-repair/04-cpu-gpu-gereinigt.jpg" alt="Freigelegte CPU und NVIDIA GPU mit gereinigten Kontaktflächen" width="450">
+</p>
+
+<p align="center"><em>Nach dem Entfernen des Kühlkörpers: die gereinigten Kontaktflächen von CPU und GPU.</em></p>
+
+
+<p align="center">
+  <img src="images/dell-inspiron-7610-repair/05-neue-waermeleitpaste.jpg" alt="Frisch aufgetragene Wärmeleitpaste auf CPU und GPU" width="450">
+</p>
+
+<p align="center"><em>Neue ARCTIC MX-7-Wärmeleitpaste auf CPU und GPU, bevor der Kühlkörper wieder montiert wurde.</em></p>
+
 Nicht alles funktionierte beim ersten Versuch. Ein kleiner Steckverbinder saß sehr fest, eine Abdeckung haftete am Kühlkörper, und beim Zusammenbau wollte eine Schraube zunächst nicht passen. Ich musste mehrfach nachsehen, die Positionen prüfen und meine Vorgehensweise anpassen. Am Ende fand ich auch die richtige Schraube und konnte alles wieder befestigen.
 
 **Meine wichtigste Regel dabei: Wenn sich etwas nicht leicht lösen lässt, nicht einfach mehr Kraft benutzen. Erst verstehen, was das Teil festhält.**
@@ -75,6 +111,13 @@ Nach dem Zusammenbau schloss ich das Netzteil an und prüfte zuerst, ob alles un
 **Windows startete normal – und der Laptop wurde wieder geladen.** 🎉
 
 Damit war die Reparatur erfolgreich. Das Ergebnis bestätigte meine Vermutung, dass die alte Ladebuchse die Ursache des Problems gewesen war.
+
+
+<p align="center">
+  <img src="images/dell-inspiron-7610-repair/06-montierte-kuehlung.jpg" alt="Laptop mit montiertem Kühlkörper und drei Lüftern" width="620">
+</p>
+
+<p align="center"><em>Wieder eingebaut: der Kühlkörper und das Kühlsystem mit drei Lüftern.</em></p>
 
 ## 7. Was ich gelernt habe
 
