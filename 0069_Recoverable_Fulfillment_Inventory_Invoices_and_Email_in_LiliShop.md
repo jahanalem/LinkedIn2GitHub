@@ -267,8 +267,8 @@ sequenceDiagram
     participant Invoice as Invoice service
     Worker->>SQL: Lock control and verify claim
     Worker->>Invoice: Issue with handoff and token
-    Invoice->>SQL: Validate all lines; reuse or allocate and save
-    Worker->>SQL: Add unique email work; set Complete
+    Invoice->>SQL: Validate all lines, then reuse or allocate and save
+    Worker->>SQL: Add unique email work and set Complete
     Worker->>SQL: Commit invoice, intent and progress
 ```
 
@@ -295,10 +295,10 @@ sequenceDiagram
     participant SQL as SQL
     participant Prep as Shared preparation
     participant Provider as Mail transport
-    Worker->>SQL: Claim Preparing; commit
+    Worker->>SQL: Claim Preparing and commit
     Worker->>Prep: Render and compose outside transaction
     Prep-->>Worker: PDF attachment and message
-    Worker->>SQL: Recheck token; commit Sending
+    Worker->>SQL: Recheck token and commit Sending
     Worker->>Provider: Send with operation correlation
     Provider-->>Worker: Acceptance, rejection or uncertainty
     Worker->>SQL: Persist result only if still owned
@@ -457,8 +457,8 @@ sequenceDiagram
     participant SQL as SQL
     Operator->>API: Read detail and current revision
     Operator->>API: Retry with revision and reason
-    API->>SQL: Lock control; recheck evidence and idle state
-    API->>SQL: Reset bounded cycle; append audit; commit
+    API->>SQL: Lock control and recheck evidence and idle state
+    API->>SQL: Reset bounded cycle, append audit and commit
     API-->>Operator: Accepted, or 409 conflict
 ```
 
@@ -1211,7 +1211,9 @@ The existing documentation checkout was at `f5880ab6ac0daf96d68564d1902fdfc4e619
 
 ### Diagram and documentation validation boundary
 
-The diagrams were checked against source, exact states, SQL/application relationships, code fences and internal links. No installed compatible Mermaid parser/renderer was found in the inspected project/runtime tools; Mermaid version is therefore unavailable and **visual rendering was not verified**. No tools or project dependencies were installed. Structural/manual review is not a substitute claim for rendered verification. The companion verification note records the exact checks and remaining visual-review gap.
+The initial documentation pass checked source, exact states, SQL/application relationships, code fences and internal links, but did not render the diagrams. That review missed semicolons in six sequence-message labels: Mermaid treats those characters as statement separators, which caused the reported parse errors.
+
+The three affected sequence diagrams were corrected and successfully rendered in [Mermaid Live Editor](https://mermaid.live/) with Mermaid 12.2.0. The original invoice sequence error was also reproduced there before the correction. No tools or project dependencies were installed. The other seven diagrams retain structural/source review only; their visual rendering remains unverified. The companion verification note records this distinction.
 
 External framework references explain local transaction and job semantics; implementation claims and test evidence come from LiliShop source and retained artifacts. The article distinguishes what code permits, what a synthetic test exercises and what an actual provider has not established.
 
