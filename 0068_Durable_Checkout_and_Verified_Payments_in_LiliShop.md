@@ -52,9 +52,9 @@ The examples in this article use fictional values such as `pi_example65`, `evt_e
 
 ### Source version and how to navigate
 
-This guide follows source inspected on 23 October 2026: backend commit [`5d463095031b0164710e8e0167a238d070993fca`](https://github.com/jahanalem/LiliShop-backend-dotnet/commit/5d463095031b0164710e8e0167a238d070993fca) and frontend commit [`2f1d07ccda915567a59f0657f9d15741d2cb18e4`](https://github.com/jahanalem/LiliShop-frontend-angular/commit/2f1d07ccda915567a59f0657f9d15741d2cb18e4). Both commits are available through GitHub. The inspected application source has no tracked local edits; an unrelated untracked frontend configuration file is outside this guide.
+This guide follows backend commit [`5d463095031b0164710e8e0167a238d070993fca`](https://github.com/jahanalem/LiliShop-backend-dotnet/commit/5d463095031b0164710e8e0167a238d070993fca) and frontend baseline commit [`2f1d07ccda915567a59f0657f9d15741d2cb18e4`](https://github.com/jahanalem/LiliShop-frontend-angular/commit/2f1d07ccda915567a59f0657f9d15741d2cb18e4), both available on GitHub. It also includes the local status-route correction and Router tests reviewed on 23 October 2026. Those two frontend files are currently uncommitted, so there is no new commit permalink for them. The [routing source note](#routing-correction-source-note) identifies their exact paths and hashes. The backend and the other documented frontend implementation files remain at the linked commits; unrelated untracked frontend configuration is outside this guide.
 
-`backend` paths start at the repository containing `Main/`. `frontend` paths start at the checkout containing `src/`; they do not have an extra `LiliShop/` prefix on GitHub. Source links below are pinned to those commits. Recorded validation is identified separately from the documentation checks performed for this article.
+`backend` paths start at the repository containing `Main/`. `frontend` paths start at the checkout containing `src/`; they do not have an extra `LiliShop/` prefix on GitHub. Unchanged source links below are pinned to the commits above. Current route/test references point to their local source note rather than incorrectly linking the old route as corrected code. The original full validation run and the later focused routing validation are reported separately.
 
 - [Identity and immutable evidence](#identity-and-immutable-evidence)
 - [Database relationships and checkout states](#database-relationships-and-checkout-states)
@@ -68,6 +68,17 @@ This guide follows source inspected on 23 October 2026: backend commit [`5d46309
 - [Failure scenarios and test evidence](#failure-scenarios-and-test-evidence)
 - [Local use and operational boundary](#local-use-and-the-current-operational-boundary)
 - [Glossary](#appendix-a-glossary), [type and member reference](#appendix-b-type-and-member-reference), [database reference](#appendix-c-complete-database-reference), [coverage matrix](#appendix-d-implementation-coverage-matrix), [source index](#appendix-e-source-and-test-index)
+
+### A first reading path
+
+For a first pass, follow the customer and leave the reference appendices open for later:
+
+1. Read [the customer story](#a-customer-should-pay-for-one-saved-purchase) and [overview](#the-solution-from-the-top-down). Keep three milestones separate: a receipt was accepted, money was verified, and fulfillment completed. Only the first two are implemented here.
+2. Follow [identity](#identity-and-immutable-evidence), [preparation](#preparation-before-confirmation), [stock holds](#all-stock-holds-and-the-order-become-ready-together) and [confirmation](#confirmation-is-a-controlled-release-of-authority). Trace the same 60 + 5 = 65 EUR purchase. Ask what has committed before each network call and before a secret is released.
+3. Read [signed receipts](#signed-receipts-enter-a-durable-inbox), [financial verification](#the-worker-verifies-money-before-recording-it) and [recovery](#recovery-replays-work-without-inventing-a-new-purchase). Use the crash examples to understand why receipt, financial commit and acknowledgement are separate.
+4. Follow [Angular](#angular-follows-the-saved-checkout), the [Router regression evidence](#router-integration-evidence-for-the-status-route) and [operational boundary](#local-use-and-the-current-operational-boundary). Then use the scenario matrix to check which guarantees were tested.
+
+On a second pass, use the glossary for terms, the type/member appendix for a method, and the database appendix for a column or constraint. The coverage matrix is a source checklist rather than a required reading order. This keeps the full reference available without making the first reading depend on every schema detail.
 
 ## Identity and immutable evidence
 
@@ -774,13 +785,41 @@ The payment template uses `[disabled]="isActivatedSubmitButton()"` and `(click)=
 
 `statusMessage()` is rendered in a polite live region. Conditional `@if` blocks show resume/cancel actions and saved total/currency. Existing labels use `TranslatePipe`, but the newly added operational status/action strings are English literals in the current source; they are not all localized despite the broader translation infrastructure.
 
-### Status component and a routing limitation
+<a id="status-component-and-a-routing-limitation"></a>
+
+### Status component and reload-safe routing
 
 `CheckoutSuccessComponent.refresh()` reads the `checkout` query parameter and calls server `status(id)`. Its `checkout`/`message` signals distinguish verified, review, unavailable and unverified states. The template displays “Payment received” only for `PaymentVerified`, offers manual “Check again,” and links to the returned order ID or order history. Missing query identity does not trust router state. A new refresh/destruction unsubscribes the prior subscription.
 
-**The surrounding route still has a mismatch.** `checkout.routes.ts` retains `canMatch: [successMatchGuard]`. The unchanged `success.guard.ts` requires `router.getCurrentNavigation()?.extras?.state?.order`, otherwise it navigates home and returns false. The new payment component navigates with only `{queryParams:{checkout:view.id}}`. A normal new-flow navigation, or a direct reload of the query URL, can therefore be rejected before this component loads.
+The status route now accepts the checkout query identity without requiring `navigation.extras.state.order`. The production parent route in `USER_LAYOUT_ROUTES` still applies `authGuard`, and `GET /api/checkout/{id}` still enforces server ownership. Removing a temporary navigation-state requirement does not grant payment authority: the component displays received money only after the status API returns `PaymentVerified`. An unauthorized/missing checkout response displays unavailable status instead.
 
-The component and service implement server-based status/reload behavior, but that is not proof that the full router path is usable in this source version. The existing component tests instantiate it directly; payment tests mock `Router.navigate`. They do not exercise this `canMatch` integration. Resolving the guard is application work outside this documentation change. The guide does not silently describe it as already fixed.
+The earlier baseline attached `successMatchGuard` to the success child route. That helper required a router-state order, while the payment component sent only `{queryParams:{checkout:view.id}}`; normal navigation and direct reload could therefore return home before loading the component. The correction removes only the obsolete guard import and child-route binding from `checkout.routes.ts`. The old helper file remains unchanged but is no longer registered on this route. No provider call, new payment attempt or backend financial rule is added by opening the status URL.
+
+The original component tests instantiate the status component directly, and payment tests mock `Router.navigate`; neither could prove this connection worked. New Router integration tests load the actual production parent route, retain its authentication guard and lazy-load the actual checkout routes. They use a real Angular Router, the real status component and `CheckoutService`, with `HttpTestingController` supplying controlled API responses. Unrelated page chrome is omitted. Their reload case recreates the injector/router while retaining URL and browser storage; it models reload locally rather than executing a browser F5 or real provider delivery.
+
+#### Routing correction source note
+
+The corrected working-tree route is shown in full because its new commit permalink does not yet exist:
+
+```typescript
+import { Routes } from '@angular/router';
+import { CheckoutComponent } from './checkout.component';
+import { CheckoutSuccessComponent } from './checkout-success/checkout-success.component';
+
+export const CHECKOUT_ROUTES: Routes = [
+  { path: '', component: CheckoutComponent },
+  { path: 'success', component: CheckoutSuccessComponent },
+];
+```
+
+Source: frontend `src/app/features/user-area/checkout/checkout.routes.ts`, current local correction on top of the frontend baseline. The still-authenticated parent registration is unchanged at that baseline. Do not read the baseline's old route permalink as evidence that this correction has been published.
+
+| Current local file | State and SHA-256 of inspected bytes |
+| --- | --- |
+| `src/app/features/user-area/checkout/checkout.routes.ts` | Modified; `cf46adf05c473a733c09c756a4b224b1941fb872d46cc648592f89225774bbd6` |
+| `src/app/features/user-area/checkout/checkout.routes.spec.ts` | Added; `185555abc00ed0df983f191183c4fa1df43b867562dfd800ef71e4c3c818e39f` |
+
+The new test file contains the production-route harness and eight cases listed in the [routing evidence](#router-integration-evidence-for-the-status-route). Unchanged frontend references retain their verified baseline commit links. This source note makes the local correction reviewable without inventing a new commit hash.
 
 ### Basket cleanup happens only after server verification
 
@@ -823,7 +862,7 @@ The following matrix connects protocol guarantees with current source and actual
 | Real local HTTP rejects bad signatures and failed durable acceptance | Controller body/signature path; inbox commit | `RealHttpSignatureReceiptPersistenceAndDatabaseFailureAcknowledgements`; real Kestrel/SQL, synthetic HMAC and test authentication, not the full production JWT setup or Stripe delivery. |
 | Browser preserves request identity and cannot erase uncertainty | Angular storage/replay/cancel rules | [Checkout service tests][t-browser], including `reuses the same request key after a lost response`, `rejects changed purchase identity before a network request`, and `resolves a lost response with the original saved purchase before cancellation`. |
 | No Stripe confirm before server preparation/authorization | Await order and loading guard | `does not confirm while server preparation is still pending` in [sequencing regression][t-sequence]; `renders a disabled submit while preparation is pending and ignores repeated clicks` and `waits for confirmation authorization and never navigates based on browser success` in [rendered tests][t-rendered]. |
-| Reload restores status without charging; server alone grants success | Retained status, `acceptStatus`, success component | `restores status on reload without automatically charging`, `navigates only when server status is PaymentVerified`; success tests `does not claim payment from a success route` and `handles a missing identity without trusting navigation state`. Full router guard remains untested/mismatched as described above. |
+| Reload restores status without charging; server alone grants success | Retained status, `acceptStatus`, success component | `restores status on reload without automatically charging`, `navigates only when server status is PaymentVerified`; success tests `does not claim payment from a success route` and `handles a missing identity without trusting navigation state`. These component cases are now complemented by the real production-route integration cases below; their eight cases include direct navigation, modeled reload, server-only status and retained parent authentication. |
 | Verified cleanup preserves changed baskets or failed-delete identity | `status`/`finishVerified` | Browser tests `clears only the paid basket after server verification`, `preserves a basket edited after checkout preparation`, `retains the verified identity if paid-basket cleanup fails`; no cross-tab atomicity proof. |
 
 ### Read one concurrency test carefully
@@ -907,9 +946,27 @@ A `Subject` keeps preparation unresolved. Two handler calls produce one preparat
 
 These tests stub `window.Stripe` and the shared text-input component, while keeping the payment template and button expressions. Their mock router does not prove route matching, and their card elements do not contact Stripe. Other rendered cases cover pause, uncertainty, authorized confirmation and server-only navigation.
 
+### Router integration evidence for the status route
+
+The later routing correction was validated on 23 October 2026, separately from the original full implementation run. With the final test fixture, the original route failed six cases and passed two; after removing the obsolete child guard, all eight passed. The earlier fixture iterations are retained in local logs and are not substituted for this same-test before/after comparison.
+
+| Exact test name in `checkout.routes.spec.ts` | Observed boundary |
+| --- | --- |
+| `accepts the payment component navigation with checkout query and no state.order` | Calls the same `Router.navigate` shape as the payment component. The real route activates, GETs status and displays received money only after a verified response. |
+| `opens and reloads the direct status URL without preparing or confirming payment` | Starts at the URL, then creates a fresh router/injector with the same URL/storage. Each visit only reads status; retained identity remains for a Ready response. |
+| `ignores a claimed router success and waits for the server status` | Even supplied `state.order` and `paid=true` cannot change a Ready response into received payment. |
+| `renders review from the server without claiming payment received` | ReviewRequired is rendered as review. |
+| `does not claim success when the status API rejects access with %s` | Two data cases, 401 and 404: no success or returned-order link. These are controlled HTTP responses; backend ownership enforcement remains separate evidence. |
+| `handles a direct status URL without a checkout identity without sending payment requests` | Shows the missing-identity message and issues no HTTP request. |
+| `keeps the production parent authentication guard for anonymous direct visits` | The real parent guard redirects an anonymous visit to login before any checkout HTTP call. |
+
+Every case also checks that the route did not call `prepareCheckout`, `resumeSavedCheckout`, `confirmation`, `cancelSavedCheckout`, construct Stripe or call `confirmCardPayment`; unexpected non-GET requests fail the fixture. The HTTP backend is mocked, while routing, guard execution, component activation and service HTTP construction are real Angular code. This covers the reported integration gap without claiming a real Stripe/browser end-to-end run.
+
+The related checkout run passed **40 tests across eight files**, including these eight Router cases. Do not add the separately repeated eight to that total. A new production build also passed, with its output directed to the task workspace rather than the configured backend static-output directory. No backend tests, database migration/reset, application host or provider operation was run for this correction.
+
 ### What the recorded full run established
 
-The retained implementation report and logs record the following run on 23 October 2026. These tests/builds/migrations were **not rerun while writing this documentation**.
+The retained implementation report and logs record the following run on 23 October 2026. The backend/full frontend totals and migration results below remain the **original recorded run**, not a new full-suite run for the route correction. The later 40-test frontend subset and production build are reported above.
 
 | Recorded check | Result and scope |
 | --- | --- |
@@ -920,11 +977,11 @@ The retained implementation report and logs record the following run on 23 Octob
 | EF model consistency | No pending model changes against the generated migration model. |
 | Safe Newman collection | 26 requests, 105 assertions, zero failures. Of 184 items, 158 conditional items did not execute; mutation/destructive/external flags remained false. This does not cover payment-provider success. |
 
-The retained file hashes were compared with the current documented change files, so the recorded source can be tied to these commits rather than an old retained checkout. The original report's “uncommitted” wording describes its earlier run; the source inspected for this guide is now committed at the versions above.
+The retained protocol-file hashes were compared with the corresponding documented files, tying the original implementation evidence to the linked commits. The original report's “uncommitted” wording describes its earlier run. The two later routing files have their own working-tree hashes above and are not part of the original full-run total. No new frontend commit or publication is claimed.
 
 SQL concurrency used real SQL Server contexts/connections and actual migrations, not `EnsureCreated` or an in-memory substitute. Provider operations were controlled through `ICheckoutProvider`. The HTTP test used real local Kestrel, real raw-body signature verification and a SQL insert-failure trigger. Its header-based `A4AuthHandler` is test-only; production does not authenticate through those headers.
 
-**Stripe sandbox create/retrieve, card confirmation, strong customer authentication (SCA), declines and real webhook delivery were not exercised in that recorded run.** Adapter compilation is not integration proof. Current API-version/account behavior must be tested with deliberately configured sandbox context before release. The full router mismatch is another source-level limitation not caught by the component suite.
+**Stripe sandbox create/retrieve, card confirmation, strong customer authentication (SCA), declines and real webhook delivery were not exercised in that recorded run.** Adapter compilation is not integration proof. Current API-version/account behavior must be tested with deliberately configured sandbox context before release. The separately corrected routing issue demonstrates why component tests need route integration coverage; it does not close the unexercised provider integration boundary.
 
 ## Local use and the current operational boundary
 
@@ -1018,7 +1075,7 @@ The production build writes to the repository's configured backend `wwwroot` out
 
 ### What still needs an operational decision
 
-Before any release, safe fulfillment must exist and be tested across partial failure; a deliberate Stripe sandbox run must cover create/confirm/SCA/context/version/delayed duplicate delivery; the route guard mismatch must be resolved; old clients/writers and legacy pending payments need a reviewed cutover; and capacity must be measured. No setting in this guide completes those prerequisites.
+Before any release, safe fulfillment must exist and be tested across partial failure; a deliberate Stripe sandbox run must cover create/confirm/SCA/context/version/delayed duplicate delivery; old clients/writers and legacy pending payments need a reviewed cutover; and capacity must be measured. No setting in this guide completes those prerequisites.
 
 Operations must own review of captured money that cannot safely bind, durable-accept failures, repeated worker exceptions, lease reclaims, oldest pending receipt and blocked handoff age. The current audit endpoint helps inspect local counts. It is not a cumulative technical-failure metric, full review dashboard or remote-orphan discovery tool. A low-volume percentage alone cannot replace case review of unexplained duplicate/mismatched money.
 
@@ -1219,7 +1276,7 @@ No application DTO mapper was added for checkout. New records are explicitly con
 | `ngOnDestroy` | Set destroyed flag, unsubscribe polling, destroy all card Elements with cleanup exception handling. |
 | `submitOrder` | Loading guard; explicit input; sequential prepare→authorize→Stripe→server status; destroyed checks; state/error messages; finally reset loading. |
 | `pollStatus` private | Replace subscription, bounded timer/exhaustMap HTTP polling, preserve uncertainty on error. |
-| `acceptStatus` private | Set view/message, stop terminal polling, request navigation only after server `PaymentVerified`; route integration limitation remains. |
+| `acceptStatus` private | Set view/message, stop terminal polling, request navigation only after server `PaymentVerified`; the corrected query-based route and its tests are described above. |
 | `resumeSavedCheckout`, `cancelSavedCheckout` | Explicit action/loading/error handling; neither automatically confirms. Cancelled view clears component checkout signal. |
 | `onChange` | Provider element completion/error → validity signals/cardErrors. |
 | `isActivatedSubmitButton` | Returns disabled condition despite method name: loading, terminal/review state, invalid payment form or incomplete card fields. |
@@ -1229,7 +1286,8 @@ No application DTO mapper was added for checkout. New records are explicitly con
 | `CheckoutSuccessComponent` state/dependencies | `checkout` and `message` signals; injected route/service and optional subscription. Existing constructor-style dependencies/claimed router order were replaced. [Source][f-success]. |
 | `ngOnInit`, `refresh`, `ngOnDestroy` | Initial/manual server query from checkout query parameter; verified/review/unavailable messages; unsubscribe lifecycle. No router-state financial authority. |
 | Success HTML | Payment status live region, manual refresh and server order link; no unconditional success claim. [Source][f-success-html]. |
-| Existing `CHECKOUT_ROUTES` / `successMatchGuard` | Unmodified supporting sources still require legacy router state for the success route. Documented as an unresolved integration limitation, not included among changed production files. [Routes][f-routes], [guard][f-guard]. |
+| `CHECKOUT_ROUTES` | Modified locally: remove only the obsolete success guard import/binding; the status component handles query identity and server status. Production parent authentication is retained. [Current route/source note][f-routes]. |
+| Existing `successMatchGuard` | Unchanged legacy helper, no longer registered on the status route. It is not the current status access rule. [Retained helper][f-guard]. |
 
 ## Appendix C. Complete database reference
 
@@ -1421,7 +1479,7 @@ Recorded upgrade/fresh validation and synthetic legacy preservation are describe
 
 ## Appendix D. Implementation coverage matrix
 
-The pre-draft inventory was built from the current commit diffs and declarations in the original backend/frontend checkouts. It covers all 26 backend changed files and all 12 frontend changed files: **30 production files and eight test files**. Generated migration/model metadata is explicitly identified rather than treated as an unexplained business class. Unchanged supporting sources are indexed next.
+The pre-draft inventory was built from the current commit diffs and declarations in the original backend/frontend checkouts. It covers all 26 backend implementation files and 14 frontend implementation/correction files: **31 production files and nine test files**. The additional route and Router test are explicitly identified as local changes on top of the frontend baseline. Generated migration/model metadata is explicitly identified rather than treated as an unexplained business class. Unchanged supporting sources are indexed next.
 
 | Repository / exact changed source path | Change | Type/member coverage | Document section |
 | --- | --- | --- | --- |
@@ -1464,11 +1522,18 @@ The pre-draft inventory was built from the current commit diffs and declarations
 | frontend [`src/app/features/user-area/checkout/checkout-review/checkout-review.component.spec.ts`][t-review] | Modified test | No provider call when advancing review | [Reference](#review-only-advances-to-the-payment-step) |
 | frontend [`src/app/features/user-area/checkout/checkout-success/checkout-success.component.spec.ts`][t-success] | Modified test | Server-only status, missing identity/reload/error cases | [Reference](#status-component-and-a-routing-limitation) |
 
+The local correction adds these two coverage entries:
+
+| Repository / exact changed source path | Change | Type/member coverage | Document section |
+| --- | --- | --- | --- |
+| frontend `src/app/features/user-area/checkout/checkout.routes.ts` | Modified local correction | `CHECKOUT_ROUTES`: remove obsolete state-dependent child guard; parent authentication unchanged | [Current source](#routing-correction-source-note) |
+| frontend `src/app/features/user-area/checkout/checkout.routes.spec.ts` | Added local test | Production parent/lazy child routes, real Router/status service, modeled reload, authority and anonymous cases | [Evidence](#router-integration-evidence-for-the-status-route) |
+
 Every added production type has a row in the type map and a field/member reference. Every behavior-relevant modified production member is covered by the integration/component tables and linked tutorial mechanism. Trivial imports, encoding/BOM and comment edits are grouped as nonbehavioral. Coverage describes current code and explicitly identifies the unimplemented fulfillment boundary.
 
 ## Appendix E. Source and test index
 
-The coverage matrix above is the complete changed-file source index. All its links use verified available commits containing the documented code, rather than an older implementation. The following unchanged sources supply necessary context:
+The coverage matrix above is the complete changed-file source index. All its links use verified available commits containing the documented code, rather than an older implementation. The following supporting sources supply context; the locally changed routing pair is clearly distinguished from unchanged baseline sources:
 
 | Source | Why it was read |
 | --- | --- |
@@ -1477,8 +1542,8 @@ The coverage matrix above is the complete changed-file source index. All its lin
 | Backend [`Main/LiliShop.Application/Common/Helpers/VariantSnapshotBuilder.cs`][b-builder] | Saved localized variant description/attributes used when quoting. |
 | Backend [`Main/LiliShop.API/Controllers/BaseApiController.cs`][b-base-controller] | Inherited route and existing controller/model-validation context. |
 | Frontend [`src/app/features/user-area/checkout/checkout.component.ts`][f-parent] | Parent signal form shape and child inputs. |
-| Frontend [`src/app/features/user-area/checkout/checkout.routes.ts`][f-routes] | Real success route and retained guard registration. |
-| Frontend [`src/app/core/guards/success.guard.ts`][f-guard] | Unresolved legacy router-state requirement; limits full route reload claims. |
+| Frontend `src/app/features/user-area/checkout/checkout.routes.ts` and `checkout.routes.spec.ts` | Current local correction, already indexed in the coverage matrix and [source note](#routing-correction-source-note); no new commit permalink yet. |
+| Frontend [`src/app/core/guards/success.guard.ts`][f-guard] | Retained legacy helper; no longer registered on the corrected status route. |
 | Frontend [`src/app/core/services/basket.service.ts`][f-basket] | Existing basket deletion, local cleanup and cross-tab limits. |
 | Frontend [`src/app/core/helpers/stripe-utils.ts`][f-stripe] | `window.Stripe` prerequisite and rendered-test double boundary. |
 
@@ -1502,15 +1567,19 @@ The inspected local context includes `A4_DESIGN.md`, `A4_IMPLEMENTATION_REPORT.m
 | `A4_artifacts/logs/migration-model-check.log`, `sql-final-schema-controls.log`, `sql-close-test-admission.log` | Model consistency, inspected schema and closed test admission. |
 | `A4_artifacts/helpers/vitest.config.mjs`, `runtime_services.py` | Recorded runner workaround and isolated API/Redis/signing prerequisites. These helpers are not part of the product API. |
 
+### Local routing-correction evidence
+
+The separate retained routing evidence includes `router-before-final-fixture.log`, `router-after-final-fixture.log`, `checkout-related.log` and `frontend-production-build.log`, each with command/time/exit metadata. The code patch and before/after source hashes are retained with that correction's local report. They are not remote artifacts or additions to the original 411/281 totals.
+
 ### Primary framework and provider references
 
-LiliShop behavior in this article comes from the pinned source. External rules were checked against primary documentation: [Stripe idempotent requests](https://docs.stripe.com/api/idempotent_requests), [Stripe webhooks](https://docs.stripe.com/webhooks), [Stripe currency units](https://docs.stripe.com/currencies), [Microsoft EF conditional/bulk updates and transaction boundaries](https://learn.microsoft.com/en-us/ef/core/saving/execute-insert-update-delete), and [Microsoft SQL Server locking hints](https://learn.microsoft.com/en-us/sql/t-sql/queries/hints-transact-sql-table). Provider retention and framework locking explain the chosen policies; they do not prove that the unexercised Stripe sandbox integration works.
+LiliShop behavior in this article comes from the pinned source. External rules were checked against primary documentation: [Stripe idempotent requests](https://docs.stripe.com/api/idempotent_requests), [Stripe webhooks](https://docs.stripe.com/webhooks), [Stripe currency units](https://docs.stripe.com/currencies), [Microsoft EF conditional/bulk updates and transaction boundaries](https://learn.microsoft.com/en-us/ef/core/saving/execute-insert-update-delete), and [Microsoft SQL Server locking hints](https://learn.microsoft.com/en-us/sql/t-sql/queries/hints-transact-sql-table). The routing fixture uses the APIs described in [Angular routing tests](https://angular.dev/guide/routing/testing), while the application route and authority decisions come from LiliShop source. Provider retention and framework locking explain the chosen policies; they do not prove that the unexercised Stripe sandbox integration works.
 
 ### Documentation validation boundary
 
-The article's source paths, pinned commit links, extracted source excerpts, field/index/foreign-key coverage, Markdown fences, internal anchors, JSON examples, numerical agreement and diagram relationships were checked against the inventory. Application tests, database migrations, background jobs and provider calls were not rerun for documentation. Mermaid diagrams were structurally reviewed, including optionality and the five-participant limit. No Mermaid renderer was available in the inspected installed tools, so visual rendering was not performed; no toolchain was installed to claim otherwise.
+The article's source paths, available commit links, extracted source excerpts, field/index/foreign-key coverage, Markdown fences, internal anchors, JSON examples, numerical agreement and diagram relationships were checked against the inventory. Current uncommitted route/test references use exact paths and hashes rather than a stale or invented commit permalink. The later Router/related frontend tests and production build were executed as reported above; the earlier full suites were not rerun. No database migration/reset, background job or provider operation was executed for this correction. Mermaid diagrams were structurally reviewed; no renderer was available in the inspected installed tools, so visual rendering was not performed.
 
-The remaining evidence limits are the unexercised real Stripe sandbox/delivery/SCA paths, unmeasured production capacity, missing safe fulfillment consumer and the source-confirmed router-guard mismatch. The article preserves those limits as part of the implemented design rather than describing future work as complete.
+The remaining evidence limits are the unexercised real Stripe sandbox/delivery/SCA paths, unmeasured production capacity, missing safe fulfillment consumer and the absence of a real provider/browser end-to-end run for the routing correction. The article preserves those limits as part of the implemented design rather than describing future work as complete.
 
 [b-records]: https://github.com/jahanalem/LiliShop-backend-dotnet/blob/5d463095031b0164710e8e0167a238d070993fca/Main/LiliShop.Domain/Entities/Checkout/CheckoutRecords.cs
 [b-protocol]: https://github.com/jahanalem/LiliShop-backend-dotnet/blob/5d463095031b0164710e8e0167a238d070993fca/Main/LiliShop.Infrastructure/Checkout/CheckoutProtocol.cs
@@ -1546,7 +1615,7 @@ The remaining evidence limits are the unexercised real Stripe sandbox/delivery/S
 [f-review]: https://github.com/jahanalem/LiliShop-frontend-angular/blob/2f1d07ccda915567a59f0657f9d15741d2cb18e4/src/app/features/user-area/checkout/checkout-review/checkout-review.component.ts
 [f-success]: https://github.com/jahanalem/LiliShop-frontend-angular/blob/2f1d07ccda915567a59f0657f9d15741d2cb18e4/src/app/features/user-area/checkout/checkout-success/checkout-success.component.ts
 [f-success-html]: https://github.com/jahanalem/LiliShop-frontend-angular/blob/2f1d07ccda915567a59f0657f9d15741d2cb18e4/src/app/features/user-area/checkout/checkout-success/checkout-success.component.html
-[f-routes]: https://github.com/jahanalem/LiliShop-frontend-angular/blob/2f1d07ccda915567a59f0657f9d15741d2cb18e4/src/app/features/user-area/checkout/checkout.routes.ts
+[f-routes]: #routing-correction-source-note
 [f-guard]: https://github.com/jahanalem/LiliShop-frontend-angular/blob/2f1d07ccda915567a59f0657f9d15741d2cb18e4/src/app/core/guards/success.guard.ts
 [f-basket]: https://github.com/jahanalem/LiliShop-frontend-angular/blob/2f1d07ccda915567a59f0657f9d15741d2cb18e4/src/app/core/services/basket.service.ts
 [f-parent]: https://github.com/jahanalem/LiliShop-frontend-angular/blob/2f1d07ccda915567a59f0657f9d15741d2cb18e4/src/app/features/user-area/checkout/checkout.component.ts
