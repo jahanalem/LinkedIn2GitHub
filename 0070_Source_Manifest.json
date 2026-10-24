@@ -1,0 +1,2086 @@
+{
+  "date": "2026-10-24",
+  "article": "0070_Testing_and_Hardening_Checkout_and_Order_Recovery_in_LiliShop.md",
+  "repositories": {
+    "backend": {
+      "head": "9b0aca800d363720c4a3c2dc3af263e468a2b19c",
+      "baseline": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "workingTree": "clean"
+    },
+    "frontend": {
+      "head": "d9990375008d817797bfbd887fbde9a016413b3a",
+      "baseline": "66273c85a6363d7a06cc8c42b638473c209f1fd6",
+      "workingTree": "clean"
+    }
+  },
+  "sourceFiles": [
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/API/ProductAttributesControllerTests.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "f66e7e7b590d3cbc4db0f682ef8f2f7eb57d71c683888896fb07f96b4279090b",
+      "committedBlobSha256": "5ed3819fd0ae2bf0d37a91f6ecb27163c4d0581d7fdb69bd6995ad9896dd7749",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/API/ProductAttributesControllerTests.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/API/ShopCurrencyA1Tests.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "1ce326d4e1c8272817176eef66b8dea51aed6591ca5da819755949833a9da599",
+      "committedBlobSha256": "3957b641a9228922ce71802af520914827fc48734094fe1f6940f6dfb38c0bb8",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/API/ShopCurrencyA1Tests.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Lili.Shop.Tests.csproj",
+      "change": "M",
+      "category": "Package references; dependency appendix",
+      "workingTreeSha256": "8ba80fb50be9afec666bd2c5b7d7b5e4b620646654a185cf769559a8c11a34a1",
+      "committedBlobSha256": "56a8ac89a8fadaeba43a3a1e80f1505dc1b2c1511b4b20d91b4c41dce5cc7858",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/Lili.Shop.Tests.csproj"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/BasketMappersTests.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "eb18f7f21a52c974265327c408864c032ff48becdc0db95d3cd8d46b3909b14f",
+      "committedBlobSha256": "a534048c9c0bd66a69685c52623746c2ed0fa9ec93b87dce778b0517a6cd25f5",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/Services/BasketMappersTests.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/BasketServiceTests.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "8670ade42aaf7a2f765fc414c125b192540bae80a4a878255fd6e01760d1be86",
+      "committedBlobSha256": "caa499b800733e2059044d50a9a451cf1c0abf4e298aa9c2ffbfedcc07f06123",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/Services/BasketServiceTests.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/CheckoutSqlA4Tests.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "c37cb7f8f333ed5dd3df7bab64a88df1cd1bc8bb083522673e500fcd19a3ad0c",
+      "committedBlobSha256": "231f53043c135aaa76c4ae0efef368425dcc9d9089874283ee1e4c5648020485",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/Services/CheckoutSqlA4Tests.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/DevelopmentTestCheckoutSqlTests.cs",
+      "change": "A",
+      "category": "Added test/fixture; evidence matrix",
+      "workingTreeSha256": "f1144d87b434f9badb3e7c6193928fe6690fd7cf86a3e1a30664cd78124a65ef",
+      "committedBlobSha256": "f1144d87b434f9badb3e7c6193928fe6690fd7cf86a3e1a30664cd78124a65ef",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/Services/DevelopmentTestCheckoutSqlTests.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/DevelopmentTestCheckoutTests.cs",
+      "change": "A",
+      "category": "Added test/fixture; evidence matrix",
+      "workingTreeSha256": "7754c75cb997428d73fee7b344627f1f139219dee0aa36cdf92b1b0b6ec20018",
+      "committedBlobSha256": "3880e22975bdbd82c7ce390a27646fbfa2498ef9faed27274379e173926d3113",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/Services/DevelopmentTestCheckoutTests.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/Discounts/DiscountLifecycleServiceTests.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "9193678569f01ca2beee93f63e739f504058836537d8600df1c106f276496a7e",
+      "committedBlobSha256": "3fc465dc780e977ecf4cbd8b57b481aa6b52a11067377f77df418c2ed96b98b5",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/Services/Discounts/DiscountLifecycleServiceTests.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/Email/EmailComposerTests.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "25c5cccf3b6cfc8a52eac6f7e313c8961244e6e96f6073dfdeb6e2625a2265ee",
+      "committedBlobSha256": "5550b475dd7618053e7a401f28914596640fc0f5f5cdd4632d1c8198fb540c3b",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/Services/Email/EmailComposerTests.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/Email/UnsubscribeTokenTests.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "c505805d6cdac0b0de3961df3eef0a76fc4ad015966c55557095fc3afdfca38a",
+      "committedBlobSha256": "1fe63f6946cff2e475b4fdacdad4f1aa937017d668649f677cd7ea9698313dd7",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/Services/Email/UnsubscribeTokenTests.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/FulfillmentSqlA5Tests.cs",
+      "change": "M",
+      "category": "Modified regression/fixture; evidence matrix",
+      "workingTreeSha256": "e7bf95cf7def01810da9a90800ae31f7d317217755a87e90009460fa41fd73bf",
+      "committedBlobSha256": "0a04b8c5787bddd166050cf067450b9a42bb9330e01421108e0e473be99ca946",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/Services/FulfillmentSqlA5Tests.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/InventoryServiceTests.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "7397cc7cfeec2b810935fcb9fcb9abbfb54eeee3066152acc1c69a89f449266b",
+      "committedBlobSha256": "0c6bf063b71cce45d3b87ffe8883a5c18e7543f1312a502f1f2e30222fce601c",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/Services/InventoryServiceTests.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/InvoiceEmailServiceTests.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "d0d1fc0e4e73d9823f424153b0ca60143af9bf6816c61276df8518c0a5a12676",
+      "committedBlobSha256": "9100c1fe62dbe3eaedc3803e9599c6c263a0ba80c65ff3eca5a446f78a5ae3f0",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/Services/InvoiceEmailServiceTests.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/InvoiceServiceTests.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "c2165de26adb9ea8c6eb9b1e8ae9b59621866f6fe51197d0ab5a6b1c5f1906a3",
+      "committedBlobSha256": "37758c8b6d99720ea4a7ff4f9eddc2d340783dcda462ca7da77a31a803e1f983",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/Services/InvoiceServiceTests.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/Localization/LocalizationAdminTests.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "927e831af9b501878801cbe78f142900b8f6518c403c75bd058aa69feef4abc5",
+      "committedBlobSha256": "d8fcebf9dd1392a72c14e2a8fcdea620fa758ca5d36a93da2538b16b1ded30bf",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/Services/Localization/LocalizationAdminTests.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/Mappers/OrderCurrencyA1Tests.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "72ade4836efdf6fa6891b30bd00d711c65796399b432af90863cfe56f2a8c4d5",
+      "committedBlobSha256": "b7d909b43ab50c4b9aab5e7f57f058b69f78d99bea07b8b9953e46bd50f86978",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/Services/Mappers/OrderCurrencyA1Tests.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/OrderMoneySnapshotA3Tests.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "50d00aeab0b002bee7558edc94bcc111da674bf9e106829318941c989eaafb55",
+      "committedBlobSha256": "962759e82061201ce0a75fe5eea70891d39830a5de352e5568190a876416d318",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/Services/OrderMoneySnapshotA3Tests.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/OrderServicePaymentRetryA2Tests.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "a806536b43d1014753d38a1677d55c09788ceb3bf49c7822fd3ef0e7bb54e815",
+      "committedBlobSha256": "bec62c5fe8fcf373eaae9cc1a5ed8c519b3e175edf2214ec80bb94ba185420ee",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/Services/OrderServicePaymentRetryA2Tests.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/ProductVariantServiceTests.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "3ee095adcbd816047634b4fd84bf58d239b4d5e8b393bac41bb200f77229c8ee",
+      "committedBlobSha256": "112a96a2207422de26d9b294d24c34c703c61edaebbad4c34badb5c9e6151dcc",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/Services/ProductVariantServiceTests.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/QuestPdfInvoiceRendererTests.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "19617074227d92bc960d7178407489b6e045cc19481846a93eaecde2e9542a1e",
+      "committedBlobSha256": "4a9866c6ee34f7d539cf5db471cc7f1ac6204d2e65e3ddf8a65cb18dcca075d9",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/Services/QuestPdfInvoiceRendererTests.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/RecoverySqlA6Boundaries.cs",
+      "change": "A",
+      "category": "Added test/fixture; evidence matrix",
+      "workingTreeSha256": "083326a83162da00d6eff6623fcfe50f417a88873b3626d898b74be627cbcacf",
+      "committedBlobSha256": "e40237ba48b657975de66b01d65da725b70e440f6d6138562accfcc2ea84614e",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/Services/RecoverySqlA6Boundaries.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/RecoverySqlA6Contracts.cs",
+      "change": "A",
+      "category": "Added test/fixture; evidence matrix",
+      "workingTreeSha256": "77a90bf48c938ab9733e7a2759ba6b5e18c15f151f59a288ec39b6c42f1e685d",
+      "committedBlobSha256": "3ae98b490b6d988d7828d7e9eecf853d02b69a7cfd6e452da7905a85c6192bcf",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/Services/RecoverySqlA6Contracts.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/RecoverySqlA6Fixture.cs",
+      "change": "A",
+      "category": "Added test/fixture; evidence matrix",
+      "workingTreeSha256": "e45498d4c4ee7fa7fe6be85381c7ffc3e4fda4c13c9a67e263b570e3b6c6d582",
+      "committedBlobSha256": "ae9f6da45e1d6143f454848f51978e261971250bc94d64eeecd9db29a6995255",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/Services/RecoverySqlA6Fixture.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/RecoverySqlA6Restore.cs",
+      "change": "A",
+      "category": "Added test/fixture; evidence matrix",
+      "workingTreeSha256": "b95d121de76d2efa4d50da6318abd41105cd17efe03f575b16ce2de1c0fcbabf",
+      "committedBlobSha256": "159437bae75b6d65f7ca4913006dca0902503f78575b29e2e5d32e0e00666c47",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/Services/RecoverySqlA6Restore.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/RecoverySqlA6Tests.cs",
+      "change": "A",
+      "category": "Added test/fixture; evidence matrix",
+      "workingTreeSha256": "5b7da8606ba46beadef96b13a0624385ed7630e174eb5d82c93a7c46f629ae7b",
+      "committedBlobSha256": "6b3b613b6f83001a1cec53ce0286334d1dc5dfcc07b60f3db62eaa9f0d2a51bc",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/Services/RecoverySqlA6Tests.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/TargetedInvoiceMailSqlTests.cs",
+      "change": "A",
+      "category": "Added test/fixture; evidence matrix",
+      "workingTreeSha256": "ddb845c2061cf50f313c772b4467284654ccc98eed3729c383d1af03613e96bc",
+      "committedBlobSha256": "7d017a75c71b8df0e48a9f4ff17432726a29dbc9acea0ef0dddf0a2c7eecb4fd",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/Services/TargetedInvoiceMailSqlTests.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/UnsafeCheckoutRegressionA4Tests.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "981efb51fe5464d6614ccfbee7b725fe1ca95624f00bef64597c722585b3a6e8",
+      "committedBlobSha256": "d784b33661c53a20710fcc3b02ec9563f1bd6ad830c4b3909d1b42b315190137",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/Applications/Lili.Shop.Tests/Services/UnsafeCheckoutRegressionA4Tests.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.API/Commands/OrderMoneySnapshotCommand.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "f6ba1157a4f8e759e7f48412bc36bb7b5c09283cb94de1c777448f3a8bdebe05",
+      "committedBlobSha256": "64da34941a1eac4788fedcb436c5b17c79bb0d9f40c898208870dca0a9d1e5f5",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.API/Commands/OrderMoneySnapshotCommand.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.API/Controllers/CheckoutController.cs",
+      "change": "M",
+      "category": "Modified behavior; methods/coverage matrix",
+      "workingTreeSha256": "e257cceadaab9fd44e1f2cda167e86591fc608544bd2cce602da3b48775dfe5f",
+      "committedBlobSha256": "dd36241ee7422ae4f7bf3a74da0baab012661e337057ddeb0233eb111321adc1",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.API/Controllers/CheckoutController.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.API/Controllers/FulfillmentController.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "7ca50dd5f4d1e56d34d8606102df2c2c52fd48f557e71f675be8491d801f7b46",
+      "committedBlobSha256": "d39a0a0a45baa1abdecfc5aca6292c1febf289e1c914e32bd26f77a853ef25b1",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.API/Controllers/FulfillmentController.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.API/Controllers/PaymentsController.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "035e85944c21a7cf9aaa739c8ba17d361eff59cebd6e1f19fbacbeaf607b7040",
+      "committedBlobSha256": "57a7482608c76d6802a181262f9a6aa7df2f3ac89cd067935681252233122eb9",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.API/Controllers/PaymentsController.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.API/Extensions/ApplicationServiceExtensions.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "44add3fdcfe2b656cf38770e0d3e6b3197c67b63ab3316bb9044dca58f43c871",
+      "committedBlobSha256": "252d9fd062f74b06cb7369076cfae48f5452323eab7cf581045c2f3e051d07c3",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.API/Extensions/ApplicationServiceExtensions.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.API/LiliShop.API.csproj",
+      "change": "M",
+      "category": "Package references; dependency appendix",
+      "workingTreeSha256": "d8897e3e0bbfccbb5a9e3960ef62b499a06581259345691ecdd6db689e71103f",
+      "committedBlobSha256": "8b9670cb9cc93dd0a97c7c3ea953ffc6a5acd224748449a951f101ec50933773",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.API/LiliShop.API.csproj"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.API/Program.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "1f6dac0afdff8c14910719059de3a0eb067dcb5d6bf582d569fea3e96fcd0386",
+      "committedBlobSha256": "cb28bf3259cad947d731c892584dcb2bb50bb6101b2b6c8df7e3d1105c85742b",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.API/Program.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.API/README.DevelopmentCheckout.md",
+      "change": "A",
+      "category": "Development policy documentation",
+      "workingTreeSha256": "73b09e48575862d7ad62434978f7f75f8f486355c02e881d3db92e01fef35a41",
+      "committedBlobSha256": "73b09e48575862d7ad62434978f7f75f8f486355c02e881d3db92e01fef35a41",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.API/README.DevelopmentCheckout.md"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Application/LiliShop.Application.csproj",
+      "change": "M",
+      "category": "Package references; dependency appendix",
+      "workingTreeSha256": "311581686f0d02108d5bdcbc3f676f8d6280edd778590593f23eb67751373071",
+      "committedBlobSha256": "f00e9753cac0bff91a2fa5414fb6f24d0facb2913536a708a0a002473ec8b12a",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Application/LiliShop.Application.csproj"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Application/Mappers/ProductMapper.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "6b5e067fefbdb8e961a86aea615a83b43881332f54d2b64c3d43a06eb822e770",
+      "committedBlobSha256": "f617a0f45cc72782deb111047528b684337a43e780120ad14c1399a6ecc97a94",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Application/Mappers/ProductMapper.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Domain/Entities/Checkout/CheckoutRecords.cs",
+      "change": "M",
+      "category": "Modified behavior; methods/coverage matrix",
+      "workingTreeSha256": "e2faffda8a003b0bd622721179f0b608e5690a948f3968b5a9ec338ddb7f3861",
+      "committedBlobSha256": "63013a573bed54303dd71b3bcabb26bb43780912c3a78c9d136e76c1ba1c2213",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Domain/Entities/Checkout/CheckoutRecords.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Checkout/CheckoutEnvironment.cs",
+      "change": "A",
+      "category": "Added environment policy; admission/methods",
+      "workingTreeSha256": "3726ee8ad23a3986c9f8e0c26b03cfc3d09aa7f609a919a2177b501018929448",
+      "committedBlobSha256": "3726ee8ad23a3986c9f8e0c26b03cfc3d09aa7f609a919a2177b501018929448",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Checkout/CheckoutEnvironment.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Checkout/CheckoutInboxService.cs",
+      "change": "M",
+      "category": "Modified behavior; methods/coverage matrix",
+      "workingTreeSha256": "b85444eb781a5b559c22416308e21cee657e106875996dbcbc3734d43cedec29",
+      "committedBlobSha256": "3df27c7e9f52cc05ceabb1f8451f0d6e92a97bf0d325f5d340430d28a6cee2b1",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Checkout/CheckoutInboxService.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Checkout/CheckoutMaintenance.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "08e771da25eb4661e48c1e12c2fc4169e1aa821637155bdef07f815c3d17e4cb",
+      "committedBlobSha256": "5da8dd7bb5f4bf4ae394c39ac91b070b3e0d1837cb366967b33446d75fd2b343",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Checkout/CheckoutMaintenance.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Checkout/CheckoutProtocol.cs",
+      "change": "M",
+      "category": "Modified behavior; methods/coverage matrix",
+      "workingTreeSha256": "167da549d810b257f9d2825fdb56a454f5f06bf98511d9ff5f0bc4b56983b74a",
+      "committedBlobSha256": "743454aaa0cdbd91d8165bc90c1b0ca8a29f3c71f5148bb6b076cca8bd334967",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Checkout/CheckoutProtocol.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Checkout/CheckoutService.cs",
+      "change": "M",
+      "category": "Modified behavior; methods/coverage matrix",
+      "workingTreeSha256": "1e8576b98a9cb8f328d59f586612db39ee1a2ebac29d51da3ada5aa27ee7b6b4",
+      "committedBlobSha256": "2a0f0c924d934648f00a2fd55e39ded2653682f04ad7093436029dfac7780da4",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Checkout/CheckoutService.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Checkout/FulfillmentService.cs",
+      "change": "M",
+      "category": "Modified behavior; methods/coverage matrix",
+      "workingTreeSha256": "aafc6ef9caf2d0f824c5ddea338b15369db8a68ae85b76769aa347a32658f936",
+      "committedBlobSha256": "2396f3656765db262f559c3e57a31f7ac5b3dda303eb576dda4e84cbdd0d765c",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Checkout/FulfillmentService.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Checkout/InvoiceEmailWorker.cs",
+      "change": "M",
+      "category": "Modified behavior; methods/coverage matrix",
+      "workingTreeSha256": "775d70ad6632af5cb0eeac8de4de05761c0a53dadc8ccb13593f903f99a23010",
+      "committedBlobSha256": "b6ece703e32ac194326523840fd18f7f1eb494ef2e5dd7fafe21fa564872b0b2",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Checkout/InvoiceEmailWorker.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Checkout/StripeCheckoutProvider.cs",
+      "change": "M",
+      "category": "Modified behavior; methods/coverage matrix",
+      "workingTreeSha256": "732972351869872396e23165f3336697f2a75797fdceb17d176f4d46ac633d21",
+      "committedBlobSha256": "09a224eddbe01bcb50f3eff8d69d52d5719e5669933b2003c93bbdf100d0b52b",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Checkout/StripeCheckoutProvider.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Config/CheckoutConfiguration.cs",
+      "change": "M",
+      "category": "Modified behavior; methods/coverage matrix",
+      "workingTreeSha256": "527b424bfc883711a08363e0776f6980a66be3c0a68abf3cf48ad92727ab9e70",
+      "committedBlobSha256": "f930bcc6ec85073fd59358bd6556b412d04ff45ab960d9ca5d4582f27fc4da24",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Data/Config/CheckoutConfiguration.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Config/FulfillmentConfiguration.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "736ed88034f90a451cf6accba5e27e181ac0543c419b95f2c36f45c7b281a306",
+      "committedBlobSha256": "4867d3ee9f274d9ce7b9e2decd940fce29924fcb59ebc5a6a186f413539ffd44",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Data/Config/FulfillmentConfiguration.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Config/InventoryTransactionConfiguration.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "dff9fcab0599a7ca9989356bfa68e742322627e1bfc7d8781218b90b782007e9",
+      "committedBlobSha256": "883792ea222a1aa9cb2fd938d3b60e71a60dd37e001bba33637cd4532aeddc3a",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Data/Config/InventoryTransactionConfiguration.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Config/InvoiceConfiguration.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "48bb491dd5dec3ebbf0f28a73353e3da6a182f2b22389fa9b0283d502277a397",
+      "committedBlobSha256": "57fe9e1426f49c40c8de248fdb18d7ef5b7c6da890aed300f96e55a7e28e4959",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Data/Config/InvoiceConfiguration.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Migrations/20260713104305_AddLanguageTable.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "9f6c41ecb1f5d1a0613ce8d76593324764059ab3c3453e84eb884c3c4390a683",
+      "committedBlobSha256": "95f06b3711a2e890590a5c5e7ea32163db3045361a1305b7212d7ff0ee5eaff6",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Data/Migrations/20260713104305_AddLanguageTable.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Migrations/20260713111012_AddLocalizationEntries.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "5c0de59aeed8691bbeac8176f604f2d0cd9b6a77ca5b1ae66490425230e6eb51",
+      "committedBlobSha256": "4b5b1821dc821d9d41cb914811ffbc1d45969e5159fb7af3e6a558a7869261e5",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Data/Migrations/20260713111012_AddLocalizationEntries.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Migrations/20260713151330_AddBusinessDataTranslations.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "43371be36d36f8a2c9ccec4da753d9af4a87efba86166f626cad3b10062eca39",
+      "committedBlobSha256": "498df1645cb618bcc19b16fb72324d8bfa8420f7d4b37fe58e84a90ad248e6eb",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Data/Migrations/20260713151330_AddBusinessDataTranslations.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Migrations/20260718022635_M0_AddProductAttributes.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "2307ecb9424454cea01637aa84713c54db42218a74201792aa3737c2934b3ce1",
+      "committedBlobSha256": "294088a51b1909f69e63d55c3cfd0e58b954ebae7ea85ee2047c1d5b0a7bd8b2",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Data/Migrations/20260718022635_M0_AddProductAttributes.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Migrations/20260718081814_M1_AddProductVariants.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "75c4855e4f7e1800e3792b6398544d6092e8ee6801b82df3910bc768a7bce9d7",
+      "committedBlobSha256": "3db103df3a79eb4e6a05d039bf43dc48e4ccb0898b387d629f6224cba9c0a96f",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Data/Migrations/20260718081814_M1_AddProductVariants.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Migrations/20260718083908_M2_AddInventoryLedger.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "7870cf75881c3efd76ee0622803d54a03939d9301ed95233969433c6d71fe427",
+      "committedBlobSha256": "1d64209b53bef5801c59b1998145c669250af86f4c005fbc3b4eb293c4021c51",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Data/Migrations/20260718083908_M2_AddInventoryLedger.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Migrations/20260718132701_M4_AddInventoryReservations.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "93a233cb33fdd4cf1fa1d0e30effd505c0fc4108c9bd1293ed65dbc67912d53e",
+      "committedBlobSha256": "420ef75555ed4ac541d9f9674241322b33be6c72ab9f08ce917518565ce70127",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Data/Migrations/20260718132701_M4_AddInventoryReservations.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Migrations/20260719092237_M6_DropLegacySizeAndCharacteristics.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "bb01925109f4df2d9b5a26af414265066f5d501252832666f99a375e04e1184e",
+      "committedBlobSha256": "ea2c70aab42a5742228f00f5b8401572ad6ff28efc13816fb2b1d97949289ccb",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Data/Migrations/20260719092237_M6_DropLegacySizeAndCharacteristics.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Migrations/20260720000000_M7A_AddInvoices.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "e7b0bf9a7f21c73dd6881e85c0efe54fc38a7674e8b93460ba5d11243af951d2",
+      "committedBlobSha256": "8c740b5a3c15fa0cfded302a23bf98b9f5a3a93f436fb3df6520598e921e3280",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Data/Migrations/20260720000000_M7A_AddInvoices.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Migrations/20260724120000_AddProductPhotoAttributeValues.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "fd1366d76efdd0a5df78d1ea5b22aa42db4c3dd68d02510f987f78a765d737e2",
+      "committedBlobSha256": "e391f9fbc955c7beb899097b5e68da6423616fef648d8634b85a19a651e2594a",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Data/Migrations/20260724120000_AddProductPhotoAttributeValues.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Migrations/20261022152136_A3_OrderMoneySnapshots.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "08ea19234620c6ebceab3b52fa8b5cac71e0adc52c48fa872df3cc0ce9709c53",
+      "committedBlobSha256": "fcc18231351723e4c05233a3978072308c5939dd0b2c937313ede9c8e58c7ad2",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Data/Migrations/20261022152136_A3_OrderMoneySnapshots.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Migrations/20261023053141_A4_DurableCheckout.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "052f590aff291badd0b307ac33166c0ef0748518c2090036492c2854a4dd4b9a",
+      "committedBlobSha256": "a2e728dddd3023ca4504dd771d1c0574c5c00c21b3ce83587fcb3455717b303f",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Data/Migrations/20261023053141_A4_DurableCheckout.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Migrations/20261023100434_A5_RecoverableFulfillment.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "2b8badc804842ca86e16e531efeb04438c0ef25e31ee641135efded8a3ec37f8",
+      "committedBlobSha256": "78d4cdc5969b92322ca8133414e7c8271e0fa90d6c29990cb253ab6c5e2fef8d",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Data/Migrations/20261023100434_A5_RecoverableFulfillment.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Migrations/20261023192357_A6_PaymentInboxRecovery.Designer.cs",
+      "change": "A",
+      "category": "Generated model; schema appendix",
+      "workingTreeSha256": "a5a8d850cd3a6e845c26e9c7ef9ca13dc0138a921e083fb501c92c3c21d18d9e",
+      "committedBlobSha256": "3114a965f932a7d9940072c2fcc00e0595703cb42d5fe56b052fd491b04de900",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Data/Migrations/20261023192357_A6_PaymentInboxRecovery.Designer.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Migrations/20261023192357_A6_PaymentInboxRecovery.cs",
+      "change": "A",
+      "category": "Added recovery schema; schema/restore",
+      "workingTreeSha256": "4e0926fc0e66b5c489e50e6184592ab1097f37ca602862b62db72b727e812451",
+      "committedBlobSha256": "f3905f32807ee55e016252bd22e3e9ef835bcdf1060b798ac801bc4aac737525",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Data/Migrations/20261023192357_A6_PaymentInboxRecovery.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Migrations/ShopDbContextModelSnapshot.cs",
+      "change": "M",
+      "category": "Generated model; schema appendix",
+      "workingTreeSha256": "c73013f0c43345f3f6d784c6505529b2fd3ea19d1faa55fc6173c83376f5852a",
+      "committedBlobSha256": "0a9c8db3d7e6be1913594775a6d7656a0d0ea5c2e925dbadb75f130030eaede5",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Data/Migrations/ShopDbContextModelSnapshot.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/ShopDbContext.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "de84070f1dad9003e246181cc84e9ab24c6eed5e0e25b27a00e4cf337ab2525e",
+      "committedBlobSha256": "ea1bb98682a7bf362f9da3e791f6940a457a1ad1e83daee3cfc06932a5bfc4b6",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Data/ShopDbContext.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/LiliShop.Infrastructure.csproj",
+      "change": "M",
+      "category": "Package references; dependency appendix",
+      "workingTreeSha256": "b24ae7391693ca853b04c627fc91ccd664aaad88eb1394a9df70f2364103de5f",
+      "committedBlobSha256": "a01e5aa272b7eaa6412989eb2ce2c1373a8991805279b78801aff85111250a00",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/LiliShop.Infrastructure.csproj"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/ApplicationUserService.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "66e81bf407227b0754412d099505e0b998c7774dc33951387e6bb50d21e1ee19",
+      "committedBlobSha256": "baf2d4fd39920a23b2c26c223921e48daa83e10341d624eb9d79937faee9f3d6",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Services/ApplicationUserService.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/BasketService.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "204aabbe76b3421a4e5869734e4b498a86f36a038d6aa0a81059d2cb83c01717",
+      "committedBlobSha256": "e70d2dfcaeb0d0e44d9dcd0698133d6d0dae8d53473a1adf81ef1d830184918a",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Services/BasketService.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/Discounts/DiscountLifecycleService.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "18f499f091d1a189d22264cd8b19d46d2cf490a002ec56877c464ca1baee2cb3",
+      "committedBlobSha256": "5a0dc7c4fc051fe7e38fe6155dd2606befeb16ed3ba30d2a67f9d78ce7442f7f",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Services/Discounts/DiscountLifecycleService.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/Email/EmailComposer.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "478be60ddb798fa0735da822544bfbf76a5199f5fe37b24d70e22761876de0ec",
+      "committedBlobSha256": "e699f566e8246ed89f334c6f29ef495b72214ac7f1b84f52bb40aae7ccb20dba",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Services/Email/EmailComposer.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/Email/EmailLinkBuilder.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "92b84d230de96df78bab3ebe53470e56582c11ab02bb4e009178acd6e6319fe6",
+      "committedBlobSha256": "c0f4d2a19cff8a58971419e10bf4745bad6ab6af74d06652ee0aa0e03f1ef607",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Services/Email/EmailLinkBuilder.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/InventoryService.cs",
+      "change": "M",
+      "category": "Modified behavior; methods/coverage matrix",
+      "workingTreeSha256": "98f9f392aeaf5f022d106369d11971ba6dea2b4dd471b0b786e5579ec316c4f1",
+      "committedBlobSha256": "9c2467ca01f2ebbb2d288fe3c571cedde9b03b25d7cba3403dd3300adafee78e",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Services/InventoryService.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/InvoiceEmailService.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "79fe6e825bf7c2311ebb7a24b80499323c9f28fcc6ae8991e090459e58367dc7",
+      "committedBlobSha256": "2d8b911d6c96b8f650d5a728e2a67743e1019492cecb847bc7aa454f44dd15b2",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Services/InvoiceEmailService.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/Invoices/QuestPdfInvoiceRenderer.cs",
+      "change": "M",
+      "category": "Modified behavior; methods/coverage matrix",
+      "workingTreeSha256": "fa8497991b9b01eb066d4a4245ab038274262e8d6ca8ad644e5c250d18477e6f",
+      "committedBlobSha256": "cb34a54069461eab99bfe240f8c2f7424adbc77276c78cf1e2d65de6d2e7efdb",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Services/Invoices/QuestPdfInvoiceRenderer.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/NotificationService.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "19e324b461ba34673cc0eb52612ec7882bbed31e93b6056fc0989dcceb2529ff",
+      "committedBlobSha256": "39c3b0a27f2e463ca34c509ad51d685de6558ecbaa6baaf31918f236059bbc38",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Services/NotificationService.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/OrderMoneySnapshotBackfill.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "5a252853253d477dc80ca591dfbcd674b8045973409abe006cb24d892f061604",
+      "committedBlobSha256": "957ed3b21456ea52f91d5a738fc6f5bf247b1aab8647ed61282b38feacbfaf24",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Services/OrderMoneySnapshotBackfill.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/PaymentService.cs",
+      "change": "M",
+      "category": "Modified behavior; methods/coverage matrix",
+      "workingTreeSha256": "f8a4a6a06e2912a627e770d52817a74047c1404cd1031b7fb00284eebba7202d",
+      "committedBlobSha256": "e79c54abe24abdcd62797c55335681072191f5160cf0bae4eac5f425649d7a32",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Services/PaymentService.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/ProductAttributeService.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "0e5b1c1cf279e69778f2712f836b2409dbe409b751303f9f07d6a83f245707c3",
+      "committedBlobSha256": "264ddd1263392263160161c9ae644217611081a811ccc8110276fc2b268da265",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Services/ProductAttributeService.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/ProductBrandService.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "65fd5e9438cc496f79ca4680b536ae65f04612e1f603f919837568c623064e5c",
+      "committedBlobSha256": "781317056a9ca93efc69abf1d38f261602f1dfc5b5dac150f1064b772e67aa48",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Services/ProductBrandService.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/ProductService.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "08b489d1952faa6f886213d6e533ac852c5046f30e803df26582cb54ba8bc03b",
+      "committedBlobSha256": "a609295b3d81be30ae9a14235e9a6f43165b644377c1f5a4989f7365ecbd640e",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Services/ProductService.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/ProductTypeService.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "cdee979ce6568481ea6442dc5e4b011e999128df26d63c6095ad6c10cd349ad7",
+      "committedBlobSha256": "86b8f7cccf553c2f539de50703d2f82f8a14e2144b4249b3fe6064aa67dd57af",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Services/ProductTypeService.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/ProductVariantService.cs",
+      "change": "M",
+      "category": "Formatting/import-only; inherited algorithm",
+      "workingTreeSha256": "e363bc5349e797065f264e56a83bc4a96e0089919d47fe405c5255ee47230fe2",
+      "committedBlobSha256": "ff18059634f12924e1592fbf5803db0dbf1fad6d169707b629d332faa7222017",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Services/ProductVariantService.cs"
+    },
+    {
+      "repository": "frontend",
+      "path": "cypress/e2e/checkout-recovery-a6.cy.ts",
+      "change": "A",
+      "category": "Added test/fixture; evidence matrix",
+      "workingTreeSha256": "d3c1c2362e8d22a95ed2e3a8e78ab96382941a516154e3e10596bc3797d4ca48",
+      "committedBlobSha256": "210b1510d1a4f2b42914bcf4071b65bb2cd3343852734c4daeb97657e6bec963",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/d9990375008d817797bfbd887fbde9a016413b3a/cypress/e2e/checkout-recovery-a6.cy.ts"
+    },
+    {
+      "repository": "frontend",
+      "path": "cypress/provider/checkout-abandon-a6-followup.cy.ts",
+      "change": "A",
+      "category": "Added test/fixture; evidence matrix",
+      "workingTreeSha256": "b52baae3ea6fa6ad7a4d18ccf26ab1ea8f131336f83b5f0cd8609f5dde41836c",
+      "committedBlobSha256": "b0d109235fe556e49aaed6929de3898055ac7fdc3dd4d4490c84bf55f2565ccb",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/d9990375008d817797bfbd887fbde9a016413b3a/cypress/provider/checkout-abandon-a6-followup.cy.ts"
+    },
+    {
+      "repository": "frontend",
+      "path": "cypress/provider/checkout-elements-a6-followup.cy.ts",
+      "change": "A",
+      "category": "Added test/fixture; evidence matrix",
+      "workingTreeSha256": "99909c3a49bfa43e23045819fd5ee066d9ef54592670022566ae16aef90566a5",
+      "committedBlobSha256": "99909c3a49bfa43e23045819fd5ee066d9ef54592670022566ae16aef90566a5",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/d9990375008d817797bfbd887fbde9a016413b3a/cypress/provider/checkout-elements-a6-followup.cy.ts"
+    },
+    {
+      "repository": "frontend",
+      "path": "cypress/provider/checkout-resume-a6-followup.cy.ts",
+      "change": "A",
+      "category": "Added test/fixture; evidence matrix",
+      "workingTreeSha256": "0f7e62815693ac4292f88ea8946731a9088206910f8fc34da0a3503f3cfaeade",
+      "committedBlobSha256": "dfbfc23ed918b842ef57a0d9e1eede59aaa90875edd4b85de8a8494f59ca1bc1",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/d9990375008d817797bfbd887fbde9a016413b3a/cypress/provider/checkout-resume-a6-followup.cy.ts"
+    },
+    {
+      "repository": "frontend",
+      "path": "cypress/provider/stripe-sca.cy.js",
+      "change": "A",
+      "category": "Added test/fixture; evidence matrix",
+      "workingTreeSha256": "f422cfe370e5fa2b3aebbe9a46e982d68a6e8ccb3a00b1e45838a5c2138ffd8f",
+      "committedBlobSha256": "3bee6bf8d9ae5bb62f6fe7430310820027c5455f85357d9be818dfc67f8a237b",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/d9990375008d817797bfbd887fbde9a016413b3a/cypress/provider/stripe-sca.cy.js"
+    },
+    {
+      "repository": "frontend",
+      "path": "src/app/app.component.spec.ts",
+      "change": "M",
+      "category": "Modified regression/fixture; evidence matrix",
+      "workingTreeSha256": "a5c4f69209156d6b69d234552f532fc3a859db359e306fc802bcba9cbe8714e5",
+      "committedBlobSha256": "e1c822c382ab39626f27c2756f030d6829293476b592202a3daccc6b24c9ba40",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/d9990375008d817797bfbd887fbde9a016413b3a/src/app/app.component.spec.ts"
+    },
+    {
+      "repository": "frontend",
+      "path": "src/app/app.component.ts",
+      "change": "M",
+      "category": "Modified behavior; methods/coverage matrix",
+      "workingTreeSha256": "e3a3d054e10ba9da8896f95f2dcd4617097553aafe53d35fa9523cde91db633d",
+      "committedBlobSha256": "535a2c4164a4c6e341f0a17e1aa400082308a06503cac52ffdaea0ec6fdb048f",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/d9990375008d817797bfbd887fbde9a016413b3a/src/app/app.component.ts"
+    },
+    {
+      "repository": "frontend",
+      "path": "src/app/features/user-area/checkout/checkout-payment/checkout-payment.component.ts",
+      "change": "M",
+      "category": "Modified behavior; methods/coverage matrix",
+      "workingTreeSha256": "2673c27fa75e98abd042bf8837908027ef0d7ba61116176516e57b4a620fe83a",
+      "committedBlobSha256": "35befe0789919432ca4b411d003a54f18883986b92b4dcf7d05a2cfd2dc4147c",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/d9990375008d817797bfbd887fbde9a016413b3a/src/app/features/user-area/checkout/checkout-payment/checkout-payment.component.ts"
+    },
+    {
+      "repository": "frontend",
+      "path": "src/app/features/user-area/checkout/checkout-payment/checkout-payment.rendered-a4.spec.ts",
+      "change": "M",
+      "category": "Modified regression/fixture; evidence matrix",
+      "workingTreeSha256": "5b4d526c4d10f2f1104d478d475b7ffc033a745abdb41d29a649518cbc51b1c5",
+      "committedBlobSha256": "703e578cf08054b2f292bab12b864ce6a23f0e1abfb32532af5e8d2ebe0fda54",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/d9990375008d817797bfbd887fbde9a016413b3a/src/app/features/user-area/checkout/checkout-payment/checkout-payment.rendered-a4.spec.ts"
+    },
+    {
+      "repository": "frontend",
+      "path": "src/environments/environment.prod.ts",
+      "change": "M",
+      "category": "Modified behavior; methods/coverage matrix",
+      "workingTreeSha256": "2a4400fe8fde03e92a9e58871de446654062c168b1dc78a4ac8a1e556c27d84a",
+      "committedBlobSha256": "b0e1859eba4f92b32c3049501ba1fb5267292fffa89ed6bd7d5fd3d5ceae77f1",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/d9990375008d817797bfbd887fbde9a016413b3a/src/environments/environment.prod.ts"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Checkout/FulfillmentEvidence.cs",
+      "change": "reused",
+      "category": "Reused collaborator",
+      "workingTreeSha256": "1c88e2c4a7d13aae8ad5ca7c362fafef76738b6a47efe1053b7cc0811e2e16a5",
+      "committedBlobSha256": "d741516bbe08a1250e8be398f929e4ca1c4d22e5f0f34098f80ebb0242f3985a",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Checkout/FulfillmentEvidence.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Checkout/FulfillmentMaintenance.cs",
+      "change": "reused",
+      "category": "Reused collaborator",
+      "workingTreeSha256": "2a5dce94a0915d51d2283da7d16d03088d502efdcdd722649bc2cf0fc4da1ef6",
+      "committedBlobSha256": "854c1f05e1ef9e18926588f87a739aabc699c3742fd978d9a3a551bcfc6ef445",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Checkout/FulfillmentMaintenance.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Checkout/InvoiceMailTransport.cs",
+      "change": "reused",
+      "category": "Reused collaborator",
+      "workingTreeSha256": "36fd173db517b80ea5fd6854437437ef73e591fc085c03386c2bbdaad18c96b9",
+      "committedBlobSha256": "0f0926dbb35923005c4d220fc283e28b0e9b3089a8ad5f5da980dbc98c5c7c6e",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Checkout/InvoiceMailTransport.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Application/Interfaces/Services/IInventoryService.cs",
+      "change": "reused",
+      "category": "Reused collaborator",
+      "workingTreeSha256": "487a64bb01fc1e212aaf8d9281134db1829d980dec2f468972fd7255afd58988",
+      "committedBlobSha256": "c594b9f9b059d87d0d4b1fa30ac5dff8375b4950b5dd5d00e0334b6e582b64f0",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Application/Interfaces/Services/IInventoryService.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/InvoiceService.cs",
+      "change": "reused",
+      "category": "Reused collaborator",
+      "workingTreeSha256": "11be41000e5b37c2d425a30dab478125cb4f3619338fd03481aa3123a786603d",
+      "committedBlobSha256": "5a6960f8dea94ea17b26e8d877f5a867165868d6bfc7eb6af0f9a5df0e172f7c",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Services/InvoiceService.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/External/Email/FallbackEmailService.cs",
+      "change": "reused",
+      "category": "Reused collaborator",
+      "workingTreeSha256": "468c84bf21e37f6051da16dd050362fa4e94fc034a8747d9313b51c9b3a1fa31",
+      "committedBlobSha256": "f623db0ed30636b430cef4579663e69cffdf103cf9893c3f6c2bdf6f51e82aef",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Services/External/Email/FallbackEmailService.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/External/Email/SendGridEmailService.cs",
+      "change": "reused",
+      "category": "Reused collaborator",
+      "workingTreeSha256": "2f03088027f89b046a8a4c1136584dbef8adce665f692e9202629591cfac3ec2",
+      "committedBlobSha256": "f17398f4730871a9fbf9f25f8a2dc66fc9d1c0b6b9d390f6ab4ad2b29b87ac2e",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Services/External/Email/SendGridEmailService.cs"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/External/Email/SmtpEmailService.cs",
+      "change": "reused",
+      "category": "Reused collaborator",
+      "workingTreeSha256": "4a36733fc0574906bc4c9b1a97c575eb560f52dd55975cb27a9a68e2ccf7ef6f",
+      "committedBlobSha256": "40a21bd42f736c49dad40a7e33e4201779a6cc744ec5482dabcc5d9297603b4f",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Services/External/Email/SmtpEmailService.cs"
+    },
+    {
+      "repository": "frontend",
+      "path": "src/app/core/services/account.service.ts",
+      "change": "reused",
+      "category": "Reused collaborator",
+      "workingTreeSha256": "d02240ffb97dbd25c73f22f3c548cf5ebe5e636857ee8ab2c3b43e71f7a4a1aa",
+      "committedBlobSha256": "339504caba417283e908dd3879cf647fbbd27f7656946d32c1a0051f0158f5d3",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/d9990375008d817797bfbd887fbde9a016413b3a/src/app/core/services/account.service.ts"
+    },
+    {
+      "repository": "frontend",
+      "path": "src/app/core/guards/auth.guard.ts",
+      "change": "reused",
+      "category": "Reused collaborator",
+      "workingTreeSha256": "cc2fb2e91299163ab9db818c24769086ca08406dab4a738b885e007c84cc2e34",
+      "committedBlobSha256": "fe71a3468a49b29802f4c904c03a0ac755a5c5fa04962ac221429ca55b008d62",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/d9990375008d817797bfbd887fbde9a016413b3a/src/app/core/guards/auth.guard.ts"
+    },
+    {
+      "repository": "frontend",
+      "path": "src/app/core/services/checkout.service.ts",
+      "change": "reused",
+      "category": "Reused collaborator",
+      "workingTreeSha256": "b883afa665c1a9227e51a6d466df5232e48a12a6830abf0b8548c9035433fd68",
+      "committedBlobSha256": "d7e26f2c72d4d2bcd6e4831a0f051f4782f1b0aa65ff40eff9ad1c930c018bf0",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/d9990375008d817797bfbd887fbde9a016413b3a/src/app/core/services/checkout.service.ts"
+    },
+    {
+      "repository": "frontend",
+      "path": "src/app/features/user-area/checkout/checkout-success/checkout-success.component.ts",
+      "change": "reused",
+      "category": "Reused collaborator",
+      "workingTreeSha256": "700acb84bb8038b4cceafec9a6b4a6f1fc46908ba61d4dd0d278be18fa715a6f",
+      "committedBlobSha256": "7677b32890cf2845d501a98ecca03851c807bc09fa91346c43ae909fc965db44",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/d9990375008d817797bfbd887fbde9a016413b3a/src/app/features/user-area/checkout/checkout-success/checkout-success.component.ts"
+    },
+    {
+      "repository": "frontend",
+      "path": "src/app/features/user-area/checkout/checkout.routes.ts",
+      "change": "reused",
+      "category": "Reused collaborator",
+      "workingTreeSha256": "cf46adf05c473a733c09c756a4b224b1941fb872d46cc648592f89225774bbd6",
+      "committedBlobSha256": "b68207d8f99c450cd024aa558658feb5866375017f62d4b5d319ddd01f1d665a",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/d9990375008d817797bfbd887fbde9a016413b3a/src/app/features/user-area/checkout/checkout.routes.ts"
+    },
+    {
+      "repository": "frontend",
+      "path": "src/app/features/user-area/user-layout.routes.ts",
+      "change": "reused",
+      "category": "Reused collaborator",
+      "workingTreeSha256": "bac1fbf70cf10d3af3b0e612ea5595e3f8e76afa4094e5305d5f3106eab1416c",
+      "committedBlobSha256": "eaa7562dd4896e7e2d02a708ed9296289af1de3be0e1b0140b6252b5274568be",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/d9990375008d817797bfbd887fbde9a016413b3a/src/app/features/user-area/user-layout.routes.ts"
+    },
+    {
+      "repository": "frontend",
+      "path": "src/app/core/helpers/stripe-utils.ts",
+      "change": "reused",
+      "category": "Reused collaborator",
+      "workingTreeSha256": "c05f70f9f97d47339886b68320b54044b4be9f21fe46988cc973be1821c7fce3",
+      "committedBlobSha256": "0f2fb1fcbb86c17fb7c91e139bdd54133b638429b0adeff0e9fbf02b727ecf96",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/d9990375008d817797bfbd887fbde9a016413b3a/src/app/core/helpers/stripe-utils.ts"
+    },
+    {
+      "repository": "frontend",
+      "path": "src/index.html",
+      "change": "reused",
+      "category": "Reused collaborator",
+      "workingTreeSha256": "3e3bf87109b9076d0d01b658fc4e624a8408322368104a1c41728ec6032d8b58",
+      "committedBlobSha256": "809084e4f740ede4cfc5f11c9ee08b11265c7def232d154b8339d365daf41626",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/d9990375008d817797bfbd887fbde9a016413b3a/src/index.html"
+    },
+    {
+      "repository": "frontend",
+      "path": "src/app/core/services/fulfillment.service.ts",
+      "change": "reused",
+      "category": "Reused collaborator",
+      "workingTreeSha256": "97408a3b8a22dc514ee6ccd55890bbbb64c899fbb5fe317bee5cb63dd9128601",
+      "committedBlobSha256": "8c189b20d52681c09ed82910218247ccaf280bf0bbe14d8eeefb0135404566b4",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/d9990375008d817797bfbd887fbde9a016413b3a/src/app/core/services/fulfillment.service.ts"
+    },
+    {
+      "repository": "frontend",
+      "path": "src/app/shared/models/checkout.ts",
+      "change": "reused",
+      "category": "Reused collaborator",
+      "workingTreeSha256": "2ba2f3b685f95b5f6191801ae5f7faab7d63f7ded49a9e76036387788a13914a",
+      "committedBlobSha256": "679d0e8fca42f9ace6ae92cf240ee04fddbb62ab227f542b5b9eb0bd70adabe9",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/d9990375008d817797bfbd887fbde9a016413b3a/src/app/shared/models/checkout.ts"
+    },
+    {
+      "repository": "frontend",
+      "path": "src/app/shared/models/fulfillment.ts",
+      "change": "reused",
+      "category": "Reused collaborator",
+      "workingTreeSha256": "db74ef74fbf8a1772cb0d6894eec3a2eeef9c1420b8d7c80a92ef39004a639c9",
+      "committedBlobSha256": "7a0052af8420249fe70221a4b23cb534d7945fd85dff515bd82ce73a46ab22a8",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/d9990375008d817797bfbd887fbde9a016413b3a/src/app/shared/models/fulfillment.ts"
+    },
+    {
+      "repository": "frontend",
+      "path": "src/app/features/admin-area/admin/fulfillment/fulfillment.component.ts",
+      "change": "reused",
+      "category": "Reused collaborator",
+      "workingTreeSha256": "0ef42b30d2599e180b5f8c57a02f8dfc1f22d24b56092fc2d33b10ae89b4c7a8",
+      "committedBlobSha256": "26ab98ce99637b410d5025a1c6d4cfcea6b791037fc7036127eecf8e5fc07ca3",
+      "pinnedUrl": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/d9990375008d817797bfbd887fbde9a016413b3a/src/app/features/admin-area/admin/fulfillment/fulfillment.component.ts"
+    }
+  ],
+  "packageReferences": [
+    {
+      "path": "Main/LiliShop.API/LiliShop.API.csproj",
+      "package": "Hangfire.AspNetCore",
+      "before": "1.8.24",
+      "after": "1.8.25",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.API/LiliShop.API.csproj",
+      "package": "Hangfire.Core",
+      "before": "1.8.24",
+      "after": "1.8.25",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.API/LiliShop.API.csproj",
+      "package": "Hangfire.SqlServer",
+      "before": "1.8.24",
+      "after": "1.8.25",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.API/LiliShop.API.csproj",
+      "package": "Microsoft.AspNetCore.Authentication.Google",
+      "before": "10.0.10",
+      "after": "10.0.13",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.API/LiliShop.API.csproj",
+      "package": "Microsoft.AspNetCore.Authentication.JwtBearer",
+      "before": "10.0.10",
+      "after": "10.0.13",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.API/LiliShop.API.csproj",
+      "package": "Microsoft.EntityFrameworkCore.Design",
+      "before": "10.0.10",
+      "after": "10.0.13",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.API/LiliShop.API.csproj",
+      "package": "Microsoft.Extensions.Caching.Hybrid",
+      "before": "10.8.0",
+      "after": "10.11.0",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.API/LiliShop.API.csproj",
+      "package": "Microsoft.Extensions.Caching.StackExchangeRedis",
+      "before": "10.0.10",
+      "after": "10.0.13",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.API/LiliShop.API.csproj",
+      "package": "Microsoft.OpenApi",
+      "before": "3.9.0",
+      "after": "3.11.0",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.API/LiliShop.API.csproj",
+      "package": "NLog.Extensions.Logging",
+      "before": "6.1.4",
+      "after": "6.2.2",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.API/LiliShop.API.csproj",
+      "package": "NLog.Web.AspNetCore",
+      "before": "6.1.4",
+      "after": "6.2.2",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.API/LiliShop.API.csproj",
+      "package": "StackExchange.Redis",
+      "before": "3.0.17",
+      "after": "3.4.20",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.API/LiliShop.API.csproj",
+      "package": "Swashbuckle.AspNetCore",
+      "before": "10.2.3",
+      "after": "10.3.1",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.Application/LiliShop.Application.csproj",
+      "package": "Microsoft.Extensions.Configuration.Abstractions",
+      "before": "10.0.10",
+      "after": "10.0.13",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.Infrastructure/LiliShop.Infrastructure.csproj",
+      "package": "CloudinaryDotNet",
+      "before": "1.29.2",
+      "after": "1.29.3",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.Infrastructure/LiliShop.Infrastructure.csproj",
+      "package": "Google.Apis.Auth",
+      "before": "1.75.0",
+      "after": "1.77.0",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.Infrastructure/LiliShop.Infrastructure.csproj",
+      "package": "Hangfire.Core",
+      "before": "1.8.24",
+      "after": "1.8.25",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.Infrastructure/LiliShop.Infrastructure.csproj",
+      "package": "Microsoft.AspNetCore.Identity.EntityFrameworkCore",
+      "before": "10.0.10",
+      "after": "10.0.13",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.Infrastructure/LiliShop.Infrastructure.csproj",
+      "package": "Microsoft.AspNetCore.JsonPatch.SystemTextJson",
+      "before": "10.0.10",
+      "after": "10.0.13",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.Infrastructure/LiliShop.Infrastructure.csproj",
+      "package": "Microsoft.Data.SqlClient",
+      "before": "6.1.1",
+      "after": "7.1.1",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.Infrastructure/LiliShop.Infrastructure.csproj",
+      "package": "Microsoft.EntityFrameworkCore.Abstractions",
+      "before": "10.0.10",
+      "after": "10.0.13",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.Infrastructure/LiliShop.Infrastructure.csproj",
+      "package": "Microsoft.EntityFrameworkCore.SqlServer",
+      "before": "10.0.10",
+      "after": "10.0.13",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.Infrastructure/LiliShop.Infrastructure.csproj",
+      "package": "Polly",
+      "before": "8.7.0",
+      "after": "8.8.0",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.Infrastructure/LiliShop.Infrastructure.csproj",
+      "package": "QuestPDF",
+      "before": "2026.7.1",
+      "after": "2026.9.1",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.Infrastructure/LiliShop.Infrastructure.csproj",
+      "package": "SendGrid",
+      "before": "9.29.3",
+      "after": "9.29.3",
+      "changed": false
+    },
+    {
+      "path": "Main/LiliShop.Infrastructure/LiliShop.Infrastructure.csproj",
+      "package": "StackExchange.Redis",
+      "before": "3.0.17",
+      "after": "3.4.20",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.Infrastructure/LiliShop.Infrastructure.csproj",
+      "package": "Stripe.net",
+      "before": "52.1.1",
+      "after": "53.0.0",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.Infrastructure/LiliShop.Infrastructure.csproj",
+      "package": "System.Security.Cryptography.Pkcs",
+      "before": null,
+      "after": "9.0.21",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.Infrastructure/LiliShop.Infrastructure.csproj",
+      "package": "System.IdentityModel.Tokens.Jwt",
+      "before": "8.21.0",
+      "after": "8.23.0",
+      "changed": true
+    },
+    {
+      "path": "Main/LiliShop.Infrastructure/LiliShop.Infrastructure.csproj",
+      "package": "Microsoft.EntityFrameworkCore.Design",
+      "before": "10.0.10",
+      "after": "10.0.13",
+      "changed": true
+    },
+    {
+      "path": "Main/Applications/Lili.Shop.Tests/Lili.Shop.Tests.csproj",
+      "package": "FluentAssertions",
+      "before": "8.10.0",
+      "after": "8.11.0",
+      "changed": true
+    },
+    {
+      "path": "Main/Applications/Lili.Shop.Tests/Lili.Shop.Tests.csproj",
+      "package": "Microsoft.EntityFrameworkCore.Sqlite",
+      "before": "10.0.10",
+      "after": "10.0.13",
+      "changed": true
+    },
+    {
+      "path": "Main/Applications/Lili.Shop.Tests/Lili.Shop.Tests.csproj",
+      "package": "SQLitePCLRaw.lib.e_sqlite3",
+      "before": "3.53.3",
+      "after": "3.53.3",
+      "changed": false
+    },
+    {
+      "path": "Main/Applications/Lili.Shop.Tests/Lili.Shop.Tests.csproj",
+      "package": "Microsoft.NET.Test.Sdk",
+      "before": "18.8.1",
+      "after": "18.11.0",
+      "changed": true
+    },
+    {
+      "path": "Main/Applications/Lili.Shop.Tests/Lili.Shop.Tests.csproj",
+      "package": "MockQueryable.Moq",
+      "before": "10.0.8",
+      "after": "10.0.13",
+      "changed": true
+    },
+    {
+      "path": "Main/Applications/Lili.Shop.Tests/Lili.Shop.Tests.csproj",
+      "package": "Moq",
+      "before": "4.20.72",
+      "after": "4.21.0",
+      "changed": true
+    },
+    {
+      "path": "Main/Applications/Lili.Shop.Tests/Lili.Shop.Tests.csproj",
+      "package": "Stripe.net",
+      "before": "52.1.1",
+      "after": "53.0.0",
+      "changed": true
+    },
+    {
+      "path": "Main/Applications/Lili.Shop.Tests/Lili.Shop.Tests.csproj",
+      "package": "xunit",
+      "before": "2.9.3",
+      "after": "2.9.3",
+      "changed": false
+    },
+    {
+      "path": "Main/Applications/Lili.Shop.Tests/Lili.Shop.Tests.csproj",
+      "package": "xunit.runner.visualstudio",
+      "before": "3.1.5",
+      "after": "4.0.1",
+      "changed": true
+    },
+    {
+      "path": "Main/Applications/Lili.Shop.Tests/Lili.Shop.Tests.csproj",
+      "package": "coverlet.collector",
+      "before": "10.0.1",
+      "after": "10.1.0",
+      "changed": true
+    }
+  ],
+  "retainedSourceComparison": {
+    "backend": {
+      "retained": 624,
+      "matched": 623,
+      "mismatches": [
+        "Main/LiliShop.Infrastructure/Services/Invoices/QuestPdfInvoiceRenderer.cs"
+      ],
+      "notTrackedNow": []
+    },
+    "frontend": {
+      "retained": 439,
+      "matched": 439,
+      "mismatches": [],
+      "notTrackedNow": []
+    }
+  },
+  "publicReferenceChecks": [
+    {
+      "index": 0,
+      "sha": "aa3595f5845346eb853a9b641aebfa0076ec563d",
+      "url": "https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0068_Durable_Checkout_and_Verified_Payments_in_LiliShop.md",
+      "title": "0068_Durable_Checkout_and_Verified_Payments_in_LiliShop.md",
+      "contentLength": 202028
+    },
+    {
+      "index": 1,
+      "sha": "003e6b56b9db3c90be06b7592e499aad148254f4",
+      "url": "https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0069_Recoverable_Fulfillment_Inventory_Invoices_and_Email_in_LiliShop.md",
+      "title": "0069_Recoverable_Fulfillment_Inventory_Invoices_and_Email_in_LiliShop.md",
+      "contentLength": 157407
+    },
+    {
+      "index": 2,
+      "sha": "99fbf60832df6bc2b77c75f5c2b54952d9d3a500",
+      "url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/9b0aca800d363720c4a3c2dc3af263e468a2b19c/Main/LiliShop.Infrastructure/Checkout/CheckoutInboxService.cs",
+      "title": "CheckoutInboxService.cs",
+      "contentLength": 597
+    },
+    {
+      "index": 3,
+      "sha": "a18d0d4b11209a2f631bfc8401b9d453350ffdd2",
+      "url": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/d9990375008d817797bfbd887fbde9a016413b3a/src/app/features/user-area/checkout/checkout-payment/checkout-payment.component.ts",
+      "title": "checkout-payment.component.ts",
+      "contentLength": 628
+    }
+  ],
+  "reports": [
+    {
+      "name": "A6_IMPLEMENTATION_REPORT.md",
+      "sha256": "2c288c7b47c6a67fe542d00f8e8e822977193216ac42eb37c97d4154f7b6e7cd"
+    },
+    {
+      "name": "A6_DESIGN.md",
+      "sha256": "e8e1e494d9d8a382e836fcb589ce81ebe71e388edc98c99fe5f71b369d77bf85"
+    },
+    {
+      "name": "A6_RELEASE_RUNBOOK.md",
+      "sha256": "26eecaaaed83e7bf87a804308838b0d135d8d8a20c48b4f9014f90b65959f59b"
+    },
+    {
+      "name": "A6_FOLLOWUP_REPORT.md",
+      "sha256": "8955f31969377d5d9da348b291f101e5977e459f55c52efb2675632da76fd8fd"
+    },
+    {
+      "name": "A6_FOLLOWUP_PLAN.md",
+      "sha256": "1401e084cea0c938681e2192fae6dc4632d451dae01a33edb10921ba9c27f9cb"
+    },
+    {
+      "name": "A6_ADMISSION_DESIGN.md",
+      "sha256": "38a43ac56ff2ee9358032f52820ca732ac5e432a4ec8f3149e6aadc34c575cb8"
+    },
+    {
+      "name": "A6_RELEASE_RUNBOOK_FOLLOWUP_2026-10-24.md",
+      "sha256": "c624eb53a498ededbc5adf61efc731fcb51679a607fcf0ee52dbe04cc32c4267"
+    },
+    {
+      "name": "A6_SMTP_VALIDATION_2026-10-24.md",
+      "sha256": "8edc39d7adf645176de34403a588a5644fb9731b2bf9c9550a6081e226cfd025"
+    }
+  ],
+  "excerpts": [
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Checkout/CheckoutInboxService.cs",
+      "startLine": 77,
+      "endLine": 80,
+      "sha256": "9c82def82850fc5c8030e6b5995fe9d3c7805b1063743b969a75c6927fd16bf6"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Checkout/CheckoutInboxService.cs",
+      "startLine": 136,
+      "endLine": 139,
+      "sha256": "ae8488f9167e567c87cff058661622c629a9080d2880f876ccddc1adecbf190e"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/InventoryService.cs",
+      "startLine": 423,
+      "endLine": 427,
+      "sha256": "e7a0413420935d02b37aff203dff2fa4350a7260ad87a3dfa9b013cff04e19d5"
+    },
+    {
+      "repository": "frontend",
+      "path": "src/app/features/user-area/checkout/checkout-payment/checkout-payment.component.ts",
+      "startLine": 86,
+      "endLine": 92,
+      "sha256": "823627fba3881d4aa990ed90b3802b9f3349cd4ed83c521e505de682bb98ab4f"
+    },
+    {
+      "repository": "frontend",
+      "path": "src/app/features/user-area/checkout/checkout-payment/checkout-payment.component.ts",
+      "startLine": 203,
+      "endLine": 206,
+      "sha256": "bcc7763102a946f6e019cb23e98950816231c43395d8c82575c812286e6d6a81"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/External/Email/FallbackEmailService.cs",
+      "startLine": 30,
+      "endLine": 39,
+      "sha256": "ca04e30242262ddb7c9e72f46ca872fd928104966af7fbe0539ec21e754c8ae6"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.API/Extensions/ApplicationServiceExtensions.cs",
+      "startLine": 84,
+      "endLine": 84,
+      "sha256": "84b38927e9ad8a7afba809a857bfb784ebb2fd100584e89c9f4d8e9050d96d70"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Migrations/20261023192357_A6_PaymentInboxRecovery.cs",
+      "startLine": 13,
+      "endLine": 22,
+      "sha256": "56521da15ea30c8006ae8baec8ccb187a836b19e9148b5c8d96f39d9cd222195"
+    },
+    {
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/Invoices/QuestPdfInvoiceRenderer.cs",
+      "startLine": 27,
+      "endLine": 27,
+      "sha256": "ec850ad22303d0489e182d64be57c4e21aa9a5e60527712268d05a62e5f21c5d"
+    }
+  ],
+  "diagrams": [
+    {
+      "index": 1,
+      "sourceSha256": "b8cb7d15e64f309dfabb6d807c5a48ae2725c64f627f6fb82400e1226f23dfc8",
+      "renderer": "Mermaid Live Editor 12.2.0",
+      "status": "rendered and visually inspected",
+      "screenshot": "0070_Diagrams/01-overview.png",
+      "screenshotSha256": "10841bada690f6a84c9a5d34f85c5b30699a52c8051366358027ba996f180b8a",
+      "width": 65536,
+      "height": 4292542531
+    },
+    {
+      "index": 2,
+      "sourceSha256": "18b972e520f05eb8a7881c0a1a269a5fa443720f3356484d7cd7f7bba1b0be20",
+      "renderer": "Mermaid Live Editor 12.2.0",
+      "status": "rendered and visually inspected",
+      "screenshot": "0070_Diagrams/02-inbox-states.png",
+      "screenshotSha256": "3ea98b35f41c71cda461b873a4e58693b20793feb7920dae547c30ddf6fa5aa5",
+      "width": 65536,
+      "height": 4292542531
+    },
+    {
+      "index": 3,
+      "sourceSha256": "5dc76c8e7c65da9a0a5e5c2959e6293a3400a253b45feca21748d99baa1ebee3",
+      "renderer": "Mermaid Live Editor 12.2.0",
+      "status": "rendered and visually inspected",
+      "screenshot": "0070_Diagrams/03-financial-fence.png",
+      "screenshotSha256": "7ce11c8cd76b540cf79b3fd21227fc77b5c3c558bd282a8baa1a41fa0821eb98",
+      "width": 65536,
+      "height": 4292542531
+    },
+    {
+      "index": 4,
+      "sourceSha256": "336f0fad4441b6196e7c54cbfea72f02fea0302cbb722d79b66eff5eda9a85fb",
+      "renderer": "Mermaid Live Editor 12.2.0",
+      "status": "rendered and visually inspected",
+      "screenshot": "0070_Diagrams/04-legacy-transaction.png",
+      "screenshotSha256": "56aa1a7c65c5a460ef49d71eb005e850d420a8c32e67451c0024deeeb9cc96f4",
+      "width": 65536,
+      "height": 4292542531
+    },
+    {
+      "index": 5,
+      "sourceSha256": "6c701b57041a4f74411d70f6a1bb250e7a433cb88ed4692b99752bc05f364256",
+      "renderer": "Mermaid Live Editor 12.2.0",
+      "status": "rendered and visually inspected",
+      "screenshot": "0070_Diagrams/05-browser-readiness.png",
+      "screenshotSha256": "245d30aed7f43e8a3965b25ba9c8b8c785d57c751dae82a2a832077f16bfea93",
+      "width": 65536,
+      "height": 4292542531
+    },
+    {
+      "index": 6,
+      "sourceSha256": "eb9ca78fe61ca2962854edb04d8d5a7d800ec6a39b933d98fd913fc30bba5198",
+      "renderer": "Mermaid Live Editor 12.2.0",
+      "status": "rendered and visually inspected",
+      "screenshot": "0070_Diagrams/06-browser-verification.png",
+      "screenshotSha256": "85cfc2d5ee5c5963dcb076e77cb90179403c802c03c741982b07ad1791e64ebc",
+      "width": 65536,
+      "height": 4292542531
+    },
+    {
+      "index": 7,
+      "sourceSha256": "be8dfefebb216b9bad5141725c36e0bd6366ffef83f3bfb7d71a37e3a2b85151",
+      "renderer": "Mermaid Live Editor 12.2.0",
+      "status": "rendered and visually inspected",
+      "screenshot": "0070_Diagrams/07-version-boundary.png",
+      "screenshotSha256": "3d7d192c2064024929bc9cdd4326e293d35e7d68dc2d9016e31613a8d7969b82",
+      "width": 65536,
+      "height": 4292542531
+    },
+    {
+      "index": 8,
+      "sourceSha256": "861ef39e6f50a685751e94737847b0fb658019843d16ea8114cb6a75aaa394cf",
+      "renderer": "Mermaid Live Editor 12.2.0",
+      "status": "rendered and visually inspected",
+      "screenshot": "0070_Diagrams/08-schema-relations.png",
+      "screenshotSha256": "73709b51e7fa445ce79aaca05667d1a2341868590ff03b7ddc28bf69fafc55f5",
+      "width": 65536,
+      "height": 4292542531
+    },
+    {
+      "index": 9,
+      "sourceSha256": "c870aaec45fbeebd282f6276e57b6748809f9f9f26160eb4e5f7e0261b2d1cac",
+      "renderer": "Mermaid Live Editor 12.2.0",
+      "status": "rendered and visually inspected",
+      "screenshot": "0070_Diagrams/09-cutover.png",
+      "screenshotSha256": "9f29cbb9c8f7c9ad946e31d4c504ffbcaa57aa768482b2f1e62d310d8a58fc4f",
+      "width": 65536,
+      "height": 4292542531
+    }
+  ],
+  "applicationTestsRerun": false,
+  "documentationOnly": true,
+  "prewriteDocumentation": [
+    {
+      "path": "README.md",
+      "initialSha256": "5785d05444c508105dcef1917b03c42a1a1f9a48d9c21276ea9abb678c389e8c",
+      "prewriteSha256": "5785d05444c508105dcef1917b03c42a1a1f9a48d9c21276ea9abb678c389e8c",
+      "changedDuringDrafting": false
+    },
+    {
+      "path": "0068_Durable_Checkout_and_Verified_Payments_in_LiliShop.md",
+      "initialSha256": "69be1940b41b3375d510a2de80676d112293c1892641c280822a907c6a8fa2a5",
+      "prewriteSha256": "669ccecfc06a7521bb1d4a8b142b275d2f724d019997dcc459af634e9942cb37",
+      "changedDuringDrafting": true
+    },
+    {
+      "path": "0069_Recoverable_Fulfillment_Inventory_Invoices_and_Email_in_LiliShop.md",
+      "initialSha256": "5a615e972a47bf9195831ea0ddc0b07f43811367097619df24491d3c86fb5d72",
+      "prewriteSha256": "5a615e972a47bf9195831ea0ddc0b07f43811367097619df24491d3c86fb5d72",
+      "changedDuringDrafting": false
+    }
+  ],
+  "evidenceFiles": [
+    {
+      "packet": "A6_artifacts",
+      "path": "checksums.json",
+      "sha256": "f614aaf17cc19e01b215abf24d3490f0b0bc2e48fa8f0789d6e201f8556238df",
+      "supports": "Retained packet integrity, checked while writing"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "checksums.json",
+      "sha256": "d1e7393358a4a9879515d67aa5a3e0e3734debea5962e746076626ca68b93759",
+      "supports": "Retained packet integrity, checked while writing"
+    },
+    {
+      "packet": "A6_smtp_artifacts",
+      "path": "checksums.json",
+      "sha256": "292a324adc190cce4a4009cb5053d9dcebcfef74d7eb8bd85b02d60ab2377413",
+      "supports": "Retained packet integrity, checked while writing"
+    },
+    {
+      "packet": "A6_artifacts",
+      "path": "results/A6-final-full.trx",
+      "sha256": "8278c5dfc1d3d0c3e975975fdfd1a861fc6bf657168aed489bdb88f870644ad3",
+      "supports": "Retained TRX counters and named test outcomes"
+    },
+    {
+      "packet": "A6_artifacts",
+      "path": "results/A6-red-verified.trx",
+      "sha256": "d9f1c46211eede5e9969fed536ce8100b48d6f3c8de896870baf71d6e1103ce2",
+      "supports": "Retained TRX counters and named test outcomes"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "results/followup-full.trx",
+      "sha256": "f42ef97186afe1a00bea29881cc7b0cd99014ed0705f8800a55b2ab5ccc7051d",
+      "supports": "Retained TRX counters and named test outcomes"
+    },
+    {
+      "packet": "A6_artifacts",
+      "path": "logs/final-frontend-tests.log",
+      "sha256": "3e7661f4ca9b2200cb75f1c1bc73503b04a540f3dfad301cf9a01165807b6e1f",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_artifacts",
+      "path": "logs/cypress-all-final.log",
+      "sha256": "95d50f1fef5683496d930c555da78de6774662fd733fbc9322bc999b8ee60bec",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_artifacts",
+      "path": "logs/final-backend-build.log",
+      "sha256": "b9bbe3ed9190a48ee904b9028b25f835adcc6e509bd8f87b3e2adf113670ffb1",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_artifacts",
+      "path": "provider-scenarios.json",
+      "sha256": "410b1c9c5c75842c8770fb90774a59e8495ef41e5606a564467156aa7a8d011c",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_artifacts",
+      "path": "results/history-upgrade-equality.json",
+      "sha256": "e727a786e5f54b386e58d6a0930b1da1222dc38002b7e4a226accbdc2ff00754",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_artifacts",
+      "path": "results/restore-equality.json",
+      "sha256": "92cb4f942c2c20c5272ebcee12b18646760c8c19153e5d2b9c334a87648aeeb8",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_artifacts",
+      "path": "results/bounded-metrics-sampled.json",
+      "sha256": "7c342f71db9f255cd818b6e50d770afd9cb2d7d432853762ad7728937d24daca",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_artifacts",
+      "path": "results/lock-sampling.json",
+      "sha256": "6507bf7a59bf1bf1ac71de520a99468121ab0fb0fad620d151c970b9775b6c59",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_artifacts",
+      "path": "results/stripe-sandbox.json",
+      "sha256": "43c4df93f72b0a2a17845317b7395ec9e4d3eaf443d475b3845104559fed1cd8",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_artifacts",
+      "path": "results/stripe-sandbox-latest-listener.json",
+      "sha256": "de90a932a4113c78e89573ff7b949e86bdbbba010d5c7e3643a2e00c2cd21394",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "validation-index.json",
+      "sha256": "0449e3bb080f49b012fe8bf6616b4b2c7822826511cd0ed76bb6b1e1553891b6",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "logs/full-backend-tests.log",
+      "sha256": "487400fbe9d605235808d04a39d3ba5f59d67526cfbcb5cc95deebaa823dbf99",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "logs/full-frontend-tests-final.log",
+      "sha256": "0c3dfcc7360184c519e96b9e90a8c7eb905ed9ab82c2206c920cd4eb4453d77f",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "logs/existing-13-browser-cases.log",
+      "sha256": "2a310395e92dd8451b622df51c511685078c75041204cbe371d5b60b43202189",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "logs/elements-final-source-with-reload.log",
+      "sha256": "5ad9c79bb8715d98fc47c68d8e5935d1904785bee46e27339e7c4f5f4db84f97",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "logs/elements-resume-retained-abandoned-attempt.log",
+      "sha256": "2830b889d549f789221abba19b53428d37b966a967d2b370f7e5b0a4b54572cd",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "logs/payment-polling-test-red.log",
+      "sha256": "d73c519c7ca1301ed482e03509b2dd64936c55bf4df1c784431960cdf5e699fc",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "logs/payment-polling-test-green.log",
+      "sha256": "b80383a2dede518d6ef2d63ec286a9ca5436ce42cfea0ac615570885c2c6a95b",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "logs/stripe-readiness-test-red.log",
+      "sha256": "439533690a363e6b6d88714a189c4f193343b65874ead8b70ff4b71aa56adec0",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "logs/stripe-readiness-test-green.log",
+      "sha256": "49089541e18b7295c0ebf65abaf16fc3745e04d4e3aa51b2423ce1a31c6e12ed",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "logs/dependency-audit-before.log",
+      "sha256": "af9129f28a3bb67a3a0cc90b993eddfbdd02a9061e345aaf9f80e8f7ed996145",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "logs/dependency-audit-after.log",
+      "sha256": "eb76f6b7a25866979a7c6f06d0231afb4bf603b5ad7ff7cd88dd22da75636ca6",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "logs/dependency-graph-before.log",
+      "sha256": "3b73f16ca8f6872e07f13c340178d5ac74df2c4377d2e3c6e275ae4bf8f9e089",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "logs/dependency-graph-after.log",
+      "sha256": "c1a3d40505231e52aca25646bf7ce1a7e420859a8960a238ede0bdf9ab0d0731",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "logs/patched-crypto-roundtrip-and-consumers.log",
+      "sha256": "7ae0e70e97cf2100adefac8d3943607b6ad9a27c6454400cf107e0263b3c6e46",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "security/disposition.json",
+      "sha256": "29d53f9c3b90908e6fd1e4f0925404500252b15443fc74ea7e3959fbc564b361",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "environment/final-dependencies.json",
+      "sha256": "0f66a143d158d61635556dcb4e7abe46693f28effaf0c357902414069f06bb49",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "environment/backend-source-after.json",
+      "sha256": "849e26c35a1b10e36215b4d43b314f777a341c7d98e20615ac24f43f67f9f4cd",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "environment/frontend-source-after.json",
+      "sha256": "d8e8f3f0c9f4ce739151b19b7133f1c2d79e49366ea61dc1159319d1f0177cc9",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "logs/stripe-cli-listen-help.log",
+      "sha256": "dbdae78820168c05027fe7d22d945b8fd581a288824bef59758932331e312fac",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "logs/stripe-listener.log",
+      "sha256": "109be5e08efb4ec0d2e9fe6f4a0e2b12d07d9a17b3506c736282e9e2a8831722",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "results/listener-version.json",
+      "sha256": "0d84d87997ddd10904ebdd3a100b9cd6ff3edfbeb3ebfc148f2c442be89f5229",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "results/current-provider-readonly.json",
+      "sha256": "95e60f5409a19e0aaaee812105e5991c33d95440e4bb2ef737013cce38d478b4",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "results/actual-provider-effects.json",
+      "sha256": "22edd1773c5dd327760722b4fcd2f140ced733decc0ff19c6c26359bd25c63f2",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "results/actual-stock-ledger-quantities.json",
+      "sha256": "d1629ac3f7914aa1cb659979074f57b3a7d296ef1f3601794519dbe6138eecdb",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "results/provider-invariants.json",
+      "sha256": "01ff6a3e4a09d0cdee84b3e98c88116da4af3b8cde1bd717b01c2ad800f172b7",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "results/old-provider-readonly.json",
+      "sha256": "e0b7b870a6794b178871de84908d65230cd1412c7afdfbaca08e06aff46d32e0",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "results/old-inbox-preservation.json",
+      "sha256": "07ca722fb1ef48a345382b8a9fca5ca0c16ce807aa455e72ed4ecdb924cf198c",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "results/provider-restart-equality.json",
+      "sha256": "604832ada04afe43583c79359d9b4255f70d43433a272a6d0dbbcc422ec53612",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "results/abandon-after-navigation.json",
+      "sha256": "da9c7194c801a2afb2e8ffa7d045c3cb6fbfb2cf8bd226fb9d28ef1058803f36",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "results/abandon-local-unpaid.json",
+      "sha256": "e1c7591858776444342fa7aea012d4f6d5f0874ad27ae9c3678ccd3ff1f7eced",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "results/abandon-resumed-fulfilled.json",
+      "sha256": "7b7c329fc580a2981ac476b689a09d04feefa72d65cc7a48f2202c6010c5277e",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "results/upgrade-equality.json",
+      "sha256": "4100eba69e4899b9ebedda8e4214742aeaebfc5707c1e0b198228b96e4633bed",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "results/restore-equality.json",
+      "sha256": "47fea19df22f83917b2a4bc1277db17c17c68f35bab6444cff7cb414a718c730",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "logs/backup-checksum-verify.log",
+      "sha256": "189ab1b3f1b7c33489085821590c9c63b1b623f89f424a3c47667640325cdee9",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "logs/restore-checkdb.log",
+      "sha256": "a41606a255dc543ae98eab1a8e8e832e4f09f683837273fb3fd19b39290a37f9",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "logs/model-drift.log",
+      "sha256": "a8c12100f693017727ccdbd631a1f045f0ea9fd5d7844bf656baffeb35f7aa5d",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "logs/safe-newman-summary.json",
+      "sha256": "8aaf69a3f257843bad371cb9aa5586a032b48e779bff01e363f7b32fb87942d1",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_smtp_artifacts",
+      "path": "authorization.json",
+      "sha256": "b15b15ae8144c7b2dff1b0c7f7f8c27e753985b3f697a568fc784bff646dc3ce",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_smtp_artifacts",
+      "path": "durable-outcome.json",
+      "sha256": "418d127388b7379a94e3ade486b82c4755203fe1d3f0e8fb04de2665d1294440",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_smtp_artifacts",
+      "path": "gmail-delivery.json",
+      "sha256": "d9f32c920a8d86cc58a23c68ae37f679e735d053960e0065384e210db813738f",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_smtp_artifacts",
+      "path": "configuration-preservation.json",
+      "sha256": "1dbb4801fd24e75a4c4f9e778a9539565ddc95f2d2baa6297440976b75fb7ea6",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    },
+    {
+      "packet": "A6_smtp_artifacts",
+      "path": "source-state.json",
+      "sha256": "47c43e85ec1c42b0727682e92a7e2ec831b35622892847371d76b2c0536e180f",
+      "supports": "Inspected execution/source/security/provider/browser/migration/mail evidence; not rerun"
+    }
+  ],
+  "retainedPacketIntegrity": [
+    {
+      "packet": "A6_artifacts",
+      "verifiedFiles": 285,
+      "status": "matched",
+      "manifestSha256": "f614aaf17cc19e01b215abf24d3490f0b0bc2e48fa8f0789d6e201f8556238df"
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "verifiedFiles": 270,
+      "status": "matched",
+      "manifestSha256": "d1e7393358a4a9879515d67aa5a3e0e3734debea5962e746076626ca68b93759"
+    },
+    {
+      "packet": "A6_smtp_artifacts",
+      "verifiedFiles": 30,
+      "status": "matched",
+      "manifestSha256": "292a324adc190cce4a4009cb5053d9dcebcfef74d7eb8bd85b02d60ab2377413"
+    }
+  ],
+  "retainedTrx": [
+    {
+      "packet": "A6_artifacts",
+      "path": "results/A6-final-full.trx",
+      "counters": {
+        "total": "461",
+        "executed": "461",
+        "passed": "461",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "packet": "A6_artifacts",
+      "path": "results/A6-red-verified.trx",
+      "counters": {
+        "total": "2",
+        "executed": "2",
+        "passed": "0",
+        "failed": "2",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "packet": "A6_followup_artifacts",
+      "path": "results/followup-full.trx",
+      "counters": {
+        "total": "481",
+        "executed": "481",
+        "passed": "481",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    }
+  ],
+  "quantitativeChecks": {
+    "providerObjects": 10,
+    "captured": 4,
+    "unpaid": 6,
+    "capturedAmountMinor": 6500,
+    "currency": "eur",
+    "protectedEffectsPerCapture": 1,
+    "newmanRequests": 26,
+    "newmanAssertions": 105,
+    "smtpMessages": 1,
+    "smtpState": "Accepted",
+    "smtpAttempts": 1,
+    "recipientObserved": true,
+    "mailboxClassification": "Spam"
+  },
+  "documentationChecks": {
+    "currentSourceFiles": 115,
+    "changedBackend": 85,
+    "changedFrontend": 10,
+    "exactExcerpts": 9,
+    "renderedDiagrams": 9,
+    "allDiagramsVisuallyInspected": true,
+    "applicationTestsRerun": false,
+    "packageVersionsMatchRetainedFullRun": true,
+    "relativeLinksAndAnchors": 48,
+    "sourceReferenceDefinitions": 141,
+    "sourceReferenceUsages": 167,
+    "privateDataScan": "passed for new public text and companion/index additions"
+  },
+  "documentationRepository": {
+    "initialHead": "f5880ab6ac0daf96d68564d1902fdfc4e6193528",
+    "observedHead": "62870a283d866111ca4e9cddf257dbcaba065698",
+    "commitsCreatedByDocumentationTask": 0,
+    "otherDocumentDrift": [
+      {
+        "path": "0066_LiliShop_Currency_Handling_Angular_DotNet.md",
+        "initialSha256": "1ae17e9f75b90daf39f85dd4b03dcdba2643ea6990b84d13c7247354b0821419",
+        "observedSha256": "05a72aa3f992098f49c8697302eb8babf9632009b3c9f22d58cad89bfdbc7d0e",
+        "taskWroteFile": false
+      },
+      {
+        "path": "0067_Immutable_Order_Totals_and_Shipping_Snapshots_in_LiliShop.md",
+        "initialSha256": "371438db74eb3f47da35f1828224d922f79968edda82edcba03b096427e0e84d",
+        "observedSha256": "2640950cbad670cf73018bd2714f3fb5d3922ec889b0e2d290102668f4f5b3bc",
+        "taskWroteFile": false
+      }
+    ]
+  }
+}

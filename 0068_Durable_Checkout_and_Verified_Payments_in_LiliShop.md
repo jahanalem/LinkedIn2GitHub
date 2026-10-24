@@ -1,5 +1,7 @@
 # Building a Reliable Checkout: Durable Payments, Webhooks and Recovery in LiliShop
 
+Later companion: [Testing and Hardening Checkout and Order Recovery](0070_Testing_and_Hardening_Checkout_and_Order_Recovery_in_LiliShop.md) explains subsequent inbox and inventory hardening, browser/provider integration, current mail-path scope and release evidence. This article keeps its original implementation and validation boundary.
+
 ## A customer should pay for one saved purchase
 
 A customer selects two items at 30 EUR each and chooses shipping for 5 EUR. The agreement is simple: **60 + 5 = 65 EUR**. A reliable checkout must preserve that agreement even when the browser, payment provider or application stops responding.

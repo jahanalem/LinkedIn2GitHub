@@ -8,6 +8,14 @@ Topics include **web development**, **clean code**, and **project updates**. Fee
 ---
 ## 📚 Articles:
 
+### 71. Testing and Hardening Checkout and Order Recovery in LiliShop
+
+How LiliShop keeps payment recovery moving, commits legacy stock atomically and validates the real customer payment journey. Covers browser timing, Stripe versions, SendGrid-first/SMTP fallback scope, restore evidence and remaining release decisions.
+
+[Read More](0070_Testing_and_Hardening_Checkout_and_Order_Recovery_in_LiliShop.md)
+
+---
+
 ### 70. After Payment: Recoverable Inventory, Invoices and Email in LiliShop
 
 How LiliShop resumes a paid purchase through per-line inventory commitments, guarded invoice issuance and durable email work. Covers crash recovery, SQL evidence, operator retries, customer status and uncertain mail outcomes.

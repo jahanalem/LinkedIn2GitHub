@@ -1,5 +1,7 @@
 # After Payment: Recoverable Inventory, Invoices and Email in LiliShop
 
+Later companion: [Testing and Hardening Checkout and Order Recovery](0070_Testing_and_Hardening_Checkout_and_Order_Recovery_in_LiliShop.md) explains subsequent inbox and inventory hardening, browser/provider integration, current mail-path scope and release evidence. This article keeps its original implementation and validation boundary.
+
 ## A paid order can still be unfinished
 
 A customer pays for three order lines. The server commits the stock movement for the first line, then stops. When another process takes over, it must answer three questions: **what committed, what remains, and what evidence permits the next effect?** Starting the whole order again could deduct stock twice. Treating the first deduction as proof of completion could leave two purchased lines untouched.
