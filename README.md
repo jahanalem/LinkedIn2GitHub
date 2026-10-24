@@ -8,6 +8,38 @@ Topics include **web development**, **clean code**, and **project updates**. Fee
 ---
 ## 📚 Articles:
 
+### 70. After Payment: Recoverable Inventory, Invoices and Email in LiliShop
+
+How LiliShop resumes a paid purchase through per-line inventory commitments, guarded invoice issuance and durable email work. Covers crash recovery, SQL evidence, operator retries, customer status and uncertain mail outcomes.
+
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0069_Recoverable_Fulfillment_Inventory_Invoices_and_Email_in_LiliShop.md)
+
+---
+
+### 69. Building a Reliable Checkout: Durable Payments, Webhooks and Recovery in LiliShop
+
+How LiliShop preserves purchase identity, authorizes payment confirmation, verifies signed receipts and recovers interrupted work. Covers SQL constraints, Angular retries, test evidence and the then-current blocked fulfillment boundary.
+
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0068_Durable_Checkout_and_Verified_Payments_in_LiliShop.md)
+
+---
+
+### 68. Keeping Order Totals Stable: Shipping Snapshots in .NET and Angular
+
+How LiliShop saves order shipping and totals, recovers historical money from consistent invoice evidence, and displays unknown amounts in Angular. Covers database guards, invoice and payment consumers, regression tests and local verification.
+
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0067_Immutable_Order_Totals_and_Shipping_Snapshots_in_LiliShop.md)
+
+---
+
+### 67. Correct Currency Handling in LiliShop: From .NET Configuration to Angular Templates
+
+How LiliShop keeps amounts, currency and locale separate across .NET configuration, Angular signals and templates. Includes saved order and invoice currency, shared totals, admin labels, regression tests and local verification steps.
+
+[Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0066_LiliShop_Currency_Handling_Angular_DotNet.md)
+
+---
+
 ### 66. From Postman Tests to a Stronger Backend: The LiliShop API Testing Story 🔬🧪🔎🕵️
 
 [Read More](https://github.com/jahanalem/LinkedIn2GitHub/blob/main/0065_Postman_API_testing_and_backend_improvement.md)

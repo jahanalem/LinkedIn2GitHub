@@ -1,0 +1,598 @@
+{
+  "format_version": 1,
+  "purpose": "Documentation provenance; hashes do not authorize execution or activation.",
+  "repositories": {
+    "backend": {
+      "repository": "jahanalem/LiliShop-backend-dotnet",
+      "head": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "branch": "main",
+      "working_tree": "clean at documentation capture",
+      "implementation_baseline": "5d463095031b0164710e8e0167a238d070993fca",
+      "validated_local_fingerprints_matched": 612
+    },
+    "frontend": {
+      "repository": "jahanalem/LiliShop-frontend-angular",
+      "head": "66273c85a6363d7a06cc8c42b638473c209f1fd6",
+      "branch": "main",
+      "working_tree": "clean at documentation capture",
+      "implementation_baseline": "52630fc20a4484ddbf0e0042dfe518476fd5ab99",
+      "validated_local_fingerprints_matched": 434
+    },
+    "articles": {
+      "repository": "jahanalem/LinkedIn2GitHub",
+      "head": "f5880ab6ac0daf96d68564d1902fdfc4e6193528",
+      "branch": "main",
+      "working_tree_before_documentation": "README modified; articles 0066, 0067 and 0068 untracked; prior content preserved"
+    }
+  },
+  "sources": [
+    {
+      "reference": "records",
+      "repository": "backend",
+      "path": "Main/LiliShop.Domain/Entities/Checkout/FulfillmentRecords.cs",
+      "change": "Added",
+      "sha256_working_tree_bytes": "8412ef4acd747108a3dfff523d8d0c3304c050e0d73c1d91af06b648ce362a3b",
+      "sha256_committed_blob_bytes": "f76be460cbc603b5a2a529157dd1c61f911bc3f06c2f274e0cd82f533007c358",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Domain/Entities/Checkout/FulfillmentRecords.cs"
+    },
+    {
+      "reference": "worker",
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Checkout/FulfillmentService.cs",
+      "change": "Added",
+      "sha256_working_tree_bytes": "b919bab574e052ad973028e8b711cef6a7e5f92f5e08102bbbf7c3979c7b6efc",
+      "sha256_committed_blob_bytes": "3afc2e4625da301dc2b1c36efc9ef74df15b85c55a17e14f7a4ba240d4c2a75c",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Infrastructure/Checkout/FulfillmentService.cs"
+    },
+    {
+      "reference": "evidence",
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Checkout/FulfillmentEvidence.cs",
+      "change": "Added",
+      "sha256_working_tree_bytes": "1c88e2c4a7d13aae8ad5ca7c362fafef76738b6a47efe1053b7cc0811e2e16a5",
+      "sha256_committed_blob_bytes": "d741516bbe08a1250e8be398f929e4ca1c4d22e5f0f34098f80ebb0242f3985a",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Infrastructure/Checkout/FulfillmentEvidence.cs"
+    },
+    {
+      "reference": "maintenance",
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Checkout/FulfillmentMaintenance.cs",
+      "change": "Added",
+      "sha256_working_tree_bytes": "2a5dce94a0915d51d2283da7d16d03088d502efdcdd722649bc2cf0fc4da1ef6",
+      "sha256_committed_blob_bytes": "854c1f05e1ef9e18926588f87a739aabc699c3742fd978d9a3a551bcfc6ef445",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Infrastructure/Checkout/FulfillmentMaintenance.cs"
+    },
+    {
+      "reference": "mail",
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Checkout/InvoiceEmailWorker.cs",
+      "change": "Added",
+      "sha256_working_tree_bytes": "cc2ccfe7fcde2665860d7dbe06e7b04bb538d7f994b2d32be0be50cb80931ae7",
+      "sha256_committed_blob_bytes": "0b476eb0bd17dec243a7ea44fad1c8133c18d6617c3abf7ee340727f9912cc07",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Infrastructure/Checkout/InvoiceEmailWorker.cs"
+    },
+    {
+      "reference": "transport",
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Checkout/InvoiceMailTransport.cs",
+      "change": "Added",
+      "sha256_working_tree_bytes": "36fd173db517b80ea5fd6854437437ef73e591fc085c03386c2bbdaad18c96b9",
+      "sha256_committed_blob_bytes": "0f0926dbb35923005c4d220fc283e28b0e9b3089a8ad5f5da980dbc98c5c7c6e",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Infrastructure/Checkout/InvoiceMailTransport.cs"
+    },
+    {
+      "reference": "controller",
+      "repository": "backend",
+      "path": "Main/LiliShop.API/Controllers/FulfillmentController.cs",
+      "change": "Added",
+      "sha256_working_tree_bytes": "de740480c89a83e4236d5d6bc42bcef84ba72ad9e1c29e8d0b18cfa0d62f0201",
+      "sha256_committed_blob_bytes": "792f59c5bc1705ce01cb006b931a076b25ff457943b7b95acb271895635f62cf",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.API/Controllers/FulfillmentController.cs"
+    },
+    {
+      "reference": "config",
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Config/FulfillmentConfiguration.cs",
+      "change": "Added",
+      "sha256_working_tree_bytes": "3a0865b71137255e0eb7b837abceb8620d3b5da9cb65580dc3fa6fe5515c61ce",
+      "sha256_committed_blob_bytes": "4ed52b03d811281c10eb53d181142c1e669d427fe8e5dde853c397c536418c81",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Infrastructure/Data/Config/FulfillmentConfiguration.cs"
+    },
+    {
+      "reference": "migration",
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Migrations/20261023100434_A5_RecoverableFulfillment.cs",
+      "change": "Added",
+      "sha256_working_tree_bytes": "5ffb001322d264077c5511d83eda1a77869412696b3960459d5782acdac34310",
+      "sha256_committed_blob_bytes": "b58b1b950822a0450adb3db5524b3b343833d0e3bcf38763661e7390e21fb9de",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Infrastructure/Data/Migrations/20261023100434_A5_RecoverableFulfillment.cs"
+    },
+    {
+      "reference": "designer",
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Migrations/20261023100434_A5_RecoverableFulfillment.Designer.cs",
+      "change": "Added",
+      "sha256_working_tree_bytes": "02cdbfae6ebf85c82c6ebb830b1a02d70c7f0e7b231cfe5c5817ddba787a9fb3",
+      "sha256_committed_blob_bytes": "fb9e5841399957366ab0786f55306ce7d86d6a759c39b799965d18e844646ba2",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Infrastructure/Data/Migrations/20261023100434_A5_RecoverableFulfillment.Designer.cs"
+    },
+    {
+      "reference": "snapshot",
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Migrations/ShopDbContextModelSnapshot.cs",
+      "change": "Modified",
+      "sha256_working_tree_bytes": "f693f1b00fb99eb7908664612196bc2fa78cd48b975af746b68736be60048194",
+      "sha256_committed_blob_bytes": "329d8787d8a27405aae0d7ee8ec520ad0bf465b84b3a6c8c290cda4174de7334",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Infrastructure/Data/Migrations/ShopDbContextModelSnapshot.cs"
+    },
+    {
+      "reference": "db",
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/ShopDbContext.cs",
+      "change": "Modified",
+      "sha256_working_tree_bytes": "72d6beb2d46417262f9667bf81f6d061290269e15ef9c6b3c4da7b313b0a7a85",
+      "sha256_committed_blob_bytes": "11db405a9e8e8781514dc550e939d7648b3f8bbe225ac921e444915e7fbd8a52",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Infrastructure/Data/ShopDbContext.cs"
+    },
+    {
+      "reference": "ledger",
+      "repository": "backend",
+      "path": "Main/LiliShop.Domain/Entities/InventoryTransaction.cs",
+      "change": "Modified",
+      "sha256_working_tree_bytes": "5fffdffb098221e71bc1ba6eddb1f7848247fdaf9fbc66c590ce96c81337c53a",
+      "sha256_committed_blob_bytes": "5eb5ff7f8aaf75ea2968b5b2c58bb9c9d710fc14a9c1d7cf654fbd7534d91a4d",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Domain/Entities/InventoryTransaction.cs"
+    },
+    {
+      "reference": "ledger-config",
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Config/InventoryTransactionConfiguration.cs",
+      "change": "Modified",
+      "sha256_working_tree_bytes": "15ecf811c32dc9c78100a44c5c786db5a4ff87623677ffe751ae08de1e71d5ac",
+      "sha256_committed_blob_bytes": "87c5dee6af63bf35bd6e89b3f81db5cd2da3630528d9124e9e7e0c073b504eb1",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Infrastructure/Data/Config/InventoryTransactionConfiguration.cs"
+    },
+    {
+      "reference": "inventory",
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/InventoryService.cs",
+      "change": "Modified",
+      "sha256_working_tree_bytes": "9df1183496e6de7a42d378a3ccea6c534f4bf1364cd177f6b9c467c0a2a57c57",
+      "sha256_committed_blob_bytes": "21962e4be84551e663000b0d525d54aca5cc8fe2ea9ba4c2ab8f72353b732a0c",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Infrastructure/Services/InventoryService.cs"
+    },
+    {
+      "reference": "invoice",
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/InvoiceService.cs",
+      "change": "Modified",
+      "sha256_working_tree_bytes": "11be41000e5b37c2d425a30dab478125cb4f3619338fd03481aa3123a786603d",
+      "sha256_committed_blob_bytes": "5a6960f8dea94ea17b26e8d877f5a867165868d6bfc7eb6af0f9a5df0e172f7c",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Infrastructure/Services/InvoiceService.cs"
+    },
+    {
+      "reference": "mail-prep",
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/InvoiceEmailService.cs",
+      "change": "Modified",
+      "sha256_working_tree_bytes": "6dfbd42f7bc9e0ea4d23e7b19ca51e343cf2c741a4c57fb693ca62ccb649301e",
+      "sha256_committed_blob_bytes": "8eafea804e3af304e148edde18fb0e6f125759f7f9650bcca9a1d5f4a340226e",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Infrastructure/Services/InvoiceEmailService.cs"
+    },
+    {
+      "reference": "di",
+      "repository": "backend",
+      "path": "Main/LiliShop.API/Extensions/ApplicationServiceExtensions.cs",
+      "change": "Modified",
+      "sha256_working_tree_bytes": "2b8516e88e01ae1a287054927003daa0d00c5a38e45209c11295c96ae2f1030c",
+      "sha256_committed_blob_bytes": "c91fc9e0f03afe3436e1f604504da5e6d28bb18e6cd5b15a8ca1d810a8a23a0c",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.API/Extensions/ApplicationServiceExtensions.cs"
+    },
+    {
+      "reference": "program",
+      "repository": "backend",
+      "path": "Main/LiliShop.API/Program.cs",
+      "change": "Modified",
+      "sha256_working_tree_bytes": "60453db0cbfc3b88564f0c0efee051d7b0f3880b5604d7902e1dfda6785d83ba",
+      "sha256_committed_blob_bytes": "43eb9638d2ed26d9a2543fee1299c304630b60f376df073b9ed132f37e1ff64c",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.API/Program.cs"
+    },
+    {
+      "reference": "seed",
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/SeedData/localization-entries.json",
+      "change": "Modified",
+      "sha256_working_tree_bytes": "7e733e66b6f271822c92b4efd6994352cab1c9bde281e8a9b80790f91c084aa1",
+      "sha256_committed_blob_bytes": "1275f011b371259aab037e52cc7b91bd8eee406619eaa1e101ad07ec77548005",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Infrastructure/Data/SeedData/localization-entries.json"
+    },
+    {
+      "reference": "sql-tests",
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/FulfillmentSqlA5Tests.cs",
+      "change": "Added",
+      "sha256_working_tree_bytes": "050ba301e778cb204b5c35cbcc129ab6a9c1a4f6f7c845dd529c54cff0db3268",
+      "sha256_committed_blob_bytes": "fe9de500847a9a137d0ac90b12db5f761c9a63ec6fbaefe9ad57476330b56bda",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/Applications/Lili.Shop.Tests/Services/FulfillmentSqlA5Tests.cs"
+    },
+    {
+      "reference": "inventory-tests",
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/InventoryServiceTests.cs",
+      "change": "Modified",
+      "sha256_working_tree_bytes": "eb1a8b6861ab6432d391e508150b87d583438cf12ec141256198eb9db0ebbd7c",
+      "sha256_committed_blob_bytes": "7aaafdd1889eed869190380c4f9f49c768aad7a5d1dabf634a17bf4bcd875bb1",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/Applications/Lili.Shop.Tests/Services/InventoryServiceTests.cs"
+    },
+    {
+      "reference": "mail-tests",
+      "repository": "backend",
+      "path": "Main/Applications/Lili.Shop.Tests/Services/InvoiceEmailServiceTests.cs",
+      "change": "Modified",
+      "sha256_working_tree_bytes": "711aab356786e056965f1ef63e22333a6de90c3ee3b6b49b98e70706be6c36a4",
+      "sha256_committed_blob_bytes": "506982e23b441fd5fc455a4e737e1c267966cbf9fa698a8840a81a09f6fff3b6",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/Applications/Lili.Shop.Tests/Services/InvoiceEmailServiceTests.cs"
+    },
+    {
+      "reference": "checkout",
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Checkout/CheckoutService.cs",
+      "change": "Reused earlier infrastructure",
+      "sha256_working_tree_bytes": "79079d148b526ebddee724a1d61595d527a4f6fb847e3586914d4812491de7f0",
+      "sha256_committed_blob_bytes": "9ff6d4edd7ecd3b74b6826161d45ee1e0c2afee5ea6c46a62d136467bfedf39b",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Infrastructure/Checkout/CheckoutService.cs"
+    },
+    {
+      "reference": "protocol",
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Checkout/CheckoutProtocol.cs",
+      "change": "Reused earlier infrastructure",
+      "sha256_working_tree_bytes": "c169f44d90e1cc9979b02d88da580ddf4a32849cd8082959e2cd22366f66e202",
+      "sha256_committed_blob_bytes": "eb1e12a2f4fa53ea66f43c229234dafb6b35612c961e5473b8b71e4f3351f511",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Infrastructure/Checkout/CheckoutProtocol.cs"
+    },
+    {
+      "reference": "inbox",
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Checkout/CheckoutInboxService.cs",
+      "change": "Reused earlier infrastructure",
+      "sha256_working_tree_bytes": "cf7b14c688e7a7766e72bf3320b7087767a98bbea9c4a14d9a0523afa041eec8",
+      "sha256_committed_blob_bytes": "d6d125ad441232b7262cf3f962568fb13c39be2eb73bac70da31adf752f72097",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Infrastructure/Checkout/CheckoutInboxService.cs"
+    },
+    {
+      "reference": "old-maintenance",
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Checkout/CheckoutMaintenance.cs",
+      "change": "Reused earlier infrastructure",
+      "sha256_working_tree_bytes": "8915b53499aace31706c3aeeeacc13c56290ce7a7a369f252776c1c0c547e049",
+      "sha256_committed_blob_bytes": "4539374eea105721e8a8f74e30efaf0d74e526a6b1e848e318a1d8fa285b3b86",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Infrastructure/Checkout/CheckoutMaintenance.cs"
+    },
+    {
+      "reference": "checkout-records",
+      "repository": "backend",
+      "path": "Main/LiliShop.Domain/Entities/Checkout/CheckoutRecords.cs",
+      "change": "Reused earlier infrastructure",
+      "sha256_working_tree_bytes": "15cdaa615e4389e1c27535a6a2e0c5ed6d9d0603730a8d9402f87a9bf31e8246",
+      "sha256_committed_blob_bytes": "2ff33e2a49b7c1b3187fd269ee60387401aa57a6d3b8299ea61a5a6079d02c1d",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Domain/Entities/Checkout/CheckoutRecords.cs"
+    },
+    {
+      "reference": "base",
+      "repository": "backend",
+      "path": "Main/LiliShop.Domain/Entities/BaseEntity.cs",
+      "change": "Reused earlier infrastructure",
+      "sha256_working_tree_bytes": "1a55e36b8a6c21445f4e741d37015e2657ccb7500b765832dca0a96be4aa5cfa",
+      "sha256_committed_blob_bytes": "f9cd42c4b9939c278917d2390d00e8dbbd3e7b508ceba80421bc0af17cea3ac5",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Domain/Entities/BaseEntity.cs"
+    },
+    {
+      "reference": "movement-enum",
+      "repository": "backend",
+      "path": "Main/LiliShop.Domain/Enums/InventoryTransactionType.cs",
+      "change": "Reused earlier infrastructure",
+      "sha256_working_tree_bytes": "1f0e32a3406cb57b980501e966bf89bdd7d993fdff0c4302e871d752d12fb98e",
+      "sha256_committed_blob_bytes": "f775b7cabe295997b56e2361ee8bb39e7bf80848c70a18a5c298dfb4a6dc1dfc",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Domain/Enums/InventoryTransactionType.cs"
+    },
+    {
+      "reference": "invoice-config",
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Config/InvoiceConfiguration.cs",
+      "change": "Reused earlier infrastructure",
+      "sha256_working_tree_bytes": "38ecfe1ba24edeeffcef1b8e964f865c86018bc386c4623bcf76e6fa636c04a2",
+      "sha256_committed_blob_bytes": "bacc62907630ba70e228edec7f4dbcd4457427cdf980dc078c973f313d8acfe4",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Infrastructure/Data/Config/InvoiceConfiguration.cs"
+    },
+    {
+      "reference": "legacy-email",
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/External/Email/FallbackEmailService.cs",
+      "change": "Reused earlier infrastructure",
+      "sha256_working_tree_bytes": "468c84bf21e37f6051da16dd050362fa4e94fc034a8747d9313b51c9b3a1fa31",
+      "sha256_committed_blob_bytes": "f623db0ed30636b430cef4579663e69cffdf103cf9893c3f6c2bdf6f51e82aef",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Infrastructure/Services/External/Email/FallbackEmailService.cs"
+    },
+    {
+      "reference": "legacy-sendgrid",
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Services/External/Email/SendGridEmailService.cs",
+      "change": "Reused earlier infrastructure",
+      "sha256_working_tree_bytes": "2f03088027f89b046a8a4c1136584dbef8adce665f692e9202629591cfac3ec2",
+      "sha256_committed_blob_bytes": "f17398f4730871a9fbf9f25f8a2dc66fc9d1c0b6b9d390f6ab4ad2b29b87ac2e",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Infrastructure/Services/External/Email/SendGridEmailService.cs"
+    },
+    {
+      "reference": "sequence-config",
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Data/Config/InvoiceNumberSequenceConfiguration.cs",
+      "change": "Reused earlier infrastructure",
+      "sha256_working_tree_bytes": "b27fe8c7b43292c9e1fe5abb6f5c0b5112fad78d8b002e0de9aaec5c161ed515",
+      "sha256_committed_blob_bytes": "7a287ae5d32ffc2cada093778f45fcf1e6683cc06981f4618e2430ea2e0a881b",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Infrastructure/Data/Config/InvoiceNumberSequenceConfiguration.cs"
+    },
+    {
+      "reference": "uow",
+      "repository": "backend",
+      "path": "Main/LiliShop.Infrastructure/Repositories/UnitOfWork.cs",
+      "change": "Reused earlier infrastructure",
+      "sha256_working_tree_bytes": "04de1617fb7b9fa96f479224fca1eb1f9b7a82a8999b14e0914ec13ace1bcfc0",
+      "sha256_committed_blob_bytes": "3fb739a8fc9271183f09d0770c4d4239272e5ebfd10285fda36c87351734a35c",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.Infrastructure/Repositories/UnitOfWork.cs"
+    },
+    {
+      "reference": "base-controller",
+      "repository": "backend",
+      "path": "Main/LiliShop.API/Controllers/BaseApiController.cs",
+      "change": "Reused earlier infrastructure",
+      "sha256_working_tree_bytes": "87deb7e593ef699d840a6e0d96c8aa21435c94e0fba6aab2144831f6d3d334c8",
+      "sha256_committed_blob_bytes": "51ccd377673d335bdf04041ff7507597d651451b0f6270641fb4b4d126bb94c5",
+      "commit": "214077e34636c2f4ccdc491ac1120dd5f7ffe72e",
+      "source_url": "https://github.com/jahanalem/LiliShop-backend-dotnet/blob/214077e34636c2f4ccdc491ac1120dd5f7ffe72e/Main/LiliShop.API/Controllers/BaseApiController.cs"
+    },
+    {
+      "reference": "dto",
+      "repository": "frontend",
+      "path": "src/app/shared/models/fulfillment.ts",
+      "change": "Added",
+      "sha256_working_tree_bytes": "db74ef74fbf8a1772cb0d6894eec3a2eeef9c1420b8d7c80a92ef39004a639c9",
+      "sha256_committed_blob_bytes": "7a0052af8420249fe70221a4b23cb534d7945fd85dff515bd82ce73a46ab22a8",
+      "commit": "66273c85a6363d7a06cc8c42b638473c209f1fd6",
+      "source_url": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/66273c85a6363d7a06cc8c42b638473c209f1fd6/src/app/shared/models/fulfillment.ts"
+    },
+    {
+      "reference": "http",
+      "repository": "frontend",
+      "path": "src/app/core/services/fulfillment.service.ts",
+      "change": "Added",
+      "sha256_working_tree_bytes": "97408a3b8a22dc514ee6ccd55890bbbb64c899fbb5fe317bee5cb63dd9128601",
+      "sha256_committed_blob_bytes": "8c189b20d52681c09ed82910218247ccaf280bf0bbe14d8eeefb0135404566b4",
+      "commit": "66273c85a6363d7a06cc8c42b638473c209f1fd6",
+      "source_url": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/66273c85a6363d7a06cc8c42b638473c209f1fd6/src/app/core/services/fulfillment.service.ts"
+    },
+    {
+      "reference": "labels",
+      "repository": "frontend",
+      "path": "src/app/core/i18n/fulfillment-text.ts",
+      "change": "Added",
+      "sha256_working_tree_bytes": "3fe508850a097a16344735c120f54c4ebab34d225fd299edb0abbd422d32c867",
+      "sha256_committed_blob_bytes": "56557ba3524519ce90e22b2dc91c8dd305bc04c43f2f8caf71cba9bb2abff2f8",
+      "commit": "66273c85a6363d7a06cc8c42b638473c209f1fd6",
+      "source_url": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/66273c85a6363d7a06cc8c42b638473c209f1fd6/src/app/core/i18n/fulfillment-text.ts"
+    },
+    {
+      "reference": "keys",
+      "repository": "frontend",
+      "path": "src/app/core/i18n/translation-keys.ts",
+      "change": "Modified",
+      "sha256_working_tree_bytes": "46191256a5b8c97cace6b8b925af95f9457d4fc21a23c6a40ad58ded67508376",
+      "sha256_committed_blob_bytes": "46191256a5b8c97cace6b8b925af95f9457d4fc21a23c6a40ad58ded67508376",
+      "commit": "66273c85a6363d7a06cc8c42b638473c209f1fd6",
+      "source_url": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/66273c85a6363d7a06cc8c42b638473c209f1fd6/src/app/core/i18n/translation-keys.ts"
+    },
+    {
+      "reference": "admin",
+      "repository": "frontend",
+      "path": "src/app/features/admin-area/admin/fulfillment/fulfillment.component.ts",
+      "change": "Added",
+      "sha256_working_tree_bytes": "0ef42b30d2599e180b5f8c57a02f8dfc1f22d24b56092fc2d33b10ae89b4c7a8",
+      "sha256_committed_blob_bytes": "26ab98ce99637b410d5025a1c6d4cfcea6b791037fc7036127eecf8e5fc07ca3",
+      "commit": "66273c85a6363d7a06cc8c42b638473c209f1fd6",
+      "source_url": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/66273c85a6363d7a06cc8c42b638473c209f1fd6/src/app/features/admin-area/admin/fulfillment/fulfillment.component.ts"
+    },
+    {
+      "reference": "admin-html",
+      "repository": "frontend",
+      "path": "src/app/features/admin-area/admin/fulfillment/fulfillment.component.html",
+      "change": "Added",
+      "sha256_working_tree_bytes": "3b7c8b15f099d0a40ccb375ca521163acb5dbf03846db5cc8f2dabdd64b315ce",
+      "sha256_committed_blob_bytes": "56de4a3d07be0c26a39cbc5f644888a5f0cea9e6d902decb131d339215686455",
+      "commit": "66273c85a6363d7a06cc8c42b638473c209f1fd6",
+      "source_url": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/66273c85a6363d7a06cc8c42b638473c209f1fd6/src/app/features/admin-area/admin/fulfillment/fulfillment.component.html"
+    },
+    {
+      "reference": "routes",
+      "repository": "frontend",
+      "path": "src/app/features/admin-area/admin/fulfillment/fulfillment.routes.ts",
+      "change": "Added",
+      "sha256_working_tree_bytes": "0879f29e4501cd036c47f9ec9585cb998d8c216a00f16cafa5fbefca8762bd03",
+      "sha256_committed_blob_bytes": "f754c2358e0117da424d31366d6b65004d0fd7d123c365147c5e43de4f9bda85",
+      "commit": "66273c85a6363d7a06cc8c42b638473c209f1fd6",
+      "source_url": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/66273c85a6363d7a06cc8c42b638473c209f1fd6/src/app/features/admin-area/admin/fulfillment/fulfillment.routes.ts"
+    },
+    {
+      "reference": "admin-parent",
+      "repository": "frontend",
+      "path": "src/app/features/admin-area/admin/admin.routes.ts",
+      "change": "Modified",
+      "sha256_working_tree_bytes": "1315cf5437b1badff584cab22c5bbd82910dc0da9d0d1f7fab8436e685644815",
+      "sha256_committed_blob_bytes": "3d64c40bc2dc19462d441073bd5e29bad496226b3015853619776d518decbfb1",
+      "commit": "66273c85a6363d7a06cc8c42b638473c209f1fd6",
+      "source_url": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/66273c85a6363d7a06cc8c42b638473c209f1fd6/src/app/features/admin-area/admin/admin.routes.ts"
+    },
+    {
+      "reference": "admin-nav",
+      "repository": "frontend",
+      "path": "src/app/features/admin-area/admin/admin.component.ts",
+      "change": "Modified",
+      "sha256_working_tree_bytes": "7182b9bbc3592a90c20ce56ca9bfbff67b5895239708a37fae38349db1c896c4",
+      "sha256_committed_blob_bytes": "a538a75ab3ef7784e08e5a59bdfcd4bcd9f0c4190fbc056870b4b28d089c1c4f",
+      "commit": "66273c85a6363d7a06cc8c42b638473c209f1fd6",
+      "source_url": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/66273c85a6363d7a06cc8c42b638473c209f1fd6/src/app/features/admin-area/admin/admin.component.ts"
+    },
+    {
+      "reference": "router-tests",
+      "repository": "frontend",
+      "path": "src/app/features/admin-area/admin/fulfillment/fulfillment.routes.spec.ts",
+      "change": "Added",
+      "sha256_working_tree_bytes": "44d27b3906469f39750bd018392a7cc943e24d9d7433a711d388cded5b9971db",
+      "sha256_committed_blob_bytes": "667aac6aa7136f59f25445d7f65201b50767157bc05af04773c2b068e51e4ecb",
+      "commit": "66273c85a6363d7a06cc8c42b638473c209f1fd6",
+      "source_url": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/66273c85a6363d7a06cc8c42b638473c209f1fd6/src/app/features/admin-area/admin/fulfillment/fulfillment.routes.spec.ts"
+    },
+    {
+      "reference": "status",
+      "repository": "frontend",
+      "path": "src/app/features/user-area/checkout/checkout-success/checkout-success.component.ts",
+      "change": "Modified",
+      "sha256_working_tree_bytes": "700acb84bb8038b4cceafec9a6b4a6f1fc46908ba61d4dd0d278be18fa715a6f",
+      "sha256_committed_blob_bytes": "7677b32890cf2845d501a98ecca03851c807bc09fa91346c43ae909fc965db44",
+      "commit": "66273c85a6363d7a06cc8c42b638473c209f1fd6",
+      "source_url": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/66273c85a6363d7a06cc8c42b638473c209f1fd6/src/app/features/user-area/checkout/checkout-success/checkout-success.component.ts"
+    },
+    {
+      "reference": "status-html",
+      "repository": "frontend",
+      "path": "src/app/features/user-area/checkout/checkout-success/checkout-success.component.html",
+      "change": "Modified",
+      "sha256_working_tree_bytes": "ffff111e5fcaf3b2d8dc2f239c79d7fd4463d912df2e7f87df7a76330ccbc2df",
+      "sha256_committed_blob_bytes": "9532e4ad14e9cd827b838f5b8d7b77d5942827f567ffd38e1ae9b63ea1877276",
+      "commit": "66273c85a6363d7a06cc8c42b638473c209f1fd6",
+      "source_url": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/66273c85a6363d7a06cc8c42b638473c209f1fd6/src/app/features/user-area/checkout/checkout-success/checkout-success.component.html"
+    },
+    {
+      "reference": "status-tests",
+      "repository": "frontend",
+      "path": "src/app/features/user-area/checkout/checkout-success/checkout-success.component.spec.ts",
+      "change": "Modified",
+      "sha256_working_tree_bytes": "0257d49d6762d86600f119ae496996c6ff4c41547a0328951fee6b2de5b02036",
+      "sha256_committed_blob_bytes": "c21e700da046ce681781133cf4a5a057f453be4263e503610e02b8d9b8a7f607",
+      "commit": "66273c85a6363d7a06cc8c42b638473c209f1fd6",
+      "source_url": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/66273c85a6363d7a06cc8c42b638473c209f1fd6/src/app/features/user-area/checkout/checkout-success/checkout-success.component.spec.ts"
+    },
+    {
+      "reference": "prior-router-tests",
+      "repository": "frontend",
+      "path": "src/app/features/user-area/checkout/checkout.routes.spec.ts",
+      "change": "Modified",
+      "sha256_working_tree_bytes": "ac9da67ccbadaa63e0df007bf5770fc99b93c52637b2ed10575bd835331f829d",
+      "sha256_committed_blob_bytes": "5727f6e286bcde97c9418ce9883f9a001f31bb3d0249ac11c8dc7e9bc4ff11ea",
+      "commit": "66273c85a6363d7a06cc8c42b638473c209f1fd6",
+      "source_url": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/66273c85a6363d7a06cc8c42b638473c209f1fd6/src/app/features/user-area/checkout/checkout.routes.spec.ts"
+    },
+    {
+      "reference": "prior-routes",
+      "repository": "frontend",
+      "path": "src/app/features/user-area/checkout/checkout.routes.ts",
+      "change": "Reused earlier infrastructure",
+      "sha256_working_tree_bytes": "cf46adf05c473a733c09c756a4b224b1941fb872d46cc648592f89225774bbd6",
+      "sha256_committed_blob_bytes": "b68207d8f99c450cd024aa558658feb5866375017f62d4b5d319ddd01f1d665a",
+      "commit": "66273c85a6363d7a06cc8c42b638473c209f1fd6",
+      "source_url": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/66273c85a6363d7a06cc8c42b638473c209f1fd6/src/app/features/user-area/checkout/checkout.routes.ts"
+    },
+    {
+      "reference": "auth",
+      "repository": "frontend",
+      "path": "src/app/core/guards/auth.guard.ts",
+      "change": "Reused earlier infrastructure",
+      "sha256_working_tree_bytes": "cc2fb2e91299163ab9db818c24769086ca08406dab4a738b885e007c84cc2e34",
+      "sha256_committed_blob_bytes": "fe71a3468a49b29802f4c904c03a0ac755a5c5fa04962ac221429ca55b008d62",
+      "commit": "66273c85a6363d7a06cc8c42b638473c209f1fd6",
+      "source_url": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/66273c85a6363d7a06cc8c42b638473c209f1fd6/src/app/core/guards/auth.guard.ts"
+    },
+    {
+      "reference": "policy",
+      "repository": "frontend",
+      "path": "src/app/shared/models/policy.ts",
+      "change": "Reused earlier infrastructure",
+      "sha256_working_tree_bytes": "c753f2b711153a79c2613b337d90bef37f872527fd7915a102c80c84cd31106c",
+      "sha256_committed_blob_bytes": "1ea145e89232eafe01efd6e19694bdf72143d04fe60880554f73fe2d178d48ce",
+      "commit": "66273c85a6363d7a06cc8c42b638473c209f1fd6",
+      "source_url": "https://github.com/jahanalem/LiliShop-frontend-angular/blob/66273c85a6363d7a06cc8c42b638473c209f1fd6/src/app/shared/models/policy.ts"
+    }
+  ],
+  "retained_evidence": {
+    "A5_artifacts/logs/A5-final2-full.trx": "2b2c53f385829dbf3ba55a77fdcc822b3b07ca4637abd25bf65af5133844f5de",
+    "A5_artifacts/logs/A5-red.trx": "d97249307d5dd3822f7d3f8b2def362450d075e269c40f9a58141cf00729db5d",
+    "A5_artifacts/logs/A5-upgrade-release-red.trx": "4621b66863c3a22e73df1cce8b172f9a3342d62c0376c004644c65df70ed6f01",
+    "A5_artifacts/validation-summary.json": "2498ee2645f0647023953375b3689cdb387f9be5d16db04846080599be156bf5",
+    "A5_artifacts/final-source-state.json": "f0f70eb7133c3cb8b38141f9af725454ea8ef1f673b3de33f1623636854230a0",
+    "A5_artifacts/sql/A5_migration.sql": "daa255ef6c0067f52d0db35f009fc0af67f3dd46684980028ce607e7a3deb813",
+    "A5_artifacts/sql/final-test-databases.json": "e4e16008ada7830a53809ded8874cc30f9e8eb75d81ab7e109bc0123ea4cd93a",
+    "A5_artifacts/logs/backend-final2-release-build.log": "f6a2cf2db79fcaaad2dde0153683f53bbe36b67e14a8b64a3db66b7765d4c9d7",
+    "A5_artifacts/logs/backend-final2-release-build.result.json": "44e9f75495de1abf3c571c56edb2f4e7042d7ed575cd584ffe6059baa67190d2",
+    "A5_artifacts/logs/backend-final2-full-tests.log": "c49cb28fb7783bec9e5c9d9868e9c93e072d96219129fb007b2e42b8b11c4f52",
+    "A5_artifacts/logs/backend-final2-full-tests.result.json": "53f4bee488c7180b191047817af909fbaebf77390bd379254f3c738c03e5f518",
+    "A5_artifacts/logs/frontend-full-tests.log": "a338e01ed5b5de8e4e7a629fd1c2d56f6a970652b6c30c888688920da994334f",
+    "A5_artifacts/logs/frontend-full-tests.result.json": "6590c2c3ad28b9b9d5e7b61124fcbceb3c3d42d3bd190d24b4103144403c9cde",
+    "A5_artifacts/logs/frontend-production-build.log": "95ef3a6cb17b942e5480c2e6aa5f921af705bb31c02bce029669627bef42968e",
+    "A5_artifacts/logs/frontend-production-build.result.json": "00e8d1e435a48fd4447062ebd299d937bac9196fd77953ad42f6bfb49aa94219",
+    "A5_artifacts/logs/newman-safe-command.log": "a0a0ed8ba05e2a27917a84561290ad349f9f1b664f44db106c32c7989e8876d7",
+    "A5_artifacts/logs/newman-safe-command.result.json": "0a1527356a7e7f051199109e32f1b3d65b2153ccc265e9bcbc10e6a777f3355c",
+    "A5_artifacts/logs/ef-model-drift.log": "0ae1d829f7cc9c60f9cd54adb9e0d6335aed575d21954b5a9069eecba33650bb",
+    "A5_artifacts/logs/ef-model-drift.result.json": "fd646b843f4d1c587790386d2791f731c4205247cbfbfe450a647eb36c399c30",
+    "A5_artifacts/logs/sql-migrate-Fresh.log": "e7619068d213b3b767864a036288792e351cc277fe3b10e6cadf3153acb1df95",
+    "A5_artifacts/logs/sql-migrate-Fresh.result.json": "db5c9b8d381208ed08790cf794c6bff0fe597d5241a68d800d75eeeae3a44b77",
+    "A5_artifacts/logs/regression-before.log": "be373c9eda053b427cdd7031b1c91a141d1ccbfd63d7e92231ab422a45fd58de",
+    "A5_artifacts/logs/sql-upgrade-and-release-red.log": "64550ed88a9e013a416740ab26157d848e954b8bb2ae7cfc6a3f9ccca903c802",
+    "A5_artifacts/logs/newman-safe-summary.json": "6c03cd464fd097ea0a3bc613469d03bef774943c395579b69c5e635833e70c9c",
+    "A5_DESIGN.md": "344a4ff84ba47f4e001dce6bb37d7bae7d750faece53593638e6793b0afe2ec9",
+    "A5_IMPLEMENTATION_REPORT.md": "63eb587a780f3178a9f839acf86aa7c4ce6512c58e0ad30e6097c5bf4f9c629d"
+  },
+  "inspection": {
+    "tests_rerun": false,
+    "database_access": false,
+    "provider_integration": false
+  },
+  "earlier_article": {
+    "path": "0068_Durable_Checkout_and_Verified_Payments_in_LiliShop.md",
+    "local_and_published_blob_before_edit": "aa3595f5845346eb853a9b641aebfa0076ec563d",
+    "sha256_before_edit": "f2381d70ff6f73cae9e380ec17558eb3531aa4160be38588adcf38138f5c2ebc"
+  }
+}
